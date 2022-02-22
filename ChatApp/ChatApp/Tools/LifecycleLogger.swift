@@ -25,13 +25,18 @@ class LifecycleLogger {
         case suspended // Не используется. Прописано для порядка.
     }
     
-    public static func log(newState: State? = nil, methodName: String) {
+    public enum Time: String {
+        case past = "moved"
+        case future = "will move"
+    }
+    
+    public static func log(newState: State? = nil, time: Time? = nil, methodName: String) {
         // Приложение не упадет, если удалить isLoggingEnable из Info.plist.
         guard isLoggingEnable ?? false else {
             return
         }
         printCurrentTime()
-        printLoggedinfo(newState, methodName)
+        printLoggedinfo(newState, time, methodName)
     }
     
     // Подумала, что информация о времени - дополнительный плюс :)
@@ -42,17 +47,17 @@ class LifecycleLogger {
         print(formatter.string(from: time as Date), terminator: ": ")
     }
     
-    private static func printLoggedinfo(_ newState: State?, _ methodName: String) {
+    private static func printLoggedinfo(_ newState: State?, _ time: Time?, _ methodName: String) {
         if (methodName.starts(with: "application")) {
-            printApplicationStateInfo(newState!, methodName)
+            printApplicationStateInfo(newState!, time!, methodName)
         } else {
             printControllerStateInfo(methodName)
         }
     }
     
-    private static func printApplicationStateInfo(_ newState: State, _ methodName: String) {
+    private static func printApplicationStateInfo(_ newState: State, _ time: Time, _ methodName: String) {
         if (lastState != newState) {
-            print("📕 Application moved from \(lastState) to \(newState): \(methodName).")
+            print("📕 Application \(time.rawValue) from \(lastState) to \(newState): \(methodName).")
             lastState = newState
         } else {
             print("📕 Application didn't change state. State is still \(lastState): \(methodName).")
