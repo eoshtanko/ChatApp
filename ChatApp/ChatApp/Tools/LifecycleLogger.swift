@@ -8,6 +8,7 @@
 import Foundation
 
 class LifecycleLogger {
+    
     // В Info.plist в ключе isLoggingEnable Вы можете указать, будет ли приложение вести логи.
     private static let isLoggingEnable = Bundle.main.object(forInfoDictionaryKey: "isLoggingEnable") as? Bool
     
