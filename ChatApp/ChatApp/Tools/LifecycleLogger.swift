@@ -11,6 +11,7 @@ class LifecycleLogger {
     
     // В Info.plist в ключе isLoggingEnable Вы можете указать, будет ли приложение вести логи.
     private static let isLoggingEnable = Bundle.main.object(forInfoDictionaryKey: "isLoggingEnable") as? Bool
+    private static let formatter = DateFormatter()
     
     // Последнее состояние, в котором пребывало приложение.
     private static var lastState = State.notRunning
@@ -42,20 +43,22 @@ class LifecycleLogger {
     // Подумала, что информация о времени - дополнительный плюс :)
     private static func printCurrentTime() {
         let time = NSDate()
-        let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm:ss"
         print(formatter.string(from: time as Date), terminator: ": ")
     }
     
     private static func printLoggedinfo(_ newState: State?, _ time: Time?, _ methodName: String) {
         if (methodName.starts(with: "application")) {
-            printApplicationStateInfo(newState!, time!, methodName)
+            printApplicationStateInfo(newState, time, methodName)
         } else {
             printControllerStateInfo(methodName)
         }
     }
     
-    private static func printApplicationStateInfo(_ newState: State, _ time: Time, _ methodName: String) {
+    private static func printApplicationStateInfo(_ newState: State?, _ time: Time?, _ methodName: String) {
+        guard let newState = newState, let time = time else {
+            return
+        }
         if (lastState != newState) {
             print("📕 Application \(time.rawValue) from \(lastState) to \(newState): \(methodName).")
             lastState = newState
