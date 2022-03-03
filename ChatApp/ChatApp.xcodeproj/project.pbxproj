@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345624F127C4C6950044C73A /* LifecycleLogger.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
-		34ACCFEA27C4AAEB00535096 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ViewController.swift */; };
+		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
 		34ACCFED27C4AAEB00535096 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEB27C4AAEB00535096 /* Main.storyboard */; };
 		34ACCFEF27C4AAEC00535096 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEE27C4AAEC00535096 /* Assets.xcassets */; };
 		34ACCFF227C4AAEC00535096 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */; };
+		34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		345624F127C4C6950044C73A /* LifecycleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleLogger.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		34ACCFE927C4AAEB00535096 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		34ACCFEC27C4AAEB00535096 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		34ACCFEE27C4AAEC00535096 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34ACCFF127C4AAEC00535096 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		34ACCFF327C4AAEC00535096 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +68,8 @@
 			children = (
 				345624F327C4F0E20044C73A /* Tools */,
 				34ACCFE527C4AAEB00535096 /* AppDelegate.swift */,
-				34ACCFE927C4AAEB00535096 /* ViewController.swift */,
+				34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */,
+				34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */,
 				34ACCFEB27C4AAEB00535096 /* Main.storyboard */,
 				34ACCFEE27C4AAEC00535096 /* Assets.xcassets */,
 				34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */,
@@ -146,7 +149,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34ACCFEA27C4AAEB00535096 /* ViewController.swift in Sources */,
+				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
+				34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */,
 				345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
 			);
@@ -297,9 +301,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChatApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your photo library so that you can select your profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -312,7 +318,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = shtanko.ekaterina.chatApp;
+				PRODUCT_BUNDLE_IDENTIFIER = shtanko.ekaterina.ChatApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -327,9 +333,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChatApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your photo library so that you can select your profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -342,7 +350,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = shtanko.ekaterina.chatApp;
+				PRODUCT_BUNDLE_IDENTIFIER = shtanko.ekaterina.ChatApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
