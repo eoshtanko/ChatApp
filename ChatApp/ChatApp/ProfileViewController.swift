@@ -30,7 +30,6 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationBar()
         print("viewDidLoad button frame: \(saveButton.frame)")
     }
     
@@ -63,95 +62,32 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureSubviews() {
-        let buttonBorderRadius: CGFloat = 14
-        saveButton.layer.cornerRadius = buttonBorderRadius
+        saveButton.layer.cornerRadius = Const.buttonBorderRadius
         saveButton.clipsToBounds = true
-        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
         
         editPhotoButton.layer.cornerRadius = editPhotoButton.frame.size.width / 2
         editPhotoButton.clipsToBounds = true
     }
+    
+    private enum Const {
+        static let buttonBorderRadius: CGFloat = 14
+        static let maxNumOfCharsInName = 16
+    }
 }
 
 // Все, что связано с UITextField.
 extension ProfileViewController: UITextFieldDelegate {
     
-    private static let maxNumOfCharsInName = 20
-    
     // Ввожу ограничение на максимальное количество символов в имени.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let maxNumOfCharsInName = 20
         let currentCharacterCount = textField.text?.count ?? 0
         if range.length + range.location > currentCharacterCount {
             return false
         }
         let newLength = currentCharacterCount + string.count - range.length
-        return newLength <= maxNumOfCharsInName
-    }
-}
-
-// Navigation bar.
-extension ProfileViewController {
-    
-    private func configureNavigationBar() {
-        UINavigationBar.appearance().barTintColor = UIColor(named: "BackgroundNavigationBarColor")
-        navigationBar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: Const.hightOfNavigationBar)
-        navigationBar.clipsToBounds = true
-        
-        let customTitleView = createCustomTitleView(titleName: "My Profile")
-        let customButton = createCustomButton()
-        
-        let navigationItem = UINavigationItem()
-        navigationItem.titleView = customTitleView
-        navigationItem.rightBarButtonItem = customButton
-        navigationBar.setItems([navigationItem], animated: false)
-        
-        self.view.addSubview(navigationBar)
-    }
-    
-    private func createCustomTitleView(titleName: String) -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: Const.hightOfNavigationBar))
-        
-        let titleLabel = UILabel()
-        titleLabel.text = "My Profile"
-        titleLabel.frame = CGRect(x: Const.leadigSpaceOfTitleLabel,
-                                  y: view.center.y - Const.hightOfTitleLabel / 2,
-                                  width: Const.widthOfTitleLabel,
-                                  height: Const.hightOfTitleLabel)
-        titleLabel.font = UIFont.systemFont(ofSize: Const.fontSizeOfTitleLabel, weight: .bold)
-        titleLabel.textColor = .black
-        
-        view.addSubview(titleLabel)
-        return view
-    }
-    
-    private func createCustomButton() -> UIBarButtonItem {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: Const.hightOfNavigationBar))
-        let button = UIButton(type: .system)
-        button.frame = CGRect(x: view.frame.width - Const.trailingSpaceOfCloseButton - Const.widthOfCloseButton,
-                              y: view.center.y - Const.hightOfCloseButton / 2,
-                              width: Const.widthOfCloseButton,
-                              height: Const.hightOfCloseButton)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: Const.fontSizeOfCloseButton, weight: .semibold)
-        button.setTitle("Close", for: .normal)
-        
-        view.addSubview(button)
-        return UIBarButtonItem(customView: view)
-    }
-    
-    private enum Const {
-        static let hightOfNavigationBar: CGFloat = 96
-        static let hightOfTitleLabel : CGFloat = 32
-        static let hightOfCloseButton : CGFloat = 35
-        static let widthOfTitleLabel : CGFloat = 122
-        static let widthOfCloseButton : CGFloat = 69
-        static let leadigSpaceOfTitleLabel : CGFloat = 16
-        static let trailingSpaceOfCloseButton : CGFloat = 17
-        
-        static let fontSizeOfTitleLabel : CGFloat = 26
-        static let fontSizeOfCloseButton : CGFloat = 17
+        return newLength <= Const.maxNumOfCharsInName
     }
 }
 

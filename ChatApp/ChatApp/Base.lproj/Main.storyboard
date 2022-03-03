@@ -82,6 +82,21 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Save"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycP-fT-w89">
+                                <rect key="frame" x="258" y="31.5" width="45" height="33"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <color key="tintColor" name="BlueTextColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" name="BlueTextColor"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eCa-OR-bK4">
+                                <rect key="frame" x="16" y="32" width="122" height="32"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -90,7 +105,9 @@
                             <constraint firstItem="olT-LK-OUV" firstAttribute="centerX" secondItem="nMo-WK-NC7" secondAttribute="centerX" id="43g-0c-9lj"/>
                             <constraint firstItem="pI9-KH-9vD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="49w-JX-Aex"/>
                             <constraint firstItem="dZQ-kf-EAm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="78" id="7mg-3Z-jn7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ycP-fT-w89" secondAttribute="trailing" constant="17" id="7s7-dQ-4lm"/>
                             <constraint firstItem="nMo-WK-NC7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="8ji-vj-mO2"/>
+                            <constraint firstItem="ycP-fT-w89" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="eCa-OR-bK4" secondAttribute="trailing" constant="8" symbolic="YES" id="AmC-8Z-Bd7"/>
                             <constraint firstItem="nMo-WK-NC7" firstAttribute="width" secondItem="9OQ-84-9Tx" secondAttribute="height" multiplier="188:645" id="Ayd-w9-nfb"/>
                             <constraint firstItem="nMo-WK-NC7" firstAttribute="bottom" secondItem="9OQ-84-9Tx" secondAttribute="bottom" id="CQS-AP-D0i"/>
                             <constraint firstItem="9OQ-84-9Tx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="Jhn-Bp-1rs"/>
@@ -108,6 +125,9 @@
                             <constraint firstItem="dZQ-kf-EAm" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="pUG-Fb-fXi"/>
                             <constraint firstItem="fam-S0-yNG" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qkV-tC-Ctb"/>
                             <constraint firstItem="va5-IX-ddR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="56" id="usK-G9-j3Q"/>
+                            <constraint firstItem="ycP-fT-w89" firstAttribute="centerY" secondItem="pI9-KH-9vD" secondAttribute="centerY" id="v8h-0B-kyi"/>
+                            <constraint firstItem="eCa-OR-bK4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="zZC-zy-9X3"/>
+                            <constraint firstItem="eCa-OR-bK4" firstAttribute="centerY" secondItem="pI9-KH-9vD" secondAttribute="centerY" id="zZN-lr-X74"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4fZ-vx-vm5"/>
@@ -120,7 +140,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="440" y="40"/>
+            <point key="canvasLocation" x="827" y="-18"/>
         </scene>
     </scenes>
     <resources>
