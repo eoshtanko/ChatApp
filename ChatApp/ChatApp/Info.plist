@@ -4,5 +4,9 @@
 <dict>
 	<key>isLoggingEnable</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>&quot;Access to the camera will allow you to take a photo for a profile picture.&quot;</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>&quot;Access to the photo library will allow you to select a photo for your profile picture.&quot;</string>
 </dict>
 </plist>
