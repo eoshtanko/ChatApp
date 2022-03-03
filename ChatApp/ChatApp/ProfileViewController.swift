@@ -135,8 +135,8 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     private func configureLibraryAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
         actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
             if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
-            imagePickerController.sourceType = .photoLibrary
-            self.present(imagePickerController, animated: true)
+                imagePickerController.sourceType = .photoLibrary
+                self.present(imagePickerController, animated: true)
             } else {
                 self.showAlertWith(message: "Unable to access the photo library.")
             }
@@ -166,5 +166,3 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         present(alertController, animated: true)
     }
 }
-
-
