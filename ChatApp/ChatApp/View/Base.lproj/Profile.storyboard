@@ -13,7 +13,7 @@
         <!--Profile View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ProfileViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Profile" id="BYZ-38-t0r" customClass="ProfileViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -54,7 +54,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="editPhotoButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="o2i-7H-NHh"/>
+                                    <action selector="editPhotoButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NDD-Ac-AuS"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="olT-LK-OUV">
@@ -81,6 +81,9 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Ha-r3-EGy"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycP-fT-w89">
                                 <rect key="frame" x="258" y="31.5" width="45" height="33"/>
@@ -90,6 +93,9 @@
                                 <state key="normal" title="Close">
                                     <color key="titleColor" name="BlueTextColor"/>
                                 </state>
+                                <connections>
+                                    <action selector="closeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bmn-vj-CkD"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eCa-OR-bK4">
                                 <rect key="frame" x="16" y="32" width="122" height="32"/>
@@ -132,15 +138,17 @@
                     </view>
                     <navigationItem key="navigationItem" id="4fZ-vx-vm5"/>
                     <connections>
-                        <outlet property="editPhotoButton" destination="nMo-WK-NC7" id="x5W-tP-e72"/>
-                        <outlet property="navigationBar" destination="pI9-KH-9vD" id="KbU-GT-2qY"/>
-                        <outlet property="profileImageView" destination="9OQ-84-9Tx" id="LxD-fc-gsO"/>
-                        <outlet property="saveButton" destination="va5-IX-ddR" id="1I0-d6-suc"/>
+                        <outlet property="editPhotoButton" destination="nMo-WK-NC7" id="cwh-dX-HFV"/>
+                        <outlet property="infoLabel" destination="dZQ-kf-EAm" id="EVY-bR-HAH"/>
+                        <outlet property="nameLabel" destination="fam-S0-yNG" id="r9p-VB-zvk"/>
+                        <outlet property="navigationBar" destination="pI9-KH-9vD" id="cNI-jS-MzH"/>
+                        <outlet property="profileImageView" destination="9OQ-84-9Tx" id="mu1-M3-eVf"/>
+                        <outlet property="saveButton" destination="va5-IX-ddR" id="vsz-aN-tvx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="827" y="-18"/>
+            <point key="canvasLocation" x="1074" y="-43"/>
         </scene>
     </scenes>
     <resources>

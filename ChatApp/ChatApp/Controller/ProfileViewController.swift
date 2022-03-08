@@ -8,8 +8,11 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
+    internal weak var conversationsListViewController: ConversationsListViewController?
     
     @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UITextField!
+    @IBOutlet weak var infoLabel: UITextView!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var editPhotoButton: UIButton!
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -19,41 +22,14 @@ class ProfileViewController: UIViewController {
         pickImage()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        // Если мы попытаемся распечатать frame saveButton
-        // print(saveButton.frame)
-        // то столкнемся со следующей ошибкой:
-        // Fatal error: Unexpectedly found nil while implicitly unwrapping an Optional value
-        // Все потому, что на данном этапе saveButton все еще не инициализирован и равен nil
+    @IBAction func closeButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("viewDidLoad button frame: \(saveButton.frame)")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // frame кнопки во viewDidAppear отличается от fram-а в viewDidLoad:
-        // viewDidLoad button frame: (56.0, 478.0, 208.0, 40.0)
-        // viewDidAppear button frame: (56.0, 626.0, 302.0, 40.0)
-        //
-        // Сейчас у нас в storyboard выбрано устройство iPhone SE
-        // Значения frame во viewDidLoad соответствуют этому устройству
-        // (Именно в iPhone SE игрек кнопки будет 478.0, а ширина - 208.0)
-        //
-        // Запускаем приложение мы на симуляторе iPhone 8 Plus.
-        // Значения frame во viewDidAppear соответствуют этому устройству
-        // (Именно в iPhone 8 Plus игрек кнопки будет 626.0, а ширина - 302.0)
-        //
-        // Происходит так, потому что во viewDidLoad контроллер только что загрузил
-        // из nib-файла иерархию представлений в память, и все представления соответствуют созданным нами
-        // в storyboard.
-        // viewDidAppear же вызывается, когда вьюшка контроллера полностью перемещается на экран.
-        // (Called when the view controller’s view is fully transitioned onto the screen)
-        // И соответственно значения frame-a соответствуют устройству, на котором приложение запущено.
-        print("viewDidAppear button frame: \(saveButton.frame)")
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        CurrentUser.user.image = profileImageView.image
+        CurrentUser.user.name = nameLabel.text
+        CurrentUser.user.info = infoLabel.text
     }
     
     override func viewDidLayoutSubviews() {
@@ -62,11 +38,40 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureSubviews() {
+        configureNameLabel()
+        configureInfoLabel()
+        configureSaveButton()
+        configureProfileImageView()
+        configureEditPhotoButton()
+    }
+    
+    private func configureNameLabel() {
+        if (CurrentUser.user.name != nil) {
+            nameLabel.text = CurrentUser.user.name
+        }
+        nameLabel.delegate = self
+    }
+    
+    private func configureInfoLabel() {
+        if (CurrentUser.user.info != nil) {
+            infoLabel.text = CurrentUser.user.info
+        }
+        infoLabel.delegate = self
+    }
+    
+    private func configureSaveButton() {
         saveButton.layer.cornerRadius = Const.buttonBorderRadius
         saveButton.clipsToBounds = true
-        
+    }
+    
+    private func configureProfileImageView() {
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-        
+        if(CurrentUser.user.image != nil) {
+            profileImageView.image = CurrentUser.user.image
+        }
+    }
+    
+    private func configureEditPhotoButton() {
         editPhotoButton.layer.cornerRadius = editPhotoButton.frame.size.width / 2
         editPhotoButton.clipsToBounds = true
     }
@@ -89,6 +94,22 @@ extension ProfileViewController: UITextFieldDelegate {
         let newLength = currentCharacterCount + string.count - range.length
         return newLength <= Const.maxNumOfCharsInName
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}
+
+extension ProfileViewController: UITextViewDelegate {
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
 }
 
 // Все, что связано с установкой фото.
@@ -104,7 +125,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true)
     }
     
     private func pickImage() {
