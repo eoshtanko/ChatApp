@@ -190,7 +190,7 @@ extension Date {
         let day = calendar.component(.day, from: self)
         let year = calendar.component(.year, from: self)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-        return dateFormatter.date(from: "\(month)/\(day)/\(year)") ?? Date()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        return dateFormatter.date(from: "\(day)/\(month)/\(year)") ?? Date()
     }
 }
