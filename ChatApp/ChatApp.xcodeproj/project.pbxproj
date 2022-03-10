@@ -385,7 +385,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
@@ -416,7 +416,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
