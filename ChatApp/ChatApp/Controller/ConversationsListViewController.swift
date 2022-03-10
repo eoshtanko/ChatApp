@@ -102,15 +102,27 @@ class ConversationsListViewController: UIViewController {
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
+        setupConversationsBeforePushViewController(conversation)
+        
         let conversationViewController = ConversationViewController()
-        conversationViewController.conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
+        conversationViewController.conversation = conversation
+
         self.navigationItem.title = ""
         navigationController?.pushViewController(conversationViewController, animated: true)
+        tableView.reloadRows(at: [indexPath], with: .none)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Const.hightOfCell
+    }
+    
+    private func setupConversationsBeforePushViewController(_ conversation: Conversation) {
+        conversation.hasUnreadMessages = false
+        if (conversation.message != nil) {
+            ConversationApi.messages[0] = ChatMessage(text: conversation.message, isIncoming: true, date: conversation.date)
+        }
     }
 }
 

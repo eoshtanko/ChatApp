@@ -55,7 +55,7 @@ class ConversationApi {
         ]
     }
     
-    static let messages = [
+    static var messages = [
         ChatMessage(text: "Hi!", isIncoming: true, date: ConversationApi.formatter.date(from: "2/11/2019 9:10")),
         ChatMessage(text: "How are you? Whats going on???", isIncoming: true, date: ConversationApi.formatter.date(from: "2/11/2019 9:40")),
         ChatMessage(text: "Hi! Fine. Let's me tell you about Shakespeare.", isIncoming: false, date: ConversationApi.formatter.date(from: "2/11/2019 13:27")),

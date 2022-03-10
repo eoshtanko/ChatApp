@@ -10,7 +10,7 @@ import UIKit
 class ConversationViewController: UITableViewController {
     
     var conversation: Conversation?
-    private var chatMessages = [[ChatMessage]]()
+    private var filteredChatMessages = [[ChatMessage]]()
     private var entreMessageBar: UIView?
     
     override func viewDidLoad() {
@@ -18,6 +18,7 @@ class ConversationViewController: UITableViewController {
         configureNavigationBar()
         assembleGroupedMessages()
         configureTableView()
+        becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
@@ -27,7 +28,6 @@ class ConversationViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        becomeFirstResponder()
     }
     
     private func configureNavigationBar() {
@@ -44,14 +44,16 @@ class ConversationViewController: UITableViewController {
     }
     
     private func assembleGroupedMessages() {
-        let groupedMessages = Dictionary(grouping: ConversationApi.messages) { (element) -> Date in
-            // reduceToMonthDayYear - помогает сгруппировать сообщения именно по дате, без учета времени
-            return element.date?.reduceToMonthDayYear() ?? ConversationApi.getDefaultDate()
-        }
-        let sortedKeys = groupedMessages.keys.sorted()
-        sortedKeys.forEach { (key) in
-            let values = groupedMessages[key]
-            chatMessages.append(values ?? [])
+        if(conversation?.message != nil) {
+            let groupedMessages = Dictionary(grouping: ConversationApi.messages) { (element) -> Date in
+                // reduceToMonthDayYear - помогает сгруппировать сообщения именно по дате, без учета времени
+                return element.date?.reduceToMonthDayYear() ?? ConversationApi.getDefaultDate()
+            }
+            let sortedKeys = groupedMessages.keys.sorted()
+            sortedKeys.forEach { (key) in
+                let values = groupedMessages[key]
+                filteredChatMessages.append(values ?? [])
+            }
         }
     }
     
@@ -87,11 +89,11 @@ extension ConversationViewController {
 extension ConversationViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return chatMessages.count
+        return filteredChatMessages.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatMessages[section].count
+        return filteredChatMessages[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -101,15 +103,15 @@ extension ConversationViewController {
         guard let messageCell = cell as? ChatMessageCell else {
             return cell
         }
-        let message = chatMessages[indexPath.section][indexPath.row]
+        let message = filteredChatMessages[indexPath.section][indexPath.row]
         messageCell.configureCell(message)
         return messageCell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let firstMessageInSection = chatMessages[section].first {
+        if let firstMessageInSection = filteredChatMessages[section].first {
             let dateLabel = DateHeaderLabel()
-            dateLabel.configureDate(date: firstMessageInSection.date!)
+            dateLabel.configureDate(date: firstMessageInSection.date ?? ConversationApi.getDefaultDate())
             return getContainerView(dateLabel)
         }
         return nil
@@ -126,7 +128,7 @@ extension ConversationViewController {
 
 // Настройка view для ввода сообщения.
 extension ConversationViewController {
-
+    
     override var inputAccessoryView: UIView? {
         get {
             if entreMessageBar == nil {
@@ -135,11 +137,11 @@ extension ConversationViewController {
             return entreMessageBar
         }
     }
-
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
-
+    
     override var canResignFirstResponder: Bool {
         return true
     }
