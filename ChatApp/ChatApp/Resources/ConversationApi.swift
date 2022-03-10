@@ -65,6 +65,7 @@ class ConversationApi {
         ChatMessage(text: "Здесь Паша Эмильевич, обладавший сверхъестественным чутьем, понял, что сейчас его будут бить, может быть, даже ногами.", isIncoming: false, date: ConversationApi.formatter.date(from: "1/8/2017 10:30")),
         ChatMessage(text: "Дверь открылась. Остап прошел в комнату, которая могла быть обставлена только существом с воображением дятла.", isIncoming: false, date: ConversationApi.formatter.date(from: "1/6/2016 10:30")),
         ChatMessage(text: "Держите гроссмейстера!", isIncoming: true, date: ConversationApi.formatter.date(from: "1/6/2016 10:33")),
+        ChatMessage(text: "А вообще, описать климат Грузии парой предложений практически невозможно — в каждом регионе свои особенности.", isIncoming: true, date: ConversationApi.formatter.date(from: "3/5/2019 10:40")),
         ChatMessage(text: "Киса, я хочу вас спросить, как художник художника: вы рисовать умеете?", isIncoming: true, date: ConversationApi.formatter.date(from: "1/8/2015 10:30"))
     ]
     

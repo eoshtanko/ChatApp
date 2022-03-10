@@ -7,6 +7,14 @@
 
 import UIKit
 
+// Меня смутили эти правила:
+// 1. Для входящих сообщений:
+// Текст сообщения не должен заходить на последнюю четверть ширины ячейки.
+// 2. Для исходящих сообщений:
+// Текст сообщения не должен заходить на первую четверть ширины ячейки.
+//
+// Посоветовавшись со здравым смыслом под шириной ячейки я здесь поняла не
+// ширину конкретного "messageBubble", а ширину row (ширина экрана)
 class ChatMessageCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
@@ -35,16 +43,19 @@ class ChatMessageCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.isUserInteractionEnabled = false
 
         addSubview(bubbleBackgroundView)
         addSubview(messageLabel)
         
+        messageLabel.numberOfLines = 0
+        self.isUserInteractionEnabled = false
         bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.numberOfLines = 0
-
+        configureConstraints()
+    }
+    
+    private func configureConstraints() {
         NSLayoutConstraint.activate([
             messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstant),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Const.bottomConstant),
