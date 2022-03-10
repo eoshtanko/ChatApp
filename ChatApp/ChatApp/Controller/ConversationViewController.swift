@@ -26,10 +26,6 @@ class ConversationViewController: UITableViewController {
         scrollToBottom()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     private func configureNavigationBar() {
         navigationItem.title = conversation?.name
         navigationController?.navigationBar.prefersLargeTitles = false

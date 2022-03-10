@@ -95,6 +95,7 @@ class ConversationTableViewCell: UITableViewCell {
     
     private func setDefaultImage() {
         profileImageView.backgroundColor = UIColor(named: "BackgroundImageColor")
+        profileImageView.tintColor = UIColor(named: "DefaultImageColor")
         profileImageView.image = UIImage(systemName: "person.fill")
     }
     

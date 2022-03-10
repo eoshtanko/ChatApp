@@ -18,7 +18,7 @@ import UIKit
 class ChatMessageCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
-
+    
     private let messageLabel = UILabel()
     private let bubbleBackgroundView = UIView()
     
@@ -27,7 +27,7 @@ class ChatMessageCell: UITableViewCell {
     
     func configureCell(_ chatMessage: ChatMessage) {
         messageLabel.text = chatMessage.text
-
+        
         bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
         UIColor(named: "IncomingMessageColor") : UIColor(named: "OutcomingMessageColor")
         messageLabel.textColor = .black
@@ -43,7 +43,7 @@ class ChatMessageCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         addSubview(bubbleBackgroundView)
         addSubview(messageLabel)
         
@@ -60,7 +60,7 @@ class ChatMessageCell: UITableViewCell {
             messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstant),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Const.bottomConstant),
             messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: Const.messageLabelWidth),
-
+            
             bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: Const.messageLabelBoarderConstraint),

@@ -77,12 +77,21 @@ class ConversationsListViewController: UIViewController {
     
     private func setImageToNavigationButton(_ profileButton: UIButton) {
         if (CurrentUser.user.image == nil) {
-            profileButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
-            profileButton.imageView?.tintColor = UIColor(named: "DefaultImageColor")
-            profileButton.backgroundColor = UIColor(named: "BackgroundImageColor")
+            setDefaultImage(profileButton)
         } else {
-            profileButton.setImage(CurrentUser.user.image, for: .normal)
+            let image = CurrentUser.user.image!.resized(to: CGSize(width: 44, height: 44))
+            profileButton.setImage(image, for: .normal)
         }
+        configureImage(profileButton)
+    }
+    
+    private func setDefaultImage(_ profileButton: UIButton) {
+        profileButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
+        profileButton.imageView?.tintColor = UIColor(named: "DefaultImageColor")
+        profileButton.backgroundColor = UIColor(named: "BackgroundImageColor")
+    }
+    
+    private func configureImage(_ profileButton: UIButton) {
         profileButton.imageView?.layer.cornerRadius = profileButton.frame.size.width / 2
         profileButton.layer.cornerRadius = profileButton.frame.size.width / 2
         profileButton.contentHorizontalAlignment = .fill
@@ -107,7 +116,7 @@ extension ConversationsListViewController: UITableViewDelegate {
         
         let conversationViewController = ConversationViewController()
         conversationViewController.conversation = conversation
-
+        
         self.navigationItem.title = ""
         navigationController?.pushViewController(conversationViewController, animated: true)
         tableView.reloadRows(at: [indexPath], with: .none)
@@ -196,5 +205,13 @@ extension ConversationsListViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
+    }
+}
+
+extension UIImage {
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
     }
 }

@@ -30,7 +30,7 @@ class ProfileViewController: UIViewController {
         CurrentUser.user.image = profileImageView.image
         CurrentUser.user.name = nameLabel.text
         CurrentUser.user.info = infoLabel.text
-        //conversationsListViewController?.configureNavigationButton()
+        conversationsListViewController?.configureNavigationButton()
     }
     
     override func viewDidLayoutSubviews() {
