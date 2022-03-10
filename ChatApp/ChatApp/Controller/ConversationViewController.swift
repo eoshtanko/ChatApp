@@ -159,7 +159,7 @@ class DateHeaderLabel: UILabel {
     }
     
     func configureDate(date: Date) {
-        formatter.dateFormat = "MM/dd/yyyy"
+        formatter.dateFormat = "dd/MM/yyyy"
         self.text = formatter.string(from: date)
     }
     
