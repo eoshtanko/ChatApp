@@ -9,6 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     internal weak var conversationsListViewController: ConversationsListViewController?
+    private var imageDidChanged = false
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -27,7 +28,9 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
-        CurrentUser.user.image = profileImageView.image
+        if imageDidChanged {
+            CurrentUser.user.image = profileImageView.image
+        }
         CurrentUser.user.name = nameLabel.text
         CurrentUser.user.info = infoLabel.text
         conversationsListViewController?.configureNavigationButton()
@@ -119,6 +122,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             profileImageView.image = image
+            imageDidChanged = true
         } else {
             self.showAlertWith(message: "No image found.")
         }

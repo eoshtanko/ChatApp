@@ -35,8 +35,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Marina Dudarenko" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="24" translatesAutoresizingMaskIntoConstraints="NO" id="fam-S0-yNG">
-                                <rect key="frame" x="57.5" y="321" width="205" height="30.5"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Marina Dudarenko" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="24" translatesAutoresizingMaskIntoConstraints="NO" id="fam-S0-yNG">
+                                <rect key="frame" x="0.0" y="321" width="320" height="30.5"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -108,6 +108,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="fam-S0-yNG" firstAttribute="top" secondItem="9OQ-84-9Tx" secondAttribute="bottom" constant="32" id="3Z6-BG-df0"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fam-S0-yNG" secondAttribute="trailing" id="3uE-Ia-L8i"/>
                             <constraint firstItem="olT-LK-OUV" firstAttribute="centerX" secondItem="nMo-WK-NC7" secondAttribute="centerX" id="43g-0c-9lj"/>
                             <constraint firstItem="pI9-KH-9vD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="49w-JX-Aex"/>
                             <constraint firstItem="dZQ-kf-EAm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="78" id="7mg-3Z-jn7"/>
@@ -117,6 +118,7 @@
                             <constraint firstItem="nMo-WK-NC7" firstAttribute="width" secondItem="9OQ-84-9Tx" secondAttribute="height" multiplier="188:645" id="Ayd-w9-nfb"/>
                             <constraint firstItem="nMo-WK-NC7" firstAttribute="bottom" secondItem="9OQ-84-9Tx" secondAttribute="bottom" id="CQS-AP-D0i"/>
                             <constraint firstItem="9OQ-84-9Tx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="67" id="Jhn-Bp-1rs"/>
+                            <constraint firstItem="fam-S0-yNG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="LKc-Nj-Xhy"/>
                             <constraint firstItem="pI9-KH-9vD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MF7-Ze-yYB"/>
                             <constraint firstItem="pI9-KH-9vD" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Pev-jE-GAb"/>
                             <constraint firstItem="olT-LK-OUV" firstAttribute="width" secondItem="nMo-WK-NC7" secondAttribute="height" multiplier="17:27" id="ROX-Y5-xRw"/>
