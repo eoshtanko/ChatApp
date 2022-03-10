@@ -60,9 +60,9 @@ class ConversationViewController: UITableViewController {
     // на люом устройстве.
     private var shouldScrollToBottomTimes: Int = 3
     private func scrollToBottom() {
-        if shouldScrollToBottomTimes > 0 {
+        if shouldScrollToBottomTimes > 0 && tableView.contentSize.height > tableView.bounds.size.height {
             shouldScrollToBottomTimes -= 1
-            let bottomOffset = CGPoint(x: 0, y: max(-tableView.contentInset.top, tableView.contentSize.height - tableView.bounds.size.height + EntryMessageView.getEntyMessageViewHight()))
+            let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + EntryMessageView.getEntyMessageViewHight())
             tableView.setContentOffset(bottomOffset, animated: false)
         }
     }
