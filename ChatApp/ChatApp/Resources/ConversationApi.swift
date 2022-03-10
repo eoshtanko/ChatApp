@@ -55,6 +55,23 @@ class ConversationApi {
         ]
     }
     
+    static let messages = [
+        ChatMessage(text: "Hi!", isIncoming: true, date: ConversationApi.formatter.date(from: "2/11/2019 9:10")),
+        ChatMessage(text: "How are you? Whats going on???", isIncoming: true, date: ConversationApi.formatter.date(from: "2/11/2019 9:40")),
+        ChatMessage(text: "Hi! Fine. Let's me tell you about Shakespeare.", isIncoming: false, date: ConversationApi.formatter.date(from: "2/11/2019 13:27")),
+        ChatMessage(text: "Какая погода в Грузии?", isIncoming: false, date: ConversationApi.formatter.date(from: "3/5/2019 10:11")),
+        ChatMessage(text: "В уездном городе N было так много парикмахерских заведений и бюро похоронных процессий, что казалось, жители города рождаются лишь затем, чтобы побриться, остричься, освежить голову вежеталем и сразу же умереть.", isIncoming: true, date: ConversationApi.formatter.date(from: "21/3/2019 10:27")),
+        ChatMessage(text: "Отличная!", isIncoming: true, date: ConversationApi.formatter.date(from: "3/5/2019 10:30")),
+        ChatMessage(text: "Здесь Паша Эмильевич, обладавший сверхъестественным чутьем, понял, что сейчас его будут бить, может быть, даже ногами.", isIncoming: false, date: ConversationApi.formatter.date(from: "1/8/2017 10:30")),
+        ChatMessage(text: "Дверь открылась. Остап прошел в комнату, которая могла быть обставлена только существом с воображением дятла.", isIncoming: false, date: ConversationApi.formatter.date(from: "1/6/2016 10:30")),
+        ChatMessage(text: "Держите гроссмейстера!", isIncoming: true, date: ConversationApi.formatter.date(from: "1/6/2016 10:33")),
+        ChatMessage(text: "Киса, я хочу вас спросить, как художник художника: вы рисовать умеете?", isIncoming: true, date: ConversationApi.formatter.date(from: "1/8/2015 10:30"))
+    ]
+    
+    static func getDefaultDate() -> Date {
+        return ConversationApi.formatter.date(from: "1/1/2000 00:00")!
+    }
+    
     private enum Const {
         static let day: Double = 60*60*24
     }

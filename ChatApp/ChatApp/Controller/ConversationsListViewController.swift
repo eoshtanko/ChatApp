@@ -27,6 +27,10 @@ class ConversationsListViewController: UIViewController {
         configureSearchBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        configureNavigationTitle()
+    }
+    
     private func configureView() {
         view.backgroundColor = .white
     }
@@ -55,7 +59,6 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        navigationController?.navigationBar.backgroundColor = .white
         configureNavigationTitle()
         configureNavigationButton()
     }
@@ -63,10 +66,9 @@ class ConversationsListViewController: UIViewController {
     private func configureNavigationTitle() {
         navigationItem.title = "Tinkoff Chat"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.tintColor = .black
     }
     
-    private func configureNavigationButton() {
+    func configureNavigationButton() {
         let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         setImageToNavigationButton(profileButton)
         profileButton.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
@@ -100,7 +102,10 @@ class ConversationsListViewController: UIViewController {
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        navigationController?.pushViewController(ConversationViewController(), animated: true)
+        let conversationViewController = ConversationViewController()
+        conversationViewController.conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
+        self.navigationItem.title = ""
+        navigationController?.pushViewController(conversationViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -126,18 +131,12 @@ extension ConversationsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: ConversationTableViewCell.identifier,
-            for: indexPath
-        )
+            for: indexPath)
         guard let conversationCell = cell as? ConversationTableViewCell else {
             return cell
         }
         let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
-        conversationCell.configureCell(name: conversation.name,
-                                       message: conversation.message,
-                                       date: conversation.date,
-                                       online: conversation.online,
-                                       hasUnreadMessages: conversation.hasUnreadMessages,
-                                       image: conversation.image)
+        conversationCell.configureCell(conversation)
         return conversationCell
     }
     
@@ -180,7 +179,6 @@ extension ConversationsListViewController: UISearchBarDelegate {
         self.searchBar.endEditing(true)
     }
 }
-
 
 extension ConversationsListViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

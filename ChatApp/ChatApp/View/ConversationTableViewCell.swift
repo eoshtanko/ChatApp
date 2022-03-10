@@ -27,16 +27,16 @@ class ConversationTableViewCell: UITableViewCell {
         configureSubviews()
     }
     
-    func configureCell(name: String?, message: String?, date: Date?, online: Bool, hasUnreadMessages: Bool, image: UIImage?) {
-        configureNameLabel(name)
-        configureLastMessageDate(date)
-        configureLastMessageLabel(message)
-        configureOnlineIdentifier(online)
-        configureUnreadMessagesIdentifier(hasUnreadMessages)
-        configureProfileImageView(image)
+    func configureCell(_ conversation: Conversation) {
+        configureNameLabel(conversation.name)
+        configureLastMessageDate(conversation.date)
+        configureLastMessageLabel(conversation.message)
+        configureOnlineIdentifier(conversation.online)
+        configureUnreadMessagesIdentifier(conversation.hasUnreadMessages)
+        configureProfileImageView(conversation.image)
     }
     
-    private func configureSubviews() {
+    func configureSubviews() {
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
         onlineSignImageView.layer.cornerRadius = onlineSignImageView.frame.size.width / 2
     }
@@ -81,7 +81,7 @@ class ConversationTableViewCell: UITableViewCell {
     
     private func configureUnreadMessagesIdentifier(_ hasUnreadMessages: Bool) {
         if (hasUnreadMessages) {
-            lastMessageLabel.font = .systemFont(ofSize: Const.textSize, weight: .heavy)
+            lastMessageLabel.font = .systemFont(ofSize: Const.textSize, weight: .bold)
         }
     }
     
@@ -124,5 +124,7 @@ class ConversationTableViewCell: UITableViewCell {
         static let verticalInserts: CGFloat = 15
         static let horizontalInserts: CGFloat = 10
         static let contentViewCornerRadius: CGFloat = 10
+        static let rationImageAndOnlineSign: CGFloat = 5
+        static let onlineSignImageViewWidth: CGFloat = 19
     }
 }

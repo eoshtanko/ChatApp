@@ -14,6 +14,10 @@
 		3427ACDF27D48AAD0062F749 /* ConversationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */; };
 		3427ACE627D610970062F749 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACE527D610970062F749 /* User.swift */; };
 		3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACE727D61EBA0062F749 /* ConversationViewController.swift */; };
+		3427ACEE27D88CA80062F749 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACED27D88CA80062F749 /* ChatMessageCell.swift */; };
+		3427ACF027D88FDE0062F749 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACEF27D88FDE0062F749 /* ChatMessage.swift */; };
+		3427ACFA27D94D000062F749 /* EntryMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3427ACF927D94D000062F749 /* EntryMessageView.xib */; };
+		3427ACFC27D9C2B10062F749 /* EntryMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */; };
 		345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345624F127C4C6950044C73A /* LifecycleLogger.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
 		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
@@ -31,6 +35,10 @@
 		3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationTableViewCell.xib; sourceTree = "<group>"; };
 		3427ACE527D610970062F749 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3427ACE727D61EBA0062F749 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		3427ACED27D88CA80062F749 /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
+		3427ACEF27D88FDE0062F749 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		3427ACF927D94D000062F749 /* EntryMessageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EntryMessageView.xib; sourceTree = "<group>"; };
+		3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryMessageView.swift; sourceTree = "<group>"; };
 		345624F127C4C6950044C73A /* LifecycleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleLogger.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				3427ACD827D47ED40062F749 /* Conversation.swift */,
+				3427ACEF27D88FDE0062F749 /* ChatMessage.swift */,
 				3427ACE527D610970062F749 /* User.swift */,
 			);
 			path = Model;
@@ -69,6 +78,9 @@
 				34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */,
 				3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */,
 				3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */,
+				3427ACED27D88CA80062F749 /* ChatMessageCell.swift */,
+				3427ACF927D94D000062F749 /* EntryMessageView.xib */,
+				3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */,
 				34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */,
 			);
 			path = View;
@@ -197,6 +209,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3427ACFA27D94D000062F749 /* EntryMessageView.xib in Resources */,
 				3427ACDF27D48AAD0062F749 /* ConversationTableViewCell.xib in Resources */,
 				34ACCFF227C4AAEC00535096 /* LaunchScreen.storyboard in Resources */,
 				34ACCFEF27C4AAEC00535096 /* Assets.xcassets in Resources */,
@@ -218,7 +231,10 @@
 				3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */,
 				34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */,
 				3427ACE627D610970062F749 /* User.swift in Sources */,
+				3427ACEE27D88CA80062F749 /* ChatMessageCell.swift in Sources */,
 				345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */,
+				3427ACFC27D9C2B10062F749 /* EntryMessageView.swift in Sources */,
+				3427ACF027D88FDE0062F749 /* ChatMessage.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
 				3427ACDB27D483DB0062F749 /* ConversationApi.swift in Sources */,
 			);
