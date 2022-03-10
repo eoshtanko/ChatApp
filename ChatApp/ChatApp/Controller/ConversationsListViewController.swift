@@ -69,7 +69,8 @@ class ConversationsListViewController: UIViewController {
     }
     
     func configureNavigationButton() {
-        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfNavigationButton,
+                                                   height: Const.sizeOfNavigationButton))
         setImageToNavigationButton(profileButton)
         profileButton.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileButton)
@@ -79,7 +80,8 @@ class ConversationsListViewController: UIViewController {
         if (CurrentUser.user.image == nil) {
             setDefaultImage(profileButton)
         } else {
-            let image = CurrentUser.user.image!.resized(to: CGSize(width: 44, height: 44))
+            let image = CurrentUser.user.image!.resized(to: CGSize(width: Const.sizeOfNavigationButton,
+                                                                   height: Const.sizeOfNavigationButton))
             profileButton.setImage(image, for: .normal)
         }
         configureImage(profileButton)
@@ -105,6 +107,12 @@ class ConversationsListViewController: UIViewController {
         let profileViewController = storyboard.instantiateViewController(withIdentifier: "Profile") as! ProfileViewController
         profileViewController.conversationsListViewController = self
         present(profileViewController, animated: true)
+    }
+    
+    private enum Const {
+        static let numberOfSections = 2
+        static let hightOfCell: CGFloat = 100
+        static let sizeOfNavigationButton: CGFloat = 44
     }
 }
 
@@ -163,11 +171,6 @@ extension ConversationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         section == 0 ? "Online" : "History"
-    }
-    
-    private enum Const {
-        static let numberOfSections = 2
-        static let hightOfCell: CGFloat = 100
     }
 }
 

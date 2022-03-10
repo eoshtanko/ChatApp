@@ -9,7 +9,6 @@ import UIKit
 
 class EntryMessageView: UIView {
     
-    static let entyMessageViewHight: CGFloat = Const.entyMessageViewHight
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var entryMessageView: UIView!
     
@@ -17,6 +16,10 @@ class EntryMessageView: UIView {
         super.layoutSubviews()
         configureTextView()
         configureEntryMessageView()
+    }
+    
+    static func getEntyMessageViewHight() -> CGFloat {
+        return Const.entyMessageViewHight
     }
     
     private func configureTextView() {

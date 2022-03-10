@@ -8,8 +8,8 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
+    
     internal weak var conversationsListViewController: ConversationsListViewController?
-    private var imageDidChanged = false
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -27,6 +27,7 @@ class ProfileViewController: UIViewController {
         self.dismiss(animated: true)
     }
     
+    private var imageDidChanged = false
     @IBAction func saveButtonPressed(_ sender: Any) {
         if imageDidChanged {
             CurrentUser.user.image = profileImageView.image
