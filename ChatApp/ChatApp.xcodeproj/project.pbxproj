@@ -7,21 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */; };
+		3427ACD927D47ED40062F749 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACD827D47ED40062F749 /* Conversation.swift */; };
+		3427ACDB27D483DB0062F749 /* ConversationApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACDA27D483DB0062F749 /* ConversationApi.swift */; };
+		3427ACDD27D48A980062F749 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */; };
+		3427ACDF27D48AAD0062F749 /* ConversationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */; };
+		3427ACE627D610970062F749 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACE527D610970062F749 /* User.swift */; };
+		3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACE727D61EBA0062F749 /* ConversationViewController.swift */; };
+		3427ACEE27D88CA80062F749 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACED27D88CA80062F749 /* ChatMessageCell.swift */; };
+		3427ACF027D88FDE0062F749 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACEF27D88FDE0062F749 /* ChatMessage.swift */; };
+		3427ACFA27D94D000062F749 /* EntryMessageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3427ACF927D94D000062F749 /* EntryMessageView.xib */; };
+		3427ACFC27D9C2B10062F749 /* EntryMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */; };
 		345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345624F127C4C6950044C73A /* LifecycleLogger.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
 		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
-		34ACCFED27C4AAEB00535096 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEB27C4AAEB00535096 /* Main.storyboard */; };
+		34ACCFED27C4AAEB00535096 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEB27C4AAEB00535096 /* Profile.storyboard */; };
 		34ACCFEF27C4AAEC00535096 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEE27C4AAEC00535096 /* Assets.xcassets */; };
 		34ACCFF227C4AAEC00535096 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */; };
 		34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
+		3427ACD827D47ED40062F749 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		3427ACDA27D483DB0062F749 /* ConversationApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationApi.swift; sourceTree = "<group>"; };
+		3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationTableViewCell.xib; sourceTree = "<group>"; };
+		3427ACE527D610970062F749 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3427ACE727D61EBA0062F749 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		3427ACED27D88CA80062F749 /* ChatMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageCell.swift; sourceTree = "<group>"; };
+		3427ACEF27D88FDE0062F749 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		3427ACF927D94D000062F749 /* EntryMessageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EntryMessageView.xib; sourceTree = "<group>"; };
+		3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryMessageView.swift; sourceTree = "<group>"; };
 		345624F127C4C6950044C73A /* LifecycleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleLogger.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		34ACCFEC27C4AAEB00535096 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		34ACCFEC27C4AAEB00535096 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Profile.storyboard; sourceTree = "<group>"; };
 		34ACCFEE27C4AAEC00535096 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		34ACCFF127C4AAEC00535096 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		34ACCFF327C4AAEC00535096 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,6 +61,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3427ACD327D47DC20062F749 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3427ACD827D47ED40062F749 /* Conversation.swift */,
+				3427ACEF27D88FDE0062F749 /* ChatMessage.swift */,
+				3427ACE527D610970062F749 /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3427ACD427D47DCE0062F749 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				34ACCFEB27C4AAEB00535096 /* Profile.storyboard */,
+				34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */,
+				3427ACDE27D48AAD0062F749 /* ConversationTableViewCell.xib */,
+				3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */,
+				3427ACED27D88CA80062F749 /* ChatMessageCell.swift */,
+				3427ACF927D94D000062F749 /* EntryMessageView.xib */,
+				3427ACFB27D9C2B10062F749 /* EntryMessageView.swift */,
+				34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3427ACD527D47DE40062F749 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */,
+				3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */,
+				3427ACE727D61EBA0062F749 /* ConversationViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3427ACD627D47E6A0062F749 /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				34ACCFE527C4AAEB00535096 /* AppDelegate.swift */,
+				34ACCFF327C4AAEC00535096 /* Info.plist */,
+			);
+			path = "Supporting files";
+			sourceTree = "<group>";
+		};
+		3427ACD727D47E8C0062F749 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3427ACDA27D483DB0062F749 /* ConversationApi.swift */,
+				34ACCFEE27C4AAEC00535096 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		345624F327C4F0E20044C73A /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -66,14 +141,12 @@
 		34ACCFE427C4AAEB00535096 /* ChatApp */ = {
 			isa = PBXGroup;
 			children = (
+				3427ACD327D47DC20062F749 /* Model */,
+				3427ACD427D47DCE0062F749 /* View */,
+				3427ACD527D47DE40062F749 /* Controller */,
 				345624F327C4F0E20044C73A /* Tools */,
-				34ACCFE527C4AAEB00535096 /* AppDelegate.swift */,
-				34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */,
-				34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */,
-				34ACCFEB27C4AAEB00535096 /* Main.storyboard */,
-				34ACCFEE27C4AAEC00535096 /* Assets.xcassets */,
-				34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */,
-				34ACCFF327C4AAEC00535096 /* Info.plist */,
+				3427ACD727D47E8C0062F749 /* Resources */,
+				3427ACD627D47E6A0062F749 /* Supporting files */,
 			);
 			path = ChatApp;
 			sourceTree = "<group>";
@@ -136,9 +209,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3427ACFA27D94D000062F749 /* EntryMessageView.xib in Resources */,
+				3427ACDF27D48AAD0062F749 /* ConversationTableViewCell.xib in Resources */,
 				34ACCFF227C4AAEC00535096 /* LaunchScreen.storyboard in Resources */,
 				34ACCFEF27C4AAEC00535096 /* Assets.xcassets in Resources */,
-				34ACCFED27C4AAEB00535096 /* Main.storyboard in Resources */,
+				34ACCFED27C4AAEB00535096 /* Profile.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,22 +224,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3427ACDD27D48A980062F749 /* ConversationTableViewCell.swift in Sources */,
 				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
+				3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */,
+				3427ACD927D47ED40062F749 /* Conversation.swift in Sources */,
+				3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */,
 				34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */,
+				3427ACE627D610970062F749 /* User.swift in Sources */,
+				3427ACEE27D88CA80062F749 /* ChatMessageCell.swift in Sources */,
 				345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */,
+				3427ACFC27D9C2B10062F749 /* EntryMessageView.swift in Sources */,
+				3427ACF027D88FDE0062F749 /* ChatMessage.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
+				3427ACDB27D483DB0062F749 /* ConversationApi.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		34ACCFEB27C4AAEB00535096 /* Main.storyboard */ = {
+		34ACCFEB27C4AAEB00535096 /* Profile.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				34ACCFEC27C4AAEB00535096 /* Base */,
 			);
-			name = Main.storyboard;
+			name = Profile.storyboard;
 			sourceTree = "<group>";
 		};
 		34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */ = {
@@ -301,14 +385,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ChatApp/Info.plist;
+				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your photo library so that you can select your profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -333,14 +416,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ChatApp/Info.plist;
+				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to your photo library so that you can select your profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
