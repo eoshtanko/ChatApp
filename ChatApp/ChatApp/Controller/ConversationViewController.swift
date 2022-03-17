@@ -14,14 +14,16 @@ class ConversationViewController: UITableViewController {
     private var entreMessageBar: EntryMessageView?
     
     private static var currentTheme: Theme = .classic
+    
     private let nightNavBarAppearance = UINavigationBarAppearance()
+    private let dayNavBarAppearance = UINavigationBarAppearance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
         assembleGroupedMessages()
         configureTableView()
-        configureNavBarAppearanceForNightTheme()
+        configureAppearances()
         becomeFirstResponder()
     }
     
@@ -80,10 +82,21 @@ class ConversationViewController: UITableViewController {
         }
     }
     
+    private func configureAppearances() {
+        configureNavBarAppearanceForNightTheme()
+        configureNavBarAppearanceForDayOrClassicTheme()
+    }
+    
     private func configureNavBarAppearanceForNightTheme() {
         nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         nightNavBarAppearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+    }
+    
+    private func configureNavBarAppearanceForDayOrClassicTheme() {
+        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
     }
     
     private func setCurrentTheme() {
@@ -97,7 +110,9 @@ class ConversationViewController: UITableViewController {
     
     private func setDayOrClassicTheme() {
         view.backgroundColor = .white
-        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = .systemBlue
+        navigationItem.standardAppearance = dayNavBarAppearance
+        ChatMessageCell.setCurrentTheme(ConversationViewController.currentTheme)
         tableView.reloadData()
     }
     
@@ -105,6 +120,7 @@ class ConversationViewController: UITableViewController {
         tableView.backgroundColor = .black
         navigationController?.navigationBar.tintColor = .systemYellow
         navigationItem.standardAppearance = nightNavBarAppearance
+        ChatMessageCell.setCurrentTheme(ConversationViewController.currentTheme)
         tableView.reloadData()
     }
     
@@ -141,7 +157,6 @@ extension ConversationViewController {
             return cell
         }
         let message = filteredChatMessages[indexPath.section][indexPath.row]
-        messageCell.setCurrentTheme(ConversationViewController.currentTheme)
         messageCell.configureCell(message)
         return messageCell
     }

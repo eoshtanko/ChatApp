@@ -163,7 +163,6 @@ class ConversationsListViewController: UIViewController {
                     self?.currentTheme = theme
                     self?.changeControllersAppearance()
                     self?.memoryManager.saveThemeToMemory(theme)
-                    self?.setNeedsStatusBarAppearanceUpdate()
                 }
             }
         })
@@ -210,7 +209,11 @@ class ConversationsListViewController: UIViewController {
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
     }
     
+    // ДОЛГО ДОЛГО ДОЛГО пыталась избавиться от этих
+    // варинингов, но нет... :.(
     private func setDayOrClassicThemeToNavBar() {
+        UIApplication.shared.statusBarStyle = .darkContent
+        //self.setNeedsStatusBarAppearanceUpdate()
         navigationItem.standardAppearance = dayNavBarAppearance
         navigationItem.scrollEdgeAppearance = dayNavBarAppearance
     }
@@ -231,13 +234,15 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setNightThemeToNavBar() {
+        UIApplication.shared.statusBarStyle = .lightContent
+        //self.setNeedsStatusBarAppearanceUpdate()
         navigationItem.standardAppearance = nightNavBarAppearance
         navigationItem.scrollEdgeAppearance = nightNavBarAppearance
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return currentTheme == .night ? .lightContent : .darkContent
-    }
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return currentTheme == .night ? UIStatusBarStyle.lightContent : UIStatusBarStyle.darkContent
+//    }
     
     private enum Const {
         static let numberOfSections = 2
@@ -247,13 +252,6 @@ class ConversationsListViewController: UIViewController {
     }
 }
 
-extension UIApplication {
-
-var statusBarView: UIView? {
-    return value(forKey: "statusBar") as? UIView
-   }
-}
-
 protocol ThemesPickerDelegate: AnyObject {
     func selectTheme(_ theme: Theme)
 }
@@ -261,12 +259,11 @@ protocol ThemesPickerDelegate: AnyObject {
 extension ConversationsListViewController: ThemesPickerDelegate {
 
     func selectTheme(_ theme: Theme) {
-        if currentTheme != theme {
-            currentTheme = theme
-            changeControllersAppearance()
-            setNeedsStatusBarAppearanceUpdate()
-            memoryManager.saveThemeToMemory(theme)
-        }
+//        if currentTheme != theme {
+//            currentTheme = theme
+//            changeControllersAppearance()
+//            memoryManager.saveThemeToMemory(theme)
+//        }
     }
     
     private func changeControllersAppearance() {

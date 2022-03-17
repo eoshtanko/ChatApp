@@ -28,7 +28,7 @@ class ChatMessageCell: UITableViewCell {
     private var incomingMessageUIColor: UIColor!
     private var outcomingMessageUIColor: UIColor!
     
-    private var currentTheme: Theme = .classic
+    private static var currentTheme: Theme = .classic
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,11 +43,6 @@ class ChatMessageCell: UITableViewCell {
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         setCurrentTheme()
         configureConstraints()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setCurrentTheme()
     }
     
     internal func configureCell(_ chatMessage: ChatMessage) {
@@ -66,8 +61,8 @@ class ChatMessageCell: UITableViewCell {
         }
     }
     
-    internal func setCurrentTheme(_ theme: Theme) {
-        currentTheme = theme
+    internal static func setCurrentTheme(_ theme: Theme) {
+        ChatMessageCell.currentTheme = theme
     }
     
     private func configureConstraints() {
@@ -87,7 +82,7 @@ class ChatMessageCell: UITableViewCell {
     }
     
     private func setCurrentTheme() {
-        switch currentTheme {
+        switch ChatMessageCell.currentTheme {
         case .classic:
             setClassicTheme()
         case .day:
