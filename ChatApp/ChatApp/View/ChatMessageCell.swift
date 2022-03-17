@@ -41,6 +41,7 @@ class ChatMessageCell: UITableViewCell {
         bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        setCurrentTheme()
         configureConstraints()
     }
     

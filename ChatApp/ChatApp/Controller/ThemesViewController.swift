@@ -53,7 +53,6 @@ class ThemesViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar()
         initialTheme = currentTheme
-        navigationController?.navigationBar.barStyle = .black
     }
     
     init?(coder: NSCoder, themesPickerDelegate: ThemesPickerDelegate?, pickeThemeMethod: @escaping (Theme) -> Void) {
@@ -74,7 +73,6 @@ class ThemesViewController: UIViewController {
     }
     
     private func configureView() {
-        configureNavigationBar()
         configureBackground()
         configureThemeButtons()
     }

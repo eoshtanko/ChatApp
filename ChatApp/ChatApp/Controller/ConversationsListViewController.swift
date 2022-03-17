@@ -18,6 +18,9 @@ class ConversationsListViewController: UIViewController {
     private var currentTheme: Theme = .classic
     private let memoryManager = MemoryManager()
     
+    private let dayNavBarAppearance = UINavigationBarAppearance()
+    private let nightNavBarAppearance = UINavigationBarAppearance()
+    
     private let onlineConversations = ConversationApi.getOnlineConversations()
     private let offlineConversations = ConversationApi.getOfflineConversations()
     private var filteredOnlineConversations: [Conversation]!
@@ -27,6 +30,7 @@ class ConversationsListViewController: UIViewController {
         super.viewDidLoad()
         filteredOnlineConversations = onlineConversations
         filteredOfflineConversations = offlineConversations
+        configureAppearances()
         configureTableView()
         configureNavigationBar()
         configureSearchBar()
@@ -165,6 +169,23 @@ class ConversationsListViewController: UIViewController {
         })
     }
     
+    private func configureAppearances() {
+        configureDayNavBarAppearance()
+        configureNightNavBarAppearance()
+    }
+    
+    private func configureDayNavBarAppearance() {
+        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+    }
+    
+    private func configureNightNavBarAppearance() {
+        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.backgroundColor = .black
+    }
+    
     private func setCurrentTheme() {
         switch currentTheme {
         case .classic, .day:
@@ -175,45 +196,48 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setDayOrClassicTheme() {
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
         tableView.backgroundColor = .white
-        
+        setDayOrClassicThemeToSearchBar()
+        setDayOrClassicThemeToNavBar()
+        tableView.reloadData()
+    }
+    
+    private func setDayOrClassicThemeToSearchBar() {
         searchBar.barTintColor = .white
         searchBar.barStyle = .default
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.backgroundColor = UIColor(named: "BackgroundImageColor")
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        appearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.barStyle = .default
-        tableView.reloadData()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+    }
+    
+    private func setDayOrClassicThemeToNavBar() {
+        navigationItem.standardAppearance = dayNavBarAppearance
+        navigationItem.scrollEdgeAppearance = dayNavBarAppearance
     }
     
     private func setNightTheme() {
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
-
         tableView.backgroundColor = .black
-        view.backgroundColor = .black
+        setNightThemeToSearchBar()
+        setNightThemeToNavBar()
+        tableView.reloadData()
+    }
+    
+    private func setNightThemeToSearchBar() {
         searchBar.barTintColor = .black
         searchBar.barStyle = .default
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.backgroundColor = .systemYellow
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.backgroundColor = .black
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.barStyle = .black
-        
-        tableView.reloadData()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
     }
     
+    private func setNightThemeToNavBar() {
+        navigationItem.standardAppearance = nightNavBarAppearance
+        navigationItem.scrollEdgeAppearance = nightNavBarAppearance
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return currentTheme == .night ? .lightContent : .darkContent
+    }
     
     private enum Const {
         static let numberOfSections = 2
@@ -237,12 +261,12 @@ protocol ThemesPickerDelegate: AnyObject {
 extension ConversationsListViewController: ThemesPickerDelegate {
 
     func selectTheme(_ theme: Theme) {
-//        if currentTheme != theme {
-//            currentTheme = theme
-//            changeControllersAppearance()
-//            setNeedsStatusBarAppearanceUpdate()
-//            memoryManager.saveThemeToMemory(theme)
-//        }
+        if currentTheme != theme {
+            currentTheme = theme
+            changeControllersAppearance()
+            setNeedsStatusBarAppearanceUpdate()
+            memoryManager.saveThemeToMemory(theme)
+        }
     }
     
     private func changeControllersAppearance() {
@@ -256,11 +280,6 @@ extension ConversationsListViewController: ThemesPickerDelegate {
         currentTheme = memoryManager.getThemeFromMemory()
         changeControllersAppearance()
     }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return currentTheme == .night ? .lightContent : .darkContent
-    }
-    
 }
 
 enum Theme: Int {

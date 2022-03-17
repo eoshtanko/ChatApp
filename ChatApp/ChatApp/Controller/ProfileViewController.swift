@@ -104,28 +104,52 @@ class ProfileViewController: UIViewController {
     }
     
     private func setDayOrClassicTheme() {
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
         view.backgroundColor = .white
+        setDayOrClassicThemeToLabels()
+        setDayOrClassicThemeToButtons()
+        setDayOrClassicThemeToNavBar()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+    }
+    
+    private func setDayOrClassicThemeToLabels() {
         nameLabel.textColor = .black
         infoLabel.textColor = .black
         infoLabel.backgroundColor = .white
+    }
+    
+    private func setDayOrClassicThemeToButtons() {
         editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
         saveButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
         saveButton.backgroundColor = .white
+    }
+    
+    private func setDayOrClassicThemeToNavBar() {
         navigationBar.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
         navigationBarLabel.textColor = .black
         navigationBarButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
     }
     
     private func setNightTheme() {
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
         view.backgroundColor = .black
+        setNightThemeToLabels()
+        setNightThemeToButtons()
+        setNightThemeToNavBar()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
+    }
+    
+    private func setNightThemeToLabels() {
         nameLabel.textColor = .white
         infoLabel.textColor = .white
         infoLabel.backgroundColor = .black
+    }
+    
+    private func setNightThemeToButtons() {
         editPhotoButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
+    }
+    
+    private func setNightThemeToNavBar() {
         navigationBar.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
         navigationBarLabel.textColor = .white
         navigationBarButton.setTitleColor(.systemYellow, for: .normal)

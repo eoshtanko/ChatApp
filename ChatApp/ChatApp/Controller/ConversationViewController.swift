@@ -11,16 +11,17 @@ class ConversationViewController: UITableViewController {
     
     var conversation: Conversation?
     private var filteredChatMessages = [[ChatMessage]]()
-    
     private var entreMessageBar: EntryMessageView?
     
     private static var currentTheme: Theme = .classic
+    private let nightNavBarAppearance = UINavigationBarAppearance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
         assembleGroupedMessages()
         configureTableView()
+        configureNavBarAppearanceForNightTheme()
         becomeFirstResponder()
     }
     
@@ -79,6 +80,12 @@ class ConversationViewController: UITableViewController {
         }
     }
     
+    private func configureNavBarAppearanceForNightTheme() {
+        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+    }
+    
     private func setCurrentTheme() {
         switch ConversationViewController.currentTheme {
         case .classic, .day:
@@ -96,13 +103,8 @@ class ConversationViewController: UITableViewController {
     
     private func setNightTheme() {
         tableView.backgroundColor = .black
-        navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.tintColor = .systemYellow
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
-        navigationItem.standardAppearance = appearance
+        navigationItem.standardAppearance = nightNavBarAppearance
         tableView.reloadData()
     }
     
