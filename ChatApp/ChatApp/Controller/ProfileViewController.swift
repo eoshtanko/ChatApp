@@ -10,6 +10,7 @@ import UIKit
 class ProfileViewController: UIViewController {
     
     internal weak var conversationsListViewController: ConversationsListViewController?
+    private var currentTheme: Theme = .classic
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -17,6 +18,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var editPhotoButton: UIButton!
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLabel: UILabel!
+    @IBOutlet weak var navigationBarButton: UIButton!
     
     @IBAction func editPhotoButtonPressed(_ sender: Any) {
         print("Выбери изображение профиля")
@@ -34,12 +37,21 @@ class ProfileViewController: UIViewController {
         }
         CurrentUser.user.name = nameLabel.text
         CurrentUser.user.info = infoLabel.text
-        conversationsListViewController?.configureNavigationButton()
+        conversationsListViewController?.configureRightNavigationButton()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCurrentTheme()
+    }
+    
+    internal func setCurrentTheme(_ theme: Theme) {
+        currentTheme = theme
     }
     
     private func configureSubviews() {
@@ -77,8 +89,46 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureEditPhotoButton() {
+        editPhotoButton.setTitle("", for: .normal)
         editPhotoButton.layer.cornerRadius = editPhotoButton.frame.size.width / 2
         editPhotoButton.clipsToBounds = true
+    }
+    
+    private func setCurrentTheme() {
+        switch currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setDayOrClassicTheme() {
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+        view.backgroundColor = .white
+        nameLabel.textColor = .black
+        infoLabel.textColor = .black
+        infoLabel.backgroundColor = .white
+        editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
+        saveButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
+        saveButton.backgroundColor = .white
+        navigationBar.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+        navigationBarLabel.textColor = .black
+        navigationBarButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
+    }
+    
+    private func setNightTheme() {
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
+        view.backgroundColor = .black
+        nameLabel.textColor = .white
+        infoLabel.textColor = .white
+        infoLabel.backgroundColor = .black
+        editPhotoButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
+        navigationBar.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+        navigationBarLabel.textColor = .white
+        navigationBarButton.setTitleColor(.systemYellow, for: .normal)
     }
     
     private enum Const {

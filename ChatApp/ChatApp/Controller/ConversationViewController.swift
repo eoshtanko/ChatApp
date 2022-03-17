@@ -11,7 +11,10 @@ class ConversationViewController: UITableViewController {
     
     var conversation: Conversation?
     private var filteredChatMessages = [[ChatMessage]]()
-    private var entreMessageBar: UIView?
+    
+    private var entreMessageBar: EntryMessageView?
+    
+    private static var currentTheme: Theme = .classic
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,15 @@ class ConversationViewController: UITableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollToBottom()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCurrentTheme()
+    }
+    
+    static internal func setCurrentTheme(_ theme: Theme) {
+        ConversationViewController.currentTheme = theme
     }
     
     private func configureNavigationBar() {
@@ -67,6 +79,33 @@ class ConversationViewController: UITableViewController {
         }
     }
     
+    private func setCurrentTheme() {
+        switch ConversationViewController.currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setDayOrClassicTheme() {
+        view.backgroundColor = .white
+        navigationController?.navigationBar.barStyle = .default
+        tableView.reloadData()
+    }
+    
+    private func setNightTheme() {
+        tableView.backgroundColor = .black
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.tintColor = .systemYellow
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+        navigationItem.standardAppearance = appearance
+        tableView.reloadData()
+    }
+    
     private enum Const {
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
@@ -100,6 +139,7 @@ extension ConversationViewController {
             return cell
         }
         let message = filteredChatMessages[indexPath.section][indexPath.row]
+        messageCell.setCurrentTheme(ConversationViewController.currentTheme)
         messageCell.configureCell(message)
         return messageCell
     }
@@ -129,6 +169,7 @@ extension ConversationViewController {
         get {
             if entreMessageBar == nil {
                 entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+                entreMessageBar?.setCurrentTheme(ConversationViewController.currentTheme)
             }
             return entreMessageBar
         }
