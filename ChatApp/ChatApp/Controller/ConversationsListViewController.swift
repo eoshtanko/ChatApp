@@ -227,7 +227,7 @@ class ConversationsListViewController: UIViewController {
     
     private func setNightThemeToSearchBar() {
         searchBar.barTintColor = .black
-        searchBar.barStyle = .default
+        searchBar.barStyle = .black
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.backgroundColor = .systemYellow
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
