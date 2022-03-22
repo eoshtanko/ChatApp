@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Themes View Controller-->
+        <scene sceneID="mhg-QC-k16">
+            <objects>
+                <viewController storyboardIdentifier="Themes" id="VcV-Z0-Pwj" customClass="ThemesViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="laD-Me-6kh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8F-yT-jWv">
+                                <rect key="frame" x="20" y="410.5" width="374" height="75"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lmw-Fr-GAM">
+                                        <rect key="frame" x="20" y="10" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="IncomingMessageDayThemeColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yf6-13-jT5">
+                                        <rect key="frame" x="194.5" y="30" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="OutcomingMessageDayThemeColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="7P5-31-rGR"/>
+                                    <constraint firstItem="yf6-13-jT5" firstAttribute="width" secondItem="lmw-Fr-GAM" secondAttribute="width" id="P7I-yf-GLI"/>
+                                    <constraint firstItem="lmw-Fr-GAM" firstAttribute="leading" secondItem="c8F-yT-jWv" secondAttribute="leading" constant="20" id="PQW-b0-xpN"/>
+                                    <constraint firstAttribute="bottom" secondItem="yf6-13-jT5" secondAttribute="bottom" constant="10" id="Tlc-1a-YTH"/>
+                                    <constraint firstItem="yf6-13-jT5" firstAttribute="height" secondItem="lmw-Fr-GAM" secondAttribute="height" id="V81-dz-XIc"/>
+                                    <constraint firstItem="yf6-13-jT5" firstAttribute="top" secondItem="lmw-Fr-GAM" secondAttribute="top" constant="20" id="cQu-8b-D9l"/>
+                                    <constraint firstAttribute="trailing" secondItem="yf6-13-jT5" secondAttribute="trailing" constant="20" id="l9G-PB-mRQ"/>
+                                    <constraint firstItem="yf6-13-jT5" firstAttribute="leading" secondItem="lmw-Fr-GAM" secondAttribute="trailing" constant="15" id="peC-xv-4kN"/>
+                                    <constraint firstItem="lmw-Fr-GAM" firstAttribute="top" secondItem="c8F-yT-jWv" secondAttribute="top" constant="10" id="v6G-Jq-FOa"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="csT-He-hIv">
+                                <rect key="frame" x="192" y="505.5" width="30" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="qKb-De-gnb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Classic" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ydr-5r-Z9h">
+                                <rect key="frame" x="179.5" y="349.5" width="55" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="fbY-22-9xJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sGM-JJ-VaO">
+                                <rect key="frame" x="20" y="254.5" width="374" height="75"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PGN-86-u7u">
+                                        <rect key="frame" x="20" y="10" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="IncomingMessageColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tJc-ya-iKz">
+                                        <rect key="frame" x="194.5" y="30" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="OutcomingMessageColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="tJc-ya-iKz" secondAttribute="trailing" constant="20" id="D7x-YN-iJa"/>
+                                    <constraint firstItem="tJc-ya-iKz" firstAttribute="leading" secondItem="PGN-86-u7u" secondAttribute="trailing" constant="15" id="F0k-OA-eND"/>
+                                    <constraint firstItem="tJc-ya-iKz" firstAttribute="width" secondItem="PGN-86-u7u" secondAttribute="width" id="KIG-dO-Wzx"/>
+                                    <constraint firstAttribute="bottom" secondItem="tJc-ya-iKz" secondAttribute="bottom" constant="10" id="O4l-xa-Lq9"/>
+                                    <constraint firstItem="tJc-ya-iKz" firstAttribute="height" secondItem="PGN-86-u7u" secondAttribute="height" id="QhY-LQ-sXd"/>
+                                    <constraint firstItem="tJc-ya-iKz" firstAttribute="top" secondItem="PGN-86-u7u" secondAttribute="top" constant="20" id="Sv7-FA-5oW"/>
+                                    <constraint firstItem="PGN-86-u7u" firstAttribute="leading" secondItem="sGM-JJ-VaO" secondAttribute="leading" constant="20" id="U0Y-Ty-dza"/>
+                                    <constraint firstAttribute="height" constant="75" id="dtt-rg-gyl"/>
+                                    <constraint firstItem="PGN-86-u7u" firstAttribute="top" secondItem="sGM-JJ-VaO" secondAttribute="top" constant="10" id="qCZ-iZ-lHM"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V3z-h3-o20">
+                                <rect key="frame" x="20" y="566.5" width="374" height="75"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZg-zl-VzV">
+                                        <rect key="frame" x="20" y="10" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="IncomingMessageNightThemeColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tZ6-DM-HzX">
+                                        <rect key="frame" x="194.5" y="30" width="159.5" height="35"/>
+                                        <color key="backgroundColor" name="OutcomingMessageNightThemeColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="tZ6-DM-HzX" secondAttribute="trailing" constant="20" id="7kx-aN-NOH"/>
+                                    <constraint firstItem="tZ6-DM-HzX" firstAttribute="width" secondItem="XZg-zl-VzV" secondAttribute="width" id="JCj-bC-PzF"/>
+                                    <constraint firstAttribute="bottom" secondItem="tZ6-DM-HzX" secondAttribute="bottom" constant="10" id="Jnc-2M-mf5"/>
+                                    <constraint firstItem="tZ6-DM-HzX" firstAttribute="leading" secondItem="XZg-zl-VzV" secondAttribute="trailing" constant="15" id="WfA-Bf-zr9"/>
+                                    <constraint firstAttribute="height" constant="75" id="aKz-Sr-Ise"/>
+                                    <constraint firstItem="XZg-zl-VzV" firstAttribute="leading" secondItem="V3z-h3-o20" secondAttribute="leading" constant="20" id="vMc-Iq-SkG"/>
+                                    <constraint firstItem="tZ6-DM-HzX" firstAttribute="top" secondItem="XZg-zl-VzV" secondAttribute="top" constant="20" id="wk9-l2-jme"/>
+                                    <constraint firstItem="XZg-zl-VzV" firstAttribute="top" secondItem="V3z-h3-o20" secondAttribute="top" constant="10" id="woC-pu-5By"/>
+                                    <constraint firstItem="tZ6-DM-HzX" firstAttribute="height" secondItem="XZg-zl-VzV" secondAttribute="height" id="xEM-8i-7ja"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Night" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjo-B2-lo9">
+                                <rect key="frame" x="186" y="661.5" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="I36-IS-8x8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="euv-ua-JjB"/>
+                        <color key="backgroundColor" name="BackgroundClassicThemeColor"/>
+                        <constraints>
+                            <constraint firstItem="Ydr-5r-Z9h" firstAttribute="centerX" secondItem="laD-Me-6kh" secondAttribute="centerX" id="07i-w0-6os"/>
+                            <constraint firstItem="c8F-yT-jWv" firstAttribute="centerY" secondItem="laD-Me-6kh" secondAttribute="centerY" id="4fI-Kn-zKo"/>
+                            <constraint firstItem="V3z-h3-o20" firstAttribute="leading" secondItem="euv-ua-JjB" secondAttribute="leading" constant="20" id="EXb-k2-Rua"/>
+                            <constraint firstItem="sGM-JJ-VaO" firstAttribute="leading" secondItem="euv-ua-JjB" secondAttribute="leading" constant="20" id="Eyv-ff-uoq"/>
+                            <constraint firstItem="c8F-yT-jWv" firstAttribute="leading" secondItem="laD-Me-6kh" secondAttribute="leading" constant="20" id="GfD-KU-UNH"/>
+                            <constraint firstItem="c8F-yT-jWv" firstAttribute="top" secondItem="Ydr-5r-Z9h" secondAttribute="bottom" constant="40" id="I7t-mg-nNy"/>
+                            <constraint firstItem="sGM-JJ-VaO" firstAttribute="trailing" secondItem="euv-ua-JjB" secondAttribute="trailing" constant="-20" id="Mrz-62-var"/>
+                            <constraint firstItem="xjo-B2-lo9" firstAttribute="centerX" secondItem="laD-Me-6kh" secondAttribute="centerX" id="Pqm-FM-FGD"/>
+                            <constraint firstItem="csT-He-hIv" firstAttribute="top" secondItem="c8F-yT-jWv" secondAttribute="bottom" constant="20" id="Rxu-pt-Pcs"/>
+                            <constraint firstItem="V3z-h3-o20" firstAttribute="top" secondItem="csT-He-hIv" secondAttribute="bottom" constant="40" id="aih-u7-1Ve"/>
+                            <constraint firstItem="V3z-h3-o20" firstAttribute="trailing" secondItem="euv-ua-JjB" secondAttribute="trailing" constant="-20" id="cSq-IY-1tv"/>
+                            <constraint firstItem="Ydr-5r-Z9h" firstAttribute="top" secondItem="sGM-JJ-VaO" secondAttribute="bottom" constant="20" id="dLt-EA-nJc"/>
+                            <constraint firstAttribute="trailing" secondItem="c8F-yT-jWv" secondAttribute="trailing" constant="20" id="jOm-dU-r41"/>
+                            <constraint firstItem="xjo-B2-lo9" firstAttribute="top" secondItem="V3z-h3-o20" secondAttribute="bottom" constant="20" id="rE3-Hg-qC7"/>
+                            <constraint firstItem="csT-He-hIv" firstAttribute="centerX" secondItem="laD-Me-6kh" secondAttribute="centerX" id="rNd-OS-7z0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="classicThemeArea" destination="sGM-JJ-VaO" id="KFc-XA-TuE"/>
+                        <outlet property="classicThemeIncomingMessage" destination="PGN-86-u7u" id="Tbo-3p-r8v"/>
+                        <outlet property="classicThemeLabel" destination="Ydr-5r-Z9h" id="sdS-vg-FJE"/>
+                        <outlet property="classicThemeOutcomingMessage" destination="tJc-ya-iKz" id="Ztg-sm-Z3O"/>
+                        <outlet property="dayThemeArea" destination="c8F-yT-jWv" id="Xb2-YP-J1a"/>
+                        <outlet property="dayThemeIncomingMessage" destination="lmw-Fr-GAM" id="hSC-Ui-V7M"/>
+                        <outlet property="dayThemeLabel" destination="csT-He-hIv" id="g9h-ob-ZDT"/>
+                        <outlet property="dayThemeOutcomingMessage" destination="yf6-13-jT5" id="BIi-PY-9zq"/>
+                        <outlet property="nightThemeArea" destination="V3z-h3-o20" id="Z0D-sa-zSm"/>
+                        <outlet property="nightThemeIncomingMessage" destination="XZg-zl-VzV" id="g5k-gp-ayz"/>
+                        <outlet property="nightThemeLabel" destination="xjo-B2-lo9" id="a6o-To-soZ"/>
+                        <outlet property="nightThemeOutcomingMessage" destination="tZ6-DM-HzX" id="vy0-mI-nuP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="01N-2R-5rh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="46" y="44"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="BackgroundClassicThemeColor">
+            <color red="0.094117647058823528" green="0.21176470588235294" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="IncomingMessageColor">
+            <color red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="IncomingMessageDayThemeColor">
+            <color red="0.91764705882352937" green="0.92156862745098034" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="IncomingMessageNightThemeColor">
+            <color red="0.16470588235294117" green="0.16470588235294117" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OutcomingMessageColor">
+            <color red="0.86274509803921573" green="0.96862745098039216" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OutcomingMessageDayThemeColor">
+            <color red="0.24705882352941178" green="0.53725490196078429" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OutcomingMessageNightThemeColor">
+            <color red="0.36078431372549019" green="0.36078431372549019" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

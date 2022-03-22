@@ -11,19 +11,35 @@ class ConversationViewController: UITableViewController {
     
     var conversation: Conversation?
     private var filteredChatMessages = [[ChatMessage]]()
-    private var entreMessageBar: UIView?
+    private var entreMessageBar: EntryMessageView?
+    
+    private var currentTheme: Theme = .classic
+    
+    private let nightNavBarAppearance = UINavigationBarAppearance()
+    private let dayNavBarAppearance = UINavigationBarAppearance()
+    
+    init?(theme: Theme) {
+        currentTheme = theme
+        super.init(nibName: nil, bundle: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
         assembleGroupedMessages()
         configureTableView()
+        configureAppearances()
         becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollToBottom()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setCurrentTheme()
     }
     
     private func configureNavigationBar() {
@@ -65,6 +81,52 @@ class ConversationViewController: UITableViewController {
             let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + EntryMessageView.getEntyMessageViewHight())
             tableView.setContentOffset(bottomOffset, animated: false)
         }
+    }
+    
+    private func configureAppearances() {
+        configureNavBarAppearanceForNightTheme()
+        configureNavBarAppearanceForDayOrClassicTheme()
+    }
+    
+    private func configureNavBarAppearanceForNightTheme() {
+        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+    }
+    
+    private func configureNavBarAppearanceForDayOrClassicTheme() {
+        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+    }
+    
+    private func setCurrentTheme() {
+        switch currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setDayOrClassicTheme() {
+        view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .systemBlue
+        navigationItem.standardAppearance = dayNavBarAppearance
+        ChatMessageCell.setCurrentTheme(currentTheme)
+        tableView.reloadData()
+    }
+    
+    private func setNightTheme() {
+        tableView.backgroundColor = .black
+        navigationController?.navigationBar.tintColor = .systemYellow
+        navigationItem.standardAppearance = nightNavBarAppearance
+        ChatMessageCell.setCurrentTheme(currentTheme)
+        tableView.reloadData()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private enum Const {
@@ -129,6 +191,7 @@ extension ConversationViewController {
         get {
             if entreMessageBar == nil {
                 entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+                entreMessageBar?.setCurrentTheme(currentTheme)
             }
             return entreMessageBar
         }

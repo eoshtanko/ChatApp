@@ -25,21 +25,10 @@ class ChatMessageCell: UITableViewCell {
     private var leadingConstraint: NSLayoutConstraint!
     private var trailingConstraint: NSLayoutConstraint!
     
-    func configureCell(_ chatMessage: ChatMessage) {
-        messageLabel.text = chatMessage.text
-        
-        bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
-        UIColor(named: "IncomingMessageColor") : UIColor(named: "OutcomingMessageColor")
-        messageLabel.textColor = .black
-        
-        if chatMessage.isIncoming {
-            trailingConstraint.isActive = false
-            leadingConstraint.isActive = true
-        } else {
-            leadingConstraint.isActive = false
-            trailingConstraint.isActive = true
-        }
-    }
+    private var incomingMessageUIColor: UIColor!
+    private var outcomingMessageUIColor: UIColor!
+    
+    private static var currentTheme: Theme = .classic
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -52,7 +41,27 @@ class ChatMessageCell: UITableViewCell {
         bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        setCurrentTheme()
         configureConstraints()
+    }
+    
+    func configureCell(_ chatMessage: ChatMessage) {
+        messageLabel.text = chatMessage.text
+        
+        bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
+        incomingMessageUIColor : outcomingMessageUIColor
+        
+        if chatMessage.isIncoming {
+            trailingConstraint.isActive = false
+            leadingConstraint.isActive = true
+        } else {
+            leadingConstraint.isActive = false
+            trailingConstraint.isActive = true
+        }
+    }
+    
+    static func setCurrentTheme(_ theme: Theme) {
+        ChatMessageCell.currentTheme = theme
     }
     
     private func configureConstraints() {
@@ -69,6 +78,38 @@ class ChatMessageCell: UITableViewCell {
         
         leadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Const.messageLabelLeadingAndTrailingConstraint)
+    }
+    
+    private func setCurrentTheme() {
+        switch ChatMessageCell.currentTheme {
+        case .classic:
+            setClassicTheme()
+        case .day:
+            setDayTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setClassicTheme() {
+        backgroundColor = .white
+        messageLabel.textColor = .black
+        incomingMessageUIColor = UIColor(named: "IncomingMessageColor")
+        outcomingMessageUIColor = UIColor(named: "OutcomingMessageColor")
+    }
+    
+    private func setDayTheme() {
+        backgroundColor = .white
+        messageLabel.textColor = .black
+        incomingMessageUIColor = UIColor(named: "IncomingMessageDayThemeColor")
+        outcomingMessageUIColor = UIColor(named: "OutcomingMessageDayThemeColor")
+    }
+    
+    private func setNightTheme() {
+        backgroundColor = .black
+        messageLabel.textColor = .white
+        incomingMessageUIColor = UIColor(named: "IncomingMessageNightThemeColor")
+        outcomingMessageUIColor = UIColor(named: "OutcomingMessageNightThemeColor")
     }
     
     required init?(coder: NSCoder) {

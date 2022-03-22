@@ -9,7 +9,8 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    internal weak var conversationsListViewController: ConversationsListViewController?
+    weak var conversationsListViewController: ConversationsListViewController?
+    private var currentTheme: Theme = .classic
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -17,6 +18,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var editPhotoButton: UIButton!
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLabel: UILabel!
+    @IBOutlet weak var navigationBarButton: UIButton!
     
     @IBAction func editPhotoButtonPressed(_ sender: Any) {
         print("Выбери изображение профиля")
@@ -34,12 +37,28 @@ class ProfileViewController: UIViewController {
         }
         CurrentUser.user.name = nameLabel.text
         CurrentUser.user.info = infoLabel.text
-        conversationsListViewController?.configureNavigationButton()
+        conversationsListViewController?.configureRightNavigationButton()
+    }
+    
+    init?(coder: NSCoder, theme: Theme) {
+        currentTheme = theme
+        super.init(coder: coder)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureStatusBar(.lightContent)
+        setCurrentTheme()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        configureStatusBar(.darkContent)
     }
     
     private func configureSubviews() {
@@ -77,8 +96,80 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureEditPhotoButton() {
+        editPhotoButton.setTitle("", for: .normal)
         editPhotoButton.layer.cornerRadius = editPhotoButton.frame.size.width / 2
         editPhotoButton.clipsToBounds = true
+    }
+    
+    private func configureStatusBar(_ style: UIStatusBarStyle) {
+        if currentTheme != .night {
+            UIApplication.shared.statusBarStyle = style
+        }
+    }
+    
+    private func setCurrentTheme() {
+        switch currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setDayOrClassicTheme() {
+        view.backgroundColor = .white
+        setDayOrClassicThemeToLabels()
+        setDayOrClassicThemeToButtons()
+        setDayOrClassicThemeToNavBar()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+    }
+    
+    private func setDayOrClassicThemeToLabels() {
+        nameLabel.textColor = .black
+        infoLabel.textColor = .black
+        infoLabel.backgroundColor = .white
+    }
+    
+    private func setDayOrClassicThemeToButtons() {
+        editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
+        saveButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
+        saveButton.backgroundColor = UIColor(named: "BackgroundButtonColor")
+    }
+    
+    private func setDayOrClassicThemeToNavBar() {
+        navigationBar.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+        navigationBarLabel.textColor = .black
+        navigationBarButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
+    }
+    
+    private func setNightTheme() {
+        view.backgroundColor = .black
+        setNightThemeToLabels()
+        setNightThemeToButtons()
+        setNightThemeToNavBar()
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
+    }
+    
+    private func setNightThemeToLabels() {
+        nameLabel.textColor = .white
+        infoLabel.textColor = .white
+        infoLabel.backgroundColor = .black
+    }
+    
+    private func setNightThemeToButtons() {
+        editPhotoButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
+    }
+    
+    private func setNightThemeToNavBar() {
+        navigationBar.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+        navigationBarLabel.textColor = .white
+        navigationBarButton.setTitleColor(.systemYellow, for: .normal)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private enum Const {

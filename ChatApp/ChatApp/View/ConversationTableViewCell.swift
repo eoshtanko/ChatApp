@@ -12,6 +12,8 @@ class ConversationTableViewCell: UITableViewCell {
     static let identifier = String(describing: ConversationTableViewCell.self)
     private static let formatter = DateFormatter()
     
+    private static var currentTheme: Theme = .classic
+    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastMessageLabel: UILabel!
     @IBOutlet weak var lastMessageDateLabel: UILabel!
@@ -25,6 +27,11 @@ class ConversationTableViewCell: UITableViewCell {
             bottom: Const.verticalInserts, right: Const.horizontalInserts))
         contentView.layer.cornerRadius = Const.contentViewCornerRadius
         configureSubviews()
+        setCurrentTheme()
+    }
+    
+    static func setCurrentTheme(_ theme: Theme) {
+        ConversationTableViewCell.currentTheme = theme
     }
     
     func configureCell(_ conversation: Conversation) {
@@ -36,7 +43,7 @@ class ConversationTableViewCell: UITableViewCell {
         configureProfileImageView(conversation.image)
     }
     
-    func configureSubviews() {
+    private func configureSubviews() {
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
         onlineSignImageView.layer.cornerRadius = onlineSignImageView.frame.size.width / 2
     }
@@ -118,6 +125,29 @@ class ConversationTableViewCell: UITableViewCell {
         ConversationTableViewCell.formatter.locale = Locale(identifier: "en_GB")
         ConversationTableViewCell.formatter.doesRelativeDateFormatting = true
         return ConversationTableViewCell.formatter.string(from: date)
+    }
+    
+    private func setCurrentTheme() {
+        switch ConversationTableViewCell.currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setDayOrClassicTheme() {
+        backgroundColor = .white
+        nameLabel.textColor = .black
+        lastMessageLabel.textColor = .black
+        lastMessageDateLabel.textColor = .black
+    }
+    
+    private func setNightTheme() {
+        backgroundColor = .black
+        nameLabel.textColor = .white
+        lastMessageLabel.textColor = .white
+        lastMessageDateLabel.textColor = .white
     }
     
     private enum Const {

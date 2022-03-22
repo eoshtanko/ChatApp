@@ -12,6 +12,12 @@ class ConversationsListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
     
+    private var currentTheme: Theme = .classic
+    private let memoryManager = MemoryManager()
+    
+    private let dayNavBarAppearance = UINavigationBarAppearance()
+    private let nightNavBarAppearance = UINavigationBarAppearance()
+    
     private let onlineConversations = ConversationApi.getOnlineConversations()
     private let offlineConversations = ConversationApi.getOfflineConversations()
     private var filteredOnlineConversations: [Conversation]!
@@ -21,18 +27,16 @@ class ConversationsListViewController: UIViewController {
         super.viewDidLoad()
         filteredOnlineConversations = onlineConversations
         filteredOfflineConversations = offlineConversations
-        configureView()
+        configureAppearances()
         configureTableView()
         configureNavigationBar()
         configureSearchBar()
+        setInitialThemeToApp()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureNavigationTitle()
-    }
-    
-    private func configureView() {
-        view.backgroundColor = .white
     }
     
     private func configureTableView() {
@@ -47,7 +51,6 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureTableViewAppearance() {
-        tableView.backgroundColor = .white
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -68,20 +71,55 @@ class ConversationsListViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    func configureNavigationButton() {
-        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfNavigationButton,
-                                                   height: Const.sizeOfNavigationButton))
-        setImageToNavigationButton(profileButton)
+    private func configureNavigationButton() {
+        configureLeftNavigationButton()
+        configureRightNavigationButton()
+    }
+    
+    private func configureLeftNavigationButton() {
+        let settingsButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
+                                                    height: Const.sizeOfSettingsNavigationButton))
+        setImageToSettingsNavigationButton(settingsButton)
+        settingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: settingsButton)
+    }
+    
+    private func setImageToSettingsNavigationButton(_ settingsButton: UIButton) {
+        settingsButton.setImage(UIImage(systemName: "gear"), for: .normal)
+        settingsButton.imageView?.tintColor = UIColor(named: "GearButtonColor")
+        settingsButton.contentHorizontalAlignment = .fill
+        settingsButton.contentVerticalAlignment = .fill
+    }
+    
+    @objc private func goToSettings() {
+        let themesStoryboard = UIStoryboard(name: "Themes", bundle: nil)
+        let themesViewController = themesStoryboard.instantiateViewController(identifier: "Themes", creator: { coder -> ThemesViewController? in
+            ThemesViewController(coder: coder, themesPickerDelegate: self, theme: self.currentTheme) { [weak self] theme in
+                if self?.currentTheme != theme {
+                    self?.currentTheme = theme
+                    self?.setCurrentTheme()
+                    self?.memoryManager.saveThemeToMemory(theme)
+                }
+            }
+        })
+        self.navigationItem.title = "Chat"
+        navigationController?.pushViewController(themesViewController, animated: true)
+    }
+    
+    func configureRightNavigationButton() {
+        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfProfileNavigationButton,
+                                                   height: Const.sizeOfProfileNavigationButton))
+        setImageToProfileNavigationButton(profileButton)
         profileButton.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileButton)
     }
     
-    private func setImageToNavigationButton(_ profileButton: UIButton) {
+    private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
         if (CurrentUser.user.image == nil) {
             setDefaultImage(profileButton)
         } else {
-            let image = CurrentUser.user.image!.resized(to: CGSize(width: Const.sizeOfNavigationButton,
-                                                                   height: Const.sizeOfNavigationButton))
+            let image = CurrentUser.user.image!.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
+                                                                   height: Const.sizeOfProfileNavigationButton))
             profileButton.setImage(image, for: .normal)
         }
         configureImage(profileButton)
@@ -103,17 +141,144 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc private func goToProfile() {
-        let storyboard = UIStoryboard(name: "Profile", bundle: nil)
-        let profileViewController = storyboard.instantiateViewController(withIdentifier: "Profile") as! ProfileViewController
+        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
+        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
+            ProfileViewController(coder: coder, theme: self.currentTheme)
+        })
         profileViewController.conversationsListViewController = self
         present(profileViewController, animated: true)
     }
     
+    private func configureAppearances() {
+        configureDayNavBarAppearance()
+        configureNightNavBarAppearance()
+    }
+    
+    private func configureDayNavBarAppearance() {
+        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+    }
+    
+    private func configureNightNavBarAppearance() {
+        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        nightNavBarAppearance.backgroundColor = .black
+    }
+    
+    private func setDayOrClassicTheme() {
+        tableView.backgroundColor = .white
+        setDayOrClassicThemeToSearchBar()
+        setDayOrClassicThemeToNavBar()
+        tableView.reloadData()
+    }
+    
+    private func setDayOrClassicThemeToSearchBar() {
+        searchBar.barTintColor = .white
+        searchBar.barStyle = .default
+        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.backgroundColor = UIColor(named: "BackgroundImageColor")
+        textFieldInsideSearchBar?.textColor = .black
+        
+        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
+        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView.tintColor = .gray
+        
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = .gray
+        
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+    }
+    
+    // ДОЛГО ДОЛГО ДОЛГО пыталась избавиться от этих
+    // варинингов, но нет... :.(
+    private func setDayOrClassicThemeToNavBar() {
+        UIApplication.shared.statusBarStyle = .darkContent
+        //self.setNeedsStatusBarAppearanceUpdate()
+        navigationItem.standardAppearance = dayNavBarAppearance
+        navigationItem.scrollEdgeAppearance = dayNavBarAppearance
+    }
+    
+    private func setNightTheme() {
+        tableView.backgroundColor = .black
+        setNightThemeToSearchBar()
+        setNightThemeToNavBar()
+        tableView.reloadData()
+    }
+    
+    private func setNightThemeToSearchBar() {
+        searchBar.barTintColor = .black
+        searchBar.barStyle = .black
+        searchBar.tintColor = .black
+        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.backgroundColor = .systemYellow
+        textFieldInsideSearchBar?.textColor = .black
+        
+        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
+        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView.tintColor = .black
+        
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = .black
+        
+        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
+    }
+    
+    private func setNightThemeToNavBar() {
+        UIApplication.shared.statusBarStyle = .lightContent
+        //self.setNeedsStatusBarAppearanceUpdate()
+        navigationItem.standardAppearance = nightNavBarAppearance
+        navigationItem.scrollEdgeAppearance = nightNavBarAppearance
+    }
+    
+    //    override var preferredStatusBarStyle: UIStatusBarStyle {
+    //        return currentTheme == .night ? UIStatusBarStyle.lightContent : UIStatusBarStyle.darkContent
+    //    }
+    
     private enum Const {
         static let numberOfSections = 2
         static let hightOfCell: CGFloat = 100
-        static let sizeOfNavigationButton: CGFloat = 44
+        static let sizeOfProfileNavigationButton: CGFloat = 40
+        static let sizeOfSettingsNavigationButton: CGFloat = 24.8
     }
+}
+
+protocol ThemesPickerDelegate: AnyObject {
+    func selectTheme(_ theme: Theme)
+}
+
+extension ConversationsListViewController: ThemesPickerDelegate {
+    
+    func selectTheme(_ theme: Theme) {
+        //        if currentTheme != theme {
+        //            currentTheme = theme
+        //            setCurrentTheme()
+        //            memoryManager.saveThemeToMemory(theme)
+        //        }
+    }
+    
+    private func setCurrentTheme() {
+        ConversationTableViewCell.setCurrentTheme(currentTheme)
+        switch currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
+    }
+    
+    private func setInitialThemeToApp() {
+        currentTheme = memoryManager.getThemeFromMemory()
+        setCurrentTheme()
+    }
+}
+
+enum Theme: Int {
+    case classic
+    case day
+    case night
 }
 
 extension ConversationsListViewController: UITableViewDelegate {
@@ -121,12 +286,13 @@ extension ConversationsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
         setupConversationsBeforePushViewController(conversation)
-        
-        let conversationViewController = ConversationViewController()
-        conversationViewController.conversation = conversation
-        
         self.navigationItem.title = ""
-        navigationController?.pushViewController(conversationViewController, animated: true)
+        
+        let conversationViewController = ConversationViewController(theme: currentTheme)
+        if let conversationViewController = conversationViewController {
+            conversationViewController.conversation = conversation
+            navigationController?.pushViewController(conversationViewController, animated: true)
+        }
         tableView.reloadRows(at: [indexPath], with: .none)
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -205,6 +371,7 @@ extension ConversationsListViewController: UISearchBarDelegate {
 }
 
 extension ConversationsListViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -212,6 +379,7 @@ extension ConversationsListViewController: UITextFieldDelegate {
 }
 
 extension UIImage {
+    
     func resized(to size: CGSize) -> UIImage {
         return UIGraphicsImageRenderer(size: size).image { _ in
             draw(in: CGRect(origin: .zero, size: size))
