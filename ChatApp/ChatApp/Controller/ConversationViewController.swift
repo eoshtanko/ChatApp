@@ -13,10 +13,15 @@ class ConversationViewController: UITableViewController {
     private var filteredChatMessages = [[ChatMessage]]()
     private var entreMessageBar: EntryMessageView?
     
-    private static var currentTheme: Theme = .classic
+    private var currentTheme: Theme = .classic
     
     private let nightNavBarAppearance = UINavigationBarAppearance()
     private let dayNavBarAppearance = UINavigationBarAppearance()
+    
+    init?(theme: Theme) {
+        currentTheme = theme
+        super.init(nibName: nil, bundle: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,10 +40,6 @@ class ConversationViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setCurrentTheme()
-    }
-    
-    static internal func setCurrentTheme(_ theme: Theme) {
-        ConversationViewController.currentTheme = theme
     }
     
     private func configureNavigationBar() {
@@ -100,7 +101,7 @@ class ConversationViewController: UITableViewController {
     }
     
     private func setCurrentTheme() {
-        switch ConversationViewController.currentTheme {
+        switch currentTheme {
         case .classic, .day:
             setDayOrClassicTheme()
         case .night:
@@ -112,7 +113,7 @@ class ConversationViewController: UITableViewController {
         view.backgroundColor = .white
         navigationController?.navigationBar.tintColor = .systemBlue
         navigationItem.standardAppearance = dayNavBarAppearance
-        ChatMessageCell.setCurrentTheme(ConversationViewController.currentTheme)
+        ChatMessageCell.setCurrentTheme(currentTheme)
         tableView.reloadData()
     }
     
@@ -120,8 +121,12 @@ class ConversationViewController: UITableViewController {
         tableView.backgroundColor = .black
         navigationController?.navigationBar.tintColor = .systemYellow
         navigationItem.standardAppearance = nightNavBarAppearance
-        ChatMessageCell.setCurrentTheme(ConversationViewController.currentTheme)
+        ChatMessageCell.setCurrentTheme(currentTheme)
         tableView.reloadData()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private enum Const {
@@ -186,7 +191,7 @@ extension ConversationViewController {
         get {
             if entreMessageBar == nil {
                 entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
-                entreMessageBar?.setCurrentTheme(ConversationViewController.currentTheme)
+                entreMessageBar?.setCurrentTheme(currentTheme)
             }
             return entreMessageBar
         }

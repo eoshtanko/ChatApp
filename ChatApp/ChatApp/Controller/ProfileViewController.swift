@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    internal weak var conversationsListViewController: ConversationsListViewController?
+    weak var conversationsListViewController: ConversationsListViewController?
     private var currentTheme: Theme = .classic
     
     @IBOutlet weak var profileImageView: UIImageView!
@@ -40,6 +40,11 @@ class ProfileViewController: UIViewController {
         conversationsListViewController?.configureRightNavigationButton()
     }
     
+    init?(coder: NSCoder, theme: Theme) {
+        currentTheme = theme
+        super.init(coder: coder)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         configureSubviews()
@@ -47,11 +52,13 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureStatusBar(.lightContent)
         setCurrentTheme()
     }
     
-    internal func setCurrentTheme(_ theme: Theme) {
-        currentTheme = theme
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        configureStatusBar(.darkContent)
     }
     
     private func configureSubviews() {
@@ -94,6 +101,12 @@ class ProfileViewController: UIViewController {
         editPhotoButton.clipsToBounds = true
     }
     
+    private func configureStatusBar(_ style: UIStatusBarStyle) {
+        if currentTheme != .night {
+            UIApplication.shared.statusBarStyle = style
+        }
+    }
+    
     private func setCurrentTheme() {
         switch currentTheme {
         case .classic, .day:
@@ -120,7 +133,7 @@ class ProfileViewController: UIViewController {
     private func setDayOrClassicThemeToButtons() {
         editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
         saveButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
-        saveButton.backgroundColor = .white
+        saveButton.backgroundColor = UIColor(named: "BackgroundButtonColor")
     }
     
     private func setDayOrClassicThemeToNavBar() {
@@ -153,6 +166,10 @@ class ProfileViewController: UIViewController {
         navigationBar.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
         navigationBarLabel.textColor = .white
         navigationBarButton.setTitleColor(.systemYellow, for: .normal)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private enum Const {

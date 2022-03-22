@@ -12,7 +12,7 @@ class ConversationTableViewCell: UITableViewCell {
     static let identifier = String(describing: ConversationTableViewCell.self)
     private static let formatter = DateFormatter()
     
-    private var currentTheme: Theme = .classic
+    private static var currentTheme: Theme = .classic
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastMessageLabel: UILabel!
@@ -30,11 +30,11 @@ class ConversationTableViewCell: UITableViewCell {
         setCurrentTheme()
     }
     
-    internal func setCurrentTheme(_ theme: Theme) {
-        currentTheme = theme
+    static func setCurrentTheme(_ theme: Theme) {
+        ConversationTableViewCell.currentTheme = theme
     }
     
-    internal func configureCell(_ conversation: Conversation) {
+    func configureCell(_ conversation: Conversation) {
         configureNameLabel(conversation.name)
         configureLastMessageDate(conversation.date)
         configureLastMessageLabel(conversation.message)
@@ -128,7 +128,7 @@ class ConversationTableViewCell: UITableViewCell {
     }
     
     private func setCurrentTheme() {
-        switch currentTheme {
+        switch ConversationTableViewCell.currentTheme {
         case .classic, .day:
             setDayOrClassicTheme()
         case .night:

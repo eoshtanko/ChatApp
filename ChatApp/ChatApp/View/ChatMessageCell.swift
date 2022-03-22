@@ -45,12 +45,11 @@ class ChatMessageCell: UITableViewCell {
         configureConstraints()
     }
     
-    internal func configureCell(_ chatMessage: ChatMessage) {
+    func configureCell(_ chatMessage: ChatMessage) {
         messageLabel.text = chatMessage.text
         
         bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
         incomingMessageUIColor : outcomingMessageUIColor
-        messageLabel.textColor = .black
         
         if chatMessage.isIncoming {
             trailingConstraint.isActive = false
@@ -61,7 +60,7 @@ class ChatMessageCell: UITableViewCell {
         }
     }
     
-    internal static func setCurrentTheme(_ theme: Theme) {
+    static func setCurrentTheme(_ theme: Theme) {
         ChatMessageCell.currentTheme = theme
     }
     

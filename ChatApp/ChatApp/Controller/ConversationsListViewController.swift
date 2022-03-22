@@ -12,9 +12,6 @@ class ConversationsListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
     
-    private var profileViewController: ProfileViewController?
-    private var themesViewController: ThemesViewController?
-    
     private var currentTheme: Theme = .classic
     private let memoryManager = MemoryManager()
     
@@ -34,8 +31,7 @@ class ConversationsListViewController: UIViewController {
         configureTableView()
         configureNavigationBar()
         configureSearchBar()
-        instatiateViewControllers()
-        setCurrentTemeToApp()
+        setInitialThemeToApp()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,10 +92,18 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc private func goToSettings() {
+        let themesStoryboard = UIStoryboard(name: "Themes", bundle: nil)
+        let themesViewController = themesStoryboard.instantiateViewController(identifier: "Themes", creator: { coder -> ThemesViewController? in
+            ThemesViewController(coder: coder, themesPickerDelegate: self, theme: self.currentTheme) { [weak self] theme in
+                if self?.currentTheme != theme {
+                    self?.currentTheme = theme
+                    self?.setCurrentTheme()
+                    self?.memoryManager.saveThemeToMemory(theme)
+                }
+            }
+        })
         self.navigationItem.title = "Chat"
-        if themesViewController != nil {
-            navigationController?.pushViewController(themesViewController!, animated: true)
-        }
+        navigationController?.pushViewController(themesViewController, animated: true)
     }
     
     func configureRightNavigationButton() {
@@ -137,35 +141,12 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc private func goToProfile() {
-        if profileViewController != nil {
-            profileViewController!.conversationsListViewController = self
-            present(profileViewController!, animated: true)
-        }
-    }
-    
-    private func instatiateViewControllers() {
         let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-        profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
-        
-        let themesStoryboard = UIStoryboard(name: "Themes", bundle: nil)
-        themesViewController = themesStoryboard.instantiateViewController(identifier: "Themes", creator: { coder -> ThemesViewController? in
-            // Меня несколько смутила формулировка:
-            // "Нужно реализовать оба метода взаимодействия, однако закомментировать код метода делегата"
-            // Суть метода делегата не отличается от сути замыкания, поэтому я не вижу смысл писать разные методы.
-            // Так как функции являются частным случаем замыканий, мы можем, не отступив от ТЗ, просто передать в
-            // инициализатор ThemesViewController метод делегата selectTheme:
-            // ThemesViewController(coder: coder, themesPickerDelegate: self, pickeThemeMethod: self.selectTheme)
-            // Но формулировка ТЗ подталкивает меня к мысли, что Вы хотите увидеть именно безымянное замыкание,
-            // на котором был сделан акцент в лекции.
-            // Поэтому я решила продубировать код:
-            ThemesViewController(coder: coder, themesPickerDelegate: self) { [weak self] theme in
-                if self?.currentTheme != theme {
-                    self?.currentTheme = theme
-                    self?.changeControllersAppearance()
-                    self?.memoryManager.saveThemeToMemory(theme)
-                }
-            }
+        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
+            ProfileViewController(coder: coder, theme: self.currentTheme)
         })
+        profileViewController.conversationsListViewController = self
+        present(profileViewController, animated: true)
     }
     
     private func configureAppearances() {
@@ -185,15 +166,6 @@ class ConversationsListViewController: UIViewController {
         nightNavBarAppearance.backgroundColor = .black
     }
     
-    private func setCurrentTheme() {
-        switch currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
-        }
-    }
-    
     private func setDayOrClassicTheme() {
         tableView.backgroundColor = .white
         setDayOrClassicThemeToSearchBar()
@@ -206,6 +178,16 @@ class ConversationsListViewController: UIViewController {
         searchBar.barStyle = .default
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.backgroundColor = UIColor(named: "BackgroundImageColor")
+        textFieldInsideSearchBar?.textColor = .black
+        
+        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
+        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView.tintColor = .gray
+        
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = .gray
+        
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
     }
     
@@ -228,8 +210,19 @@ class ConversationsListViewController: UIViewController {
     private func setNightThemeToSearchBar() {
         searchBar.barTintColor = .black
         searchBar.barStyle = .black
+        searchBar.tintColor = .black
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.backgroundColor = .systemYellow
+        textFieldInsideSearchBar?.textColor = .black
+        
+        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
+        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+        glassIconView.tintColor = .black
+        
+        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
+        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+        clearButton.tintColor = .black
+        
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
     }
     
@@ -240,9 +233,9 @@ class ConversationsListViewController: UIViewController {
         navigationItem.scrollEdgeAppearance = nightNavBarAppearance
     }
     
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return currentTheme == .night ? UIStatusBarStyle.lightContent : UIStatusBarStyle.darkContent
-//    }
+    //    override var preferredStatusBarStyle: UIStatusBarStyle {
+    //        return currentTheme == .night ? UIStatusBarStyle.lightContent : UIStatusBarStyle.darkContent
+    //    }
     
     private enum Const {
         static let numberOfSections = 2
@@ -257,25 +250,28 @@ protocol ThemesPickerDelegate: AnyObject {
 }
 
 extension ConversationsListViewController: ThemesPickerDelegate {
-
+    
     func selectTheme(_ theme: Theme) {
-//        if currentTheme != theme {
-//            currentTheme = theme
-//            changeControllersAppearance()
-//            memoryManager.saveThemeToMemory(theme)
-//        }
+        //        if currentTheme != theme {
+        //            currentTheme = theme
+        //            setCurrentTheme()
+        //            memoryManager.saveThemeToMemory(theme)
+        //        }
     }
     
-    private func changeControllersAppearance() {
-        themesViewController?.setCurrentTheme(currentTheme)
-        profileViewController?.setCurrentTheme(currentTheme)
-        ConversationViewController.setCurrentTheme(currentTheme)
-        self.setCurrentTheme()
+    private func setCurrentTheme() {
+        ConversationTableViewCell.setCurrentTheme(currentTheme)
+        switch currentTheme {
+        case .classic, .day:
+            setDayOrClassicTheme()
+        case .night:
+            setNightTheme()
+        }
     }
-
-    private func setCurrentTemeToApp() {
+    
+    private func setInitialThemeToApp() {
         currentTheme = memoryManager.getThemeFromMemory()
-        changeControllersAppearance()
+        setCurrentTheme()
     }
 }
 
@@ -292,10 +288,12 @@ extension ConversationsListViewController: UITableViewDelegate {
         setupConversationsBeforePushViewController(conversation)
         self.navigationItem.title = ""
         
-        let conversationViewController = ConversationViewController()
+        let conversationViewController = ConversationViewController(theme: currentTheme)
+        if let conversationViewController = conversationViewController {
             conversationViewController.conversation = conversation
             navigationController?.pushViewController(conversationViewController, animated: true)
-            tableView.reloadRows(at: [indexPath], with: .none)
+        }
+        tableView.reloadRows(at: [indexPath], with: .none)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -334,7 +332,6 @@ extension ConversationsListViewController: UITableViewDataSource {
         }
         let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
         conversationCell.configureCell(conversation)
-        conversationCell.setCurrentTheme(currentTheme)
         return conversationCell
     }
     

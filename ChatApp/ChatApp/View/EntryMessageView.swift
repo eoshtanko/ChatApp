@@ -21,7 +21,7 @@ class EntryMessageView: UIView {
         configureEntryMessageView()
     }
     
-    internal func setCurrentTheme(_ theme: Theme) {
+    func setCurrentTheme(_ theme: Theme) {
         currentTheme = theme
     }
     

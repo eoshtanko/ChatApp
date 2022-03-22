@@ -14,14 +14,14 @@ class ThemesViewController: UIViewController {
     // Так как в ConversationsListViewController (ThemesPickerDelegate) есть сильная ссылка
     // на ThemesViewController:
     // var themesViewController: ThemesViewController?
-    internal weak var themesPickerDelegate: ThemesPickerDelegate?
+    weak var themesPickerDelegate: ThemesPickerDelegate?
     
     // Retain Cycle
     // Как оговаривалось на лекции, замыкания могут приводить к retain cycle.
     // У нашего замыкания есть список захвата, в нем мы захватываем self ConversationsListViewController
     // Мы были на лекции и поэтому в список захвата добавили weak ([weak self]), но если бы мы этого не сделали
     // возник бы retain cycle.
-    internal var pickeTheme: ((Theme) -> Void)?
+    var pickeTheme: ((Theme) -> Void)?
     
     private var initialTheme: Theme = .classic
     private var previousTheme: Theme = .classic
@@ -55,13 +55,15 @@ class ThemesViewController: UIViewController {
         initialTheme = currentTheme
     }
     
-    init?(coder: NSCoder, themesPickerDelegate: ThemesPickerDelegate?, pickeThemeMethod: @escaping (Theme) -> Void) {
+    init?(coder: NSCoder, themesPickerDelegate: ThemesPickerDelegate?, theme: Theme, pickeThemeMethod: ((Theme) -> Void)?) {
         self.themesPickerDelegate = themesPickerDelegate
         self.pickeTheme = pickeThemeMethod
+        previousTheme = theme
+        currentTheme = theme
         super.init(coder: coder)
     }
     
-    internal func setCurrentTheme(_ theme: Theme) {
+    func setCurrentTheme(_ theme: Theme) {
         previousTheme = currentTheme
         currentTheme = theme
         if (classicThemeArea != nil) {
@@ -172,9 +174,10 @@ class ThemesViewController: UIViewController {
     }
     
     private func changeTheme(to theme: Theme) {
+        setCurrentTheme(theme)
         themesPickerDelegate?.selectTheme(theme)
-        if (pickeTheme != nil) {
-            pickeTheme!(theme)
+        if let pickeTheme = pickeTheme {
+            pickeTheme(theme)
         }
     }
     
