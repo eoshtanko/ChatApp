@@ -8,6 +8,5 @@
 import Foundation
 
 struct ApplicationPreferences: Codable {
-  var apiKey: String
-  var baseURL: String
+    var themeId: Int
 }

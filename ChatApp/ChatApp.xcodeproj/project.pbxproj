@@ -27,8 +27,8 @@
 		3460337927EBC04B00962579 /* AsyncOpertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337827EBC04B00962579 /* AsyncOpertion.swift */; };
 		3460337B27EC14BF00962579 /* ApplicationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337A27EC14BF00962579 /* ApplicationPreferences.swift */; };
 		3460337E27EC225A00962579 /* WorkingWithMemoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337D27EC225A00962579 /* WorkingWithMemoryError.swift */; };
-		3460338027EC22E500962579 /* UserSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337F27EC22E500962579 /* UserSaver.swift */; };
-		3460338227EC231100962579 /* UserLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338127EC231100962579 /* UserLoader.swift */; };
+		3460338027EC22E500962579 /* Writer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337F27EC22E500962579 /* Writer.swift */; };
+		3460338227EC231100962579 /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338127EC231100962579 /* Reader.swift */; };
 		3460338927EC511B00962579 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338827EC511B00962579 /* ImageManager.swift */; };
 		3460338B27EC9EDF00962579 /* UserLoadOperationsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338A27EC9EDF00962579 /* UserLoadOperationsProtocol.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
@@ -60,8 +60,8 @@
 		3460337827EBC04B00962579 /* AsyncOpertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOpertion.swift; sourceTree = "<group>"; };
 		3460337A27EC14BF00962579 /* ApplicationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationPreferences.swift; sourceTree = "<group>"; };
 		3460337D27EC225A00962579 /* WorkingWithMemoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkingWithMemoryError.swift; sourceTree = "<group>"; };
-		3460337F27EC22E500962579 /* UserSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSaver.swift; sourceTree = "<group>"; };
-		3460338127EC231100962579 /* UserLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoader.swift; sourceTree = "<group>"; };
+		3460337F27EC22E500962579 /* Writer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Writer.swift; sourceTree = "<group>"; };
+		3460338127EC231100962579 /* Reader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
 		3460338827EC511B00962579 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		3460338A27EC9EDF00962579 /* UserLoadOperationsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoadOperationsProtocol.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,8 +166,8 @@
 			children = (
 				3460337D27EC225A00962579 /* WorkingWithMemoryError.swift */,
 				3460338A27EC9EDF00962579 /* UserLoadOperationsProtocol.swift */,
-				3460337F27EC22E500962579 /* UserSaver.swift */,
-				3460338127EC231100962579 /* UserLoader.swift */,
+				3460337F27EC22E500962579 /* Writer.swift */,
+				3460338127EC231100962579 /* Reader.swift */,
 				3460337C27EC220700962579 /* OperationsMemoryManager */,
 				3460338527EC2AC100962579 /* GCDMemoryManager */,
 			);
@@ -292,7 +292,7 @@
 				3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */,
 				3460337927EBC04B00962579 /* AsyncOpertion.swift in Sources */,
 				3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */,
-				3460338027EC22E500962579 /* UserSaver.swift in Sources */,
+				3460338027EC22E500962579 /* Writer.swift in Sources */,
 				342D525127E3B21C0075C42B /* ThemesViewController.swift in Sources */,
 				3427ACD927D47ED40062F749 /* Conversation.swift in Sources */,
 				3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */,
@@ -308,7 +308,7 @@
 				3460337727EB6A2700962579 /* OperationWriteToMemoryManager.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
 				3427ACDB27D483DB0062F749 /* ConversationApi.swift in Sources */,
-				3460338227EC231100962579 /* UserLoader.swift in Sources */,
+				3460338227EC231100962579 /* Reader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +457,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
@@ -488,7 +488,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNN66QAR2T;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";

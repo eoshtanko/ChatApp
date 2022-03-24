@@ -7,11 +7,10 @@
 
 import UIKit
 
-class OperationMemoryManager: AsyncOperation, UserLoadOperations {
+class OperationMemoryManager<T: Codable>: AsyncOperation {
     
-    internal fileprivate(set) var result: Result<User, Error>?
     // Операция, результат которой отразиться на UI
-    fileprivate var completionOperation: (Result<User, Error>?) -> Void
+    fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
     private let plistFileName: String
     
     var plistURL: URL {
@@ -19,20 +18,21 @@ class OperationMemoryManager: AsyncOperation, UserLoadOperations {
         return documents.appendingPathComponent(plistFileName)
     }
     
-    init(plistFileName: String, completionOperation: @escaping (Result<User, Error>?) -> Void) {
+    init(plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         self.plistFileName = plistFileName
         self.completionOperation = completionOperation
         super.init()
     }
 }
 
-class OperationWriteToMemoryManager: OperationMemoryManager {
+
+class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
     
-    private var user: User?
+    private var objectToSave: T?
     
-    init(objectToSave: User, plistFileName: String, completionOperation: @escaping (Result<User, Error>?) -> Void) {
+    init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         super.init(plistFileName: plistFileName, completionOperation: completionOperation)
-        self.user = objectToSave
+        self.objectToSave = objectToSave
     }
     
     public override func main() {
@@ -40,29 +40,34 @@ class OperationWriteToMemoryManager: OperationMemoryManager {
             state = .finished
             return
         }
-        if user == nil {
-            completionOperation(.failure(WorkingWithMemoryError.formatError))
+        if objectToSave == nil {
+            if let completionOperation = completionOperation {
+                completionOperation(.failure(WorkingWithMemoryError.formatError))
+            }
             return
         }
-        saveUserToMemory(url: plistURL, objectToSave: user!) { [weak self] result in
-            self?.result = result
-            self?.state = .finished
-            self?.completionOperation(result)
+        writeObjectToMemory(url: plistURL, objectToSave: objectToSave) { result in
+            self.state = .finished
+            if let completionOperation = self.completionOperation {
+                completionOperation(result)
+            }
         }
     }
 }
 
-class OperationReadFromMemoryManager: OperationMemoryManager {
+class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
+    private var objectToRead: T?
     
     public override func main() {
         if isCancelled {
             state = .finished
             return
         }
-        readUserFromMemory(url: plistURL) { [weak self] result in
-            self?.result = result
-            self?.state = .finished
-            self?.completionOperation(result)
+        readObjectFromMemory(url: plistURL, objectToSave: objectToRead) { result in
+            self.state = .finished
+            if let completionOperation = self.completionOperation {
+                completionOperation(result)
+            }
         }
     }
 }

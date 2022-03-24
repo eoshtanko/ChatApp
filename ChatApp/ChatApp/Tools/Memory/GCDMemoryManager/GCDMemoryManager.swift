@@ -7,10 +7,10 @@
 
 import Foundation
 
-class GCDMemoryManager {
+class GCDMemoryManager<T: Codable> {
     
     // Операция, результат которой отразиться на UI
-    fileprivate var completionOperation: (Result<User, Error>?) -> Void
+    fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
     private let plistFileName: String
     
     var plistURL: URL {
@@ -18,43 +18,47 @@ class GCDMemoryManager {
         return documents.appendingPathComponent(plistFileName)
     }
     
-    init(plistFileName: String, completionOperation: @escaping (Result<User, Error>?) -> Void) {
+    init(plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         self.plistFileName = plistFileName
         self.completionOperation = completionOperation
     }
 }
 
-class GCDMemoryWriteToMemoryManager: GCDMemoryManager {
+class GCDMemoryWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
     
-    private var user: User?
+    private var objectToSave: T?
     
-    init(objectToSave: User, plistFileName: String, completionOperation: @escaping (Result<User, Error>?) -> Void) {
+    init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         super.init(plistFileName: plistFileName, completionOperation: completionOperation)
-        self.user = objectToSave
+        self.objectToSave = objectToSave
     }
     
-    func loadUserToMemory() {
-        if user == nil {
-            completionOperation(.failure(WorkingWithMemoryError.formatError))
+    func loadObjectToMemory() {
+        if objectToSave == nil {
+            if let completionOperation = completionOperation {
+                completionOperation(.failure(WorkingWithMemoryError.formatError))
+            }
             return
         }
         DispatchQueue.global(qos: .background).async {
-            for i in 1...100000000 {
-                let y = i + i
-            }
-            saveUserToMemory(url: self.plistURL, objectToSave: self.user) { result in
-                self.completionOperation(result)
+            writeObjectToMemory(url: self.plistURL, objectToSave: self.objectToSave) { result in
+                if let completionOperation = self.completionOperation {
+                    completionOperation(result)
+                }
             }
         }
     }
 }
 
-class GCDMemoryReadFromMemoryManager: GCDMemoryManager {
+class GCDMemoryReadFromMemoryManager<T: Codable>: GCDMemoryManager<T> {
+    private var objectToRead: T?
     
-    func getUserFromMemory() {
+    func getObjectFromMemory() {
         DispatchQueue.global(qos: .background).async {
-            readUserFromMemory(url: self.plistURL) { result in
-                self.completionOperation(result)
+            readObjectFromMemory(url: self.plistURL, objectToSave: self.objectToRead) { result in
+                if let completionOperation = self.completionOperation {
+                    completionOperation(result)
+                }
             }
         }
     }

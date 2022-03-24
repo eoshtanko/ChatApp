@@ -13,7 +13,6 @@ class ConversationsListViewController: UIViewController {
     private let searchBar = UISearchBar()
     
     private var currentTheme: Theme = .classic
-    private let memoryManager = MemoryManager()
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
@@ -66,20 +65,20 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadCurrentUser() {
-        loadUserViaGCDB()
-        //loadUserViaOperations()
+        //loadUserViaGCDB()
+        loadUserViaOperations()
     }
     
-    func loadUserViaGCDB() {
-        let GCDLoader = GCDMemoryReadFromMemoryManager(plistFileName: Const.plistFileName) { [weak self] result in
-            self?.hundleLoadFromMemoryRequestResult(result: result)
+    private func loadUserViaGCDB() {
+        let GCDLoader = GCDMemoryReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+            self?.hundleLoadProfileFromMemoryRequestResult(result: result)
         }
-        GCDLoader.getUserFromMemory()
+        GCDLoader.getObjectFromMemory()
     }
     
-    func loadUserViaOperations() {
-        let operationLoader = OperationReadFromMemoryManager(plistFileName: Const.plistFileName) { [weak self] result in
-            self?.hundleLoadFromMemoryRequestResult(result: result)
+    private func loadUserViaOperations() {
+        let operationLoader = OperationReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+            self?.hundleLoadProfileFromMemoryRequestResult(result: result)
         }
         let operationQueue = OperationQueue()
         operationQueue.qualityOfService = .utility
@@ -89,7 +88,7 @@ class ConversationsListViewController: UIViewController {
         )
     }
     
-    func hundleLoadFromMemoryRequestResult(result: Result<User, Error>?) {
+    private func hundleLoadProfileFromMemoryRequestResult(result: Result<User, Error>?) {
         DispatchQueue.main.async { [weak self] in
             switch result {
             case .success(let user):
@@ -138,12 +137,39 @@ class ConversationsListViewController: UIViewController {
                 if self?.currentTheme != theme {
                     self?.currentTheme = theme
                     self?.setCurrentTheme()
-                    self?.memoryManager.saveThemeToMemory(theme)
+                    self?.saveThemeToMemory()
                 }
             }
         })
         self.navigationItem.title = "Chat"
         navigationController?.pushViewController(themesViewController, animated: true)
+    }
+    
+    private func saveThemeToMemory() {
+        let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
+        let GCDWriter = GCDMemoryWriteToMemoryManager(objectToSave: preferences, plistFileName: FileNames.plistFileNameForPreferences, completionOperation: nil)
+        GCDWriter.loadObjectToMemory()
+    }
+    
+    private func setInitialThemeToApp() {
+        setCurrentTheme()
+        let GCDLoader = GCDMemoryReadFromMemoryManager<ApplicationPreferences>(plistFileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+            self?.hundleLoadPreferencesFromMemoryRequestResult(result: result)
+        }
+        GCDLoader.getObjectFromMemory()
+    }
+    
+    private func hundleLoadPreferencesFromMemoryRequestResult(result: Result<ApplicationPreferences, Error>?) {
+        DispatchQueue.main.async { [weak self] in
+            switch result {
+            case .success(let preferences):
+                self?.currentTheme = Theme(rawValue: preferences.themeId) ?? .classic
+                self?.setCurrentTheme()
+            case .failure, .none:
+                self?.setCurrentTheme()
+                return
+            }
+        }
     }
     
     func configureRightNavigationButton() {
@@ -185,15 +211,11 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func instatiateProfileViewController() {
-           let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-           profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
-       }
+        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
+        profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
+    }
     
     @objc private func goToProfile() {
-//        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-//        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
-//            ProfileViewController(coder: coder, theme: self.currentTheme)
-//        })
         profileViewController.conversationsListViewController = self
         present(profileViewController, animated: true)
     }
@@ -291,7 +313,6 @@ class ConversationsListViewController: UIViewController {
         static let hightOfCell: CGFloat = 100
         static let sizeOfProfileNavigationButton: CGFloat = 40
         static let sizeOfSettingsNavigationButton: CGFloat = 24.8
-        static let plistFileName = "ProfileInfo.plist"
     }
 }
 
@@ -305,7 +326,7 @@ extension ConversationsListViewController: ThemesPickerDelegate {
         //        if currentTheme != theme {
         //            currentTheme = theme
         //            setCurrentTheme()
-        //            memoryManager.saveThemeToMemory(theme)
+        //            memoryManager.saveThemeToMemory()
         //        }
     }
     
@@ -319,11 +340,11 @@ extension ConversationsListViewController: ThemesPickerDelegate {
             setNightTheme()
         }
     }
-    
-    private func setInitialThemeToApp() {
-        currentTheme = memoryManager.getThemeFromMemory()
-        setCurrentTheme()
-    }
+}
+
+enum FileNames {
+    static let plistFileNameForProfileInfo = "ProfileInfo.plist"
+    static let plistFileNameForPreferences = "Preferences.plist"
 }
 
 enum Theme: Int {

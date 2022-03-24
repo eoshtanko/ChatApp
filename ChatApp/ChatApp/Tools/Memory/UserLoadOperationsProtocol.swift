@@ -8,5 +8,5 @@
 import Foundation
 
 protocol UserLoadOperations {
-    var result: Result<User, Error>? { get }
+    var result: Result<Codable, Error>? { get }
 }

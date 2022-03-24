@@ -12,8 +12,6 @@ class ProfileViewController: UIViewController {
     weak var conversationsListViewController: ConversationsListViewController?
     
     private var currentTheme: Theme = .classic
-    private var GCDSaver: GCDMemoryWriteToMemoryManager!
-    private var operationSaver: OperationWriteToMemoryManager!
     private var activityIndicator: UIActivityIndicatorView!
     private var selectedSavingApproach: SavingApproach!
     
@@ -74,13 +72,14 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureOperationQueue()
-        configureActivityIndicator()
-        configureAlerts()
+        configureSubviews()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        configureSubviews()
+        configureProfileImageView()
+        configureEditPhotoButton()
+        configureInfoLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,13 +99,13 @@ class ProfileViewController: UIViewController {
     
     private func hundleSaveToMemoryRequestResult(result: Result<User, Error>?) {
         DispatchQueue.main.async { [weak self] in
+            self?.finalizeSaving()
             switch result {
             case .success(let user):
                 self?.hundleSuccessSaveToMemoryRequestResult(user)
             case .failure, .none:
                 self?.hundleFailureSaveToMemoryRequestResult()
             }
-            self?.finalizeSaving()
         }
     }
     
@@ -159,7 +158,7 @@ class ProfileViewController: UIViewController {
     
     private func setInitialData() {
         initialName = nameLabel.text
-        initialInfo = infoLabel.text
+        initialInfo = infoLabel.textColor == .lightGray ? "" : infoLabel.text
         initialImage = profileImageView.image
     }
     
@@ -172,35 +171,46 @@ class ProfileViewController: UIViewController {
     private func saveViaGCD() {
         selectedSavingApproach = .GCD
         prepareForSaving()
-        let GCDSaver = GCDMemoryWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: Const.plistFileName) {
+        let GCDWriter = GCDMemoryWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
             [weak self] result in
             self?.hundleSaveToMemoryRequestResult(result: result)
         }
-        GCDSaver.loadUserToMemory()
+        GCDWriter.loadObjectToMemory()
     }
     
     private func saveViaOperations() {
         selectedSavingApproach = .operations
         prepareForSaving()
-        let operationSaver = OperationWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: Const.plistFileName) {
+        let operationWriter = OperationWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
             [weak self] result in
             self?.hundleSaveToMemoryRequestResult(result: result)
         }
-        operationQueue.addOperations([operationSaver], waitUntilFinished: true)
+        operationQueue.addOperations([operationWriter], waitUntilFinished: true)
     }
     
     private func getUserWithUpdatedData() -> User {
+        return User(name: nameLabel.text, info: getInfo(), imageData: getDataFromImage())
+    }
+    
+    private func getInfo() -> String? {
+        guard infoLabel.textColor != .lightGray else {
+            return nil
+        }
+        return infoLabel.text
+    }
+    
+    private func getDataFromImage() -> Data? {
         var image: Data?
         if let profileImageViewImage = profileImageView.image {
             image = ImageManager.instace.convertImageToString(image: profileImageViewImage)
         }
-        return User(name: nameLabel.text, info: infoLabel.text, imageData: image)
+        return image
     }
     
     private func prepareForSaving() {
+        disableSaveButtons()
         cancelButton.isEnabled = false
         editPhotoButton.isEnabled = false
-        disableSaveButtons()
         changeEnablePropertyOfFields(false)
         activityIndicator.startAnimating()
     }
@@ -245,27 +255,27 @@ class ProfileViewController: UIViewController {
     
     private func configureSubviews() {
         configureNameLabel()
-        configureInfoLabel()
+        configureActivityIndicator()
+        configureAlerts()
         configureButtons(editButton, cancelButton, saveGCDButton, saveOperationsButton)
-        configureProfileImageView()
-        configureEditPhotoButton()
     }
     
     private func configureNameLabel() {
+        nameLabel.delegate = self
         if (CurrentUser.user.name != nil) {
             nameLabel.text = CurrentUser.user.name
         }
-        nameLabel.delegate = self
+        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     }
     
     private func configureInfoLabel() {
+        infoLabel.delegate = self
         if (CurrentUser.user.info != nil) {
             infoLabel.text = CurrentUser.user.info
         } else {
             infoLabel.text = Const.textViewPlaceholderText
-            infoLabel.textColor = UIColor.lightGray
+            infoLabel.textColor = .lightGray
         }
-        infoLabel.delegate = self
     }
     
     private func configureButtons(_ buttons: UIButton...) {
@@ -343,6 +353,7 @@ class ProfileViewController: UIViewController {
         setDayOrClassicThemeToLabels()
         setDayOrClassicThemeToButtons()
         setDayOrClassicThemeToNavBar()
+        infoLabel.keyboardAppearance = .light
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
     }
     
@@ -351,9 +362,12 @@ class ProfileViewController: UIViewController {
     }
     
     private func setDayOrClassicThemeToLabels() {
-        nameLabel.textColor = .black
-        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "DefaultImageColor") ?? .darkGray])
-        infoLabel.textColor = .black
+        if nameLabel.textColor != .lightGray {
+            nameLabel.textColor = .black
+        }
+        if infoLabel.textColor != .lightGray {
+            infoLabel.textColor = .black
+        }
         infoLabel.backgroundColor = .white
     }
     
@@ -381,6 +395,7 @@ class ProfileViewController: UIViewController {
         setNightThemeToLabels()
         setNightThemeToButtons()
         setNightThemeToNavBar()
+        infoLabel.keyboardAppearance = .dark
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
     }
     
@@ -389,9 +404,12 @@ class ProfileViewController: UIViewController {
     }
     
     private func setNightThemeToLabels() {
-        nameLabel.textColor = .white
-        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "BackgroundImageColor") ?? .lightGray])
-        infoLabel.textColor = .white
+        if nameLabel.textColor != .lightGray {
+            nameLabel.textColor = .white
+        }
+        if infoLabel.textColor != .lightGray {
+            infoLabel.textColor = .white
+        }
         infoLabel.backgroundColor = .black
     }
     
@@ -427,10 +445,9 @@ class ProfileViewController: UIViewController {
     
     private enum Const {
         static let buttonBorderRadius: CGFloat = 14
-        static let maxNumOfCharsInName = 16
+        static let maxNumOfCharsInName = 40
         static let textFieldPlaceholderText = "ФИО"
         static let textViewPlaceholderText = "Расскажите о себе :)"
-        static let plistFileName = "ProfileInfo.plist"
     }
 }
 
@@ -480,7 +497,7 @@ extension ProfileViewController: UITextViewDelegate {
             textView.text = Const.textViewPlaceholderText
             textView.textColor = UIColor.lightGray
         }
-        infoDidChanged = textView.text != initialInfo
+        infoDidChanged = (textView.textColor == .lightGray ? "" : textView.text) != initialInfo
         setEnableStatusToSaveButtons()
     }
 }
@@ -490,14 +507,16 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            profileImageView.image = image
-            imageDidChanged = true
-            if !isProfileEditing {
-                changeProfileEditingStatus(isEditing: true)
+            DispatchQueue.main.async {
+                if !self.isProfileEditing {
+                    self.changeProfileEditingStatus(isEditing: true)
+                }
+                self.profileImageView.image = image
+                self.imageDidChanged = true
+                self.setEnableStatusToSaveButtons()
             }
-            setEnableStatusToSaveButtons()
         } else {
-            self.showAlertWith(message: "No image found.")
+            showAlertWith(message: "No image found.")
         }
         picker.dismiss(animated: true, completion: nil)
     }

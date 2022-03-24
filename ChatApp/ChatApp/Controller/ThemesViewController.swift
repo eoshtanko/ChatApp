@@ -51,7 +51,6 @@ class ThemesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar()
         initialTheme = currentTheme
     }
     
@@ -77,11 +76,12 @@ class ThemesViewController: UIViewController {
     private func configureView() {
         configureBackground()
         configureThemeButtons()
+        configureNavigationBar()
     }
     
     private func configureNavigationBar() {
         navigationItem.title = "Settings"
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
         setThemeToNavigationBar()
         configureNavigationBarButton()
     }

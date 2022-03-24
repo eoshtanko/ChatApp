@@ -1,5 +1,5 @@
 //
-//  UserLoader.swift
+//  Reader.swift
 //  ChatApp
 //
 //  Created by Екатерина on 24.03.2022.
@@ -8,7 +8,7 @@
 import Foundation
 
 
-func readUserFromMemory(url plistURL: URL?, completion: ((Result<User, Error>) -> Void)?) {
+func readObjectFromMemory<T: Decodable>(url plistURL: URL?, objectToSave: T?, completion: ((Result<T, Error>) -> Void)?) {
     guard let completion = completion else {
         return
     }
@@ -18,9 +18,9 @@ func readUserFromMemory(url plistURL: URL?, completion: ((Result<User, Error>) -
     }
     let decoder = PropertyListDecoder()
     guard let data = try? Data.init(contentsOf: plistURL),
-          let user = try? decoder.decode(User.self, from: data) else {
+          let object = try? decoder.decode(T.self, from: data) else {
               completion(.failure(WorkingWithMemoryError.readError))
               return
           }
-    completion(.success(user))
+    completion(.success(object))
 }

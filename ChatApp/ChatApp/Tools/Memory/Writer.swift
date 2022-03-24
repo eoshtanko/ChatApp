@@ -1,5 +1,5 @@
 //
-//  userSaver.swift
+//  Writer.swift
 //  ChatApp
 //
 //  Created by Екатерина on 24.03.2022.
@@ -7,20 +7,20 @@
 
 import Foundation
 
-func saveUserToMemory(url plistURL: URL?, objectToSave obj: User?, completion: ((Result<User, Error>) -> Void)?) {
+func writeObjectToMemory<T: Encodable>(url plistURL: URL?, objectToSave: T?, completion: ((Result<T, Error>) -> Void)?) {
     guard let completion = completion else {
         return
     }
-    guard let plistURL = plistURL, let obj = obj else {
+    guard let plistURL = plistURL, let objectToSave = objectToSave else {
         completion(.failure(WorkingWithMemoryError.formatError))
         return
     }
-    if let data = encodeData(objectToSave: obj, completion: completion) {
-        writeDataToFile(url: plistURL, data: data, objectToSave: obj, completion: completion)
+    if let data = encodeData(objectToSave: objectToSave, completion: completion) {
+        writeDataToFile(url: plistURL, data: data, objectToSave: objectToSave, completion: completion)
     }
 }
 
-func encodeData(objectToSave obj: User, completion: (Result<User, Error>) -> Void) -> Data? {
+func encodeData<T: Encodable>(objectToSave obj: T, completion: (Result<T, Error>) -> Void) -> Data? {
     let encoder = PropertyListEncoder()
     var data: Data
     do {
@@ -32,7 +32,7 @@ func encodeData(objectToSave obj: User, completion: (Result<User, Error>) -> Voi
     }
 }
 
-func writeDataToFile(url plistURL: URL, data: Data, objectToSave obj: User, completion: (Result<User, Error>) -> Void) {
+func writeDataToFile<T>(url plistURL: URL, data: Data, objectToSave obj: T, completion: (Result<T, Error>) -> Void) {
     if FileManager.default.fileExists(atPath: plistURL.path) {
         do {
             try data.write(to: plistURL)
