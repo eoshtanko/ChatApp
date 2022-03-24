@@ -96,14 +96,14 @@ class ConversationTableViewCell: UITableViewCell {
         if let image = image {
             profileImageView.image = image
         } else {
-            setDefaultImage()
+            setDefaultImage(to: profileImageView)
         }
     }
     
-    private func setDefaultImage() {
-        profileImageView.backgroundColor = UIColor(named: "BackgroundImageColor")
-        profileImageView.tintColor = UIColor(named: "DefaultImageColor")
-        profileImageView.image = UIImage(systemName: "person.fill")
+    private func setDefaultImage(to imageView: UIImageView) {
+        imageView.backgroundColor = UIColor(named: "BackgroundImageColor")
+        imageView.tintColor = UIColor(named: "DefaultImageColor")
+        imageView.image = UIImage(systemName: "person.fill")
     }
     
     // "если была передана дата вчерашняя или ранее - отображаем дату, т.е. формат dd MM."

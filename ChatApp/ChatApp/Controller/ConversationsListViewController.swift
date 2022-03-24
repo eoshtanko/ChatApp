@@ -23,14 +23,18 @@ class ConversationsListViewController: UIViewController {
     private var filteredOnlineConversations: [Conversation]!
     private var filteredOfflineConversations: [Conversation]!
     
+    private var profileViewController: ProfileViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadCurrentUser()
         filteredOnlineConversations = onlineConversations
         filteredOfflineConversations = offlineConversations
         configureAppearances()
         configureTableView()
         configureNavigationBar()
         configureSearchBar()
+        instatiateProfileViewController()
         setInitialThemeToApp()
     }
     
@@ -59,6 +63,42 @@ class ConversationsListViewController: UIViewController {
         ])
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func loadCurrentUser() {
+        loadUserViaGCDB()
+        //loadUserViaOperations()
+    }
+    
+    func loadUserViaGCDB() {
+        let GCDLoader = GCDMemoryReadFromMemoryManager(plistFileName: Const.plistFileName) { [weak self] result in
+            self?.hundleLoadFromMemoryRequestResult(result: result)
+        }
+        GCDLoader.getUserFromMemory()
+    }
+    
+    func loadUserViaOperations() {
+        let operationLoader = OperationReadFromMemoryManager(plistFileName: Const.plistFileName) { [weak self] result in
+            self?.hundleLoadFromMemoryRequestResult(result: result)
+        }
+        let operationQueue = OperationQueue()
+        operationQueue.qualityOfService = .utility
+        operationQueue.addOperations(
+            [operationLoader],
+            waitUntilFinished: true
+        )
+    }
+    
+    func hundleLoadFromMemoryRequestResult(result: Result<User, Error>?) {
+        DispatchQueue.main.async { [weak self] in
+            switch result {
+            case .success(let user):
+                CurrentUser.user = user
+                self?.configureRightNavigationButton()
+            case .failure, .none:
+                return
+            }
+        }
     }
     
     private func configureNavigationBar() {
@@ -115,12 +155,16 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
-        if (CurrentUser.user.image == nil) {
+        if (CurrentUser.user.imageData == nil) {
             setDefaultImage(profileButton)
         } else {
-            let image = CurrentUser.user.image!.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
-                                                                   height: Const.sizeOfProfileNavigationButton))
-            profileButton.setImage(image, for: .normal)
+            if var image = ImageManager.instace.convertUrlToImage(pngData: CurrentUser.user.imageData!) {
+                image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
+                                                 height: Const.sizeOfProfileNavigationButton))
+                profileButton.setImage(image, for: .normal)
+            } else {
+                setDefaultImage(profileButton)
+            }
         }
         configureImage(profileButton)
     }
@@ -140,11 +184,16 @@ class ConversationsListViewController: UIViewController {
         profileButton.imageView?.clipsToBounds = true
     }
     
+    private func instatiateProfileViewController() {
+           let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
+           profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
+       }
+    
     @objc private func goToProfile() {
-        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
-            ProfileViewController(coder: coder, theme: self.currentTheme)
-        })
+//        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
+//        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
+//            ProfileViewController(coder: coder, theme: self.currentTheme)
+//        })
         profileViewController.conversationsListViewController = self
         present(profileViewController, animated: true)
     }
@@ -242,6 +291,7 @@ class ConversationsListViewController: UIViewController {
         static let hightOfCell: CGFloat = 100
         static let sizeOfProfileNavigationButton: CGFloat = 40
         static let sizeOfSettingsNavigationButton: CGFloat = 24.8
+        static let plistFileName = "ProfileInfo.plist"
     }
 }
 
@@ -261,6 +311,7 @@ extension ConversationsListViewController: ThemesPickerDelegate {
     
     private func setCurrentTheme() {
         ConversationTableViewCell.setCurrentTheme(currentTheme)
+        profileViewController?.setCurrentTheme(currentTheme)
         switch currentTheme {
         case .classic, .day:
             setDayOrClassicTheme()

@@ -7,12 +7,20 @@
 
 import UIKit
 
-class User {
+class User: Codable {
     var name: String?
     var info: String?
-    var image: UIImage?
+    var imageData: Data?
+    
+    init(name: String?, info: String?, imageData: Data?) {
+        self.name = name
+        self.info = info
+        self.imageData = imageData
+    }
+    
+    init(){}
 }
 
 struct CurrentUser {
-    static let user = User()
+    static var user = User()
 }
