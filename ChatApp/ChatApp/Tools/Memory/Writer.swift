@@ -43,5 +43,6 @@ func writeDataToFile<T>(url plistURL: URL, data: Data, objectToSave obj: T, comp
         }
     } else {
         FileManager.default.createFile(atPath: plistURL.path, contents: data, attributes: nil)
+        completion(.success(obj))
     }
 }
