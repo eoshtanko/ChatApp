@@ -11,15 +11,10 @@ class GCDMemoryManager<T: Codable> {
     
     // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
-    private let plistFileName: String
-    
-    var plistURL: URL {
-        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        return documents.appendingPathComponent(plistFileName)
-    }
+    var plistURL: URL!
     
     init(plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
-        self.plistFileName = plistFileName
+        self.plistURL = URL.getPlistURL(plistFileName: plistFileName)
         self.completionOperation = completionOperation
     }
 }
