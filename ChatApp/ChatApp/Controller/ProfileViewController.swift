@@ -200,6 +200,9 @@ class ProfileViewController: UIViewController {
     }
     
     private func getDataFromImage() -> Data? {
+        if !imageDidChanged {
+            return CurrentUser.user.imageData
+        }
         var image: Data?
         if let profileImageViewImage = profileImageView.image {
             image = ImageManager.instace.convertImageToString(image: profileImageViewImage)
