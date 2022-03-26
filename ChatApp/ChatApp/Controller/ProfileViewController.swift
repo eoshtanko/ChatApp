@@ -73,6 +73,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         configureOperationQueue()
         configureSubviews()
+        setInitialProfileData()
     }
     
     override func viewWillLayoutSubviews() {
@@ -265,20 +266,11 @@ class ProfileViewController: UIViewController {
     
     private func configureNameLabel() {
         nameLabel.delegate = self
-        if (CurrentUser.user.name != nil) {
-            nameLabel.text = CurrentUser.user.name
-        }
         nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     }
     
     private func configureInfoLabel() {
         infoLabel.delegate = self
-        if (CurrentUser.user.info != nil) {
-            infoLabel.text = CurrentUser.user.info
-        } else {
-            infoLabel.text = Const.textViewPlaceholderText
-            infoLabel.textColor = .lightGray
-        }
     }
     
     private func configureButtons(_ buttons: UIButton...) {
@@ -289,11 +281,35 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private func configureProfileImageView() {
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+    private func setInitialProfileData() {
+        setInitiaoImage()
+        setInitialName()
+        setInitialInfo()
+    }
+    
+    private func setInitiaoImage() {
         if let data = CurrentUser.user.imageData, let image = ImageManager.instace.convertUrlToImage(pngData: data) {
             profileImageView.image = image
         }
+    }
+    
+    private func setInitialName() {
+        if (CurrentUser.user.name != nil) {
+            nameLabel.text = CurrentUser.user.name
+        }
+    }
+    
+    private func setInitialInfo() {
+        if (CurrentUser.user.info != nil) {
+            infoLabel.text = CurrentUser.user.info
+        } else {
+            infoLabel.text = Const.textViewPlaceholderText
+            infoLabel.textColor = .lightGray
+        }
+    }
+    
+    private func configureProfileImageView() {
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
     }
     
     private func configureEditPhotoButton() {
@@ -491,7 +507,7 @@ extension ProfileViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor.black
+            textView.textColor = currentTheme == .night ? .white : .black
         }
     }
     
