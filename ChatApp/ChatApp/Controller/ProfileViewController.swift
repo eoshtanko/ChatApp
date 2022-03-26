@@ -9,6 +9,9 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    private let GCDMemoryManager = GCDMemoryManagerInterface<User>()
+    private let operationMemoryManager = OperationMemoryManagerInterface<User>()
+    
     weak var conversationsListViewController: ConversationsListViewController?
     
     private var currentTheme: Theme = .classic
@@ -172,13 +175,13 @@ class ProfileViewController: UIViewController {
     private func saveViaGCD() {
         selectedSavingApproach = .GCD
         prepareForSaving()
-        saveWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
+        saveWithMemoryManager(memoryManager: GCDMemoryManager)
     }
     
     private func saveViaOperations() {
         selectedSavingApproach = .operations
         prepareForSaving()
-        saveWithMemoryManager(memoryManager: OperationMemoryManagerInterface<User>())
+        saveWithMemoryManager(memoryManager: operationMemoryManager)
     }
     
     private func saveWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {

@@ -9,6 +9,8 @@ import UIKit
 
 class ConversationsListViewController: UIViewController {
     
+    private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
+    
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
     
@@ -142,14 +144,12 @@ class ConversationsListViewController: UIViewController {
     
     private func saveThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
-        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToSave: preferences, completionOperation: nil)
+        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToSave: preferences, completionOperation: nil)
     }
     
     private func setInitialThemeToApp() {
         setCurrentTheme()
-        let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
-        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+        GCDMemoryManagerForApplicationPreferences.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
             self?.hundleLoadPreferencesFromMemoryRequestResult(result: result)
         }
     }
