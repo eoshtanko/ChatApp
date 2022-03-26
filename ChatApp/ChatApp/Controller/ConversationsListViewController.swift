@@ -70,16 +70,16 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadUserViaGCDB() {
-        let memoryManager = GCDMemoryManagerInterface<User>()
-        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
-            self?.hundleLoadProfileFromMemoryRequestResult(result: result)
-        }
+        loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
     }
     
     private func loadUserViaOperations() {
-        let memoryManager = OperationMemoryManagerInterface<User>()
+        loadWithMemoryManager(memoryManager: OperationMemoryManagerInterface<User>())
+    }
+    
+    private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
         memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
-            self?.hundleLoadProfileFromMemoryRequestResult(result: result)
+            self?.hundleLoadProfileFromMemoryRequestResult(result: result as? Result<User, Error>)
         }
     }
     
