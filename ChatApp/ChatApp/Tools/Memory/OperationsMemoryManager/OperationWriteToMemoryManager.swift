@@ -10,7 +10,7 @@ import UIKit
 class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtocol {
     
     private let operationQueue = OperationQueue()
-
+    
     func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         let operationLoader = OperationReadFromMemoryManager<T>(plistFileName: fileName) { result in
             if let completionOperation = completionOperation {
@@ -20,7 +20,7 @@ class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtoco
         operationQueue.qualityOfService = .utility
         operationQueue.addOperations(
             [operationLoader],
-            waitUntilFinished: true
+            waitUntilFinished: false
         )
     }
     
@@ -30,7 +30,7 @@ class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtoco
                 completionOperation(result)
             }
         }
-        operationQueue.addOperations([operationWriter], waitUntilFinished: true)
+        operationQueue.addOperations([operationWriter], waitUntilFinished: false)
     }
 }
 
