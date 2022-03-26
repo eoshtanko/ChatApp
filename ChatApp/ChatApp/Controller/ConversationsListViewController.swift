@@ -70,7 +70,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadUserViaGCDB() {
-        let GCDLoader = GCDMemoryReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+        let GCDLoader = GCDReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
             self?.hundleLoadProfileFromMemoryRequestResult(result: result)
         }
         GCDLoader.getObjectFromMemory()
@@ -147,13 +147,13 @@ class ConversationsListViewController: UIViewController {
     
     private func saveThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        let GCDWriter = GCDMemoryWriteToMemoryManager(objectToSave: preferences, plistFileName: FileNames.plistFileNameForPreferences, completionOperation: nil)
+        let GCDWriter = GCDWriteToMemoryManager(objectToSave: preferences, plistFileName: FileNames.plistFileNameForPreferences, completionOperation: nil)
         GCDWriter.loadObjectToMemory()
     }
     
     private func setInitialThemeToApp() {
         setCurrentTheme()
-        let GCDLoader = GCDMemoryReadFromMemoryManager<ApplicationPreferences>(plistFileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+        let GCDLoader = GCDReadFromMemoryManager<ApplicationPreferences>(plistFileName: FileNames.plistFileNameForPreferences) { [weak self] result in
             self?.hundleLoadPreferencesFromMemoryRequestResult(result: result)
         }
         GCDLoader.getObjectFromMemory()

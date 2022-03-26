@@ -171,7 +171,7 @@ class ProfileViewController: UIViewController {
     private func saveViaGCD() {
         selectedSavingApproach = .GCD
         prepareForSaving()
-        let GCDWriter = GCDMemoryWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
+        let GCDWriter = GCDWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
             [weak self] result in
             self?.hundleSaveToMemoryRequestResult(result: result)
         }
