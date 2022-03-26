@@ -11,7 +11,7 @@ class GCDMemoryManager<T: Codable> {
     
     // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
-    var plistURL: URL!
+    fileprivate var plistURL: URL!
     
     init(plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         self.plistURL = URL.getPlistURL(plistFileName: plistFileName)
