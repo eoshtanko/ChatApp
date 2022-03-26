@@ -7,7 +7,34 @@
 
 import UIKit
 
-class OperationMemoryManager<T: Codable>: AsyncOperation {
+class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtocol {
+    
+    private let operationQueue = OperationQueue()
+
+    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
+        let operationLoader = OperationReadFromMemoryManager<T>(plistFileName: fileName) { result in
+            if let completionOperation = completionOperation {
+                completionOperation(result)
+            }
+        }
+        operationQueue.qualityOfService = .utility
+        operationQueue.addOperations(
+            [operationLoader],
+            waitUntilFinished: true
+        )
+    }
+    
+    func writeDataToMemory(fileName: String, objectToSave: T, completionOperation: ((Result<T, Error>?) -> Void)?) {
+        let operationWriter = OperationWriteToMemoryManager(objectToSave: objectToSave, plistFileName: fileName) { result in
+            if let completionOperation = completionOperation {
+                completionOperation(result)
+            }
+        }
+        operationQueue.addOperations([operationWriter], waitUntilFinished: true)
+    }
+}
+
+fileprivate class OperationMemoryManager<T: Codable>: AsyncOperation {
     
     // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
@@ -21,7 +48,7 @@ class OperationMemoryManager<T: Codable>: AsyncOperation {
 }
 
 
-class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
+fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
     
     private var objectToSave: T?
     
@@ -50,7 +77,7 @@ class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
     }
 }
 
-class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
+fileprivate class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
     
     private var objectToRead: T?
     

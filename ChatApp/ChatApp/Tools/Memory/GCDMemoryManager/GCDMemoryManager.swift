@@ -7,7 +7,28 @@
 
 import Foundation
 
-class GCDMemoryManager<T: Codable> {
+class GCDMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtocol {
+
+    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
+        let GCDLoader = GCDReadFromMemoryManager<T>(plistFileName: fileName) { result in
+            if let completionOperation = completionOperation {
+                completionOperation(result)
+            }
+        }
+        GCDLoader.getObjectFromMemory()
+    }
+    
+    func writeDataToMemory(fileName: String, objectToSave: T, completionOperation: ((Result<T, Error>?) -> Void)?) {
+        let GCDWriter = GCDWriteToMemoryManager(objectToSave: objectToSave, plistFileName: fileName) { result in
+            if let completionOperation = completionOperation {
+                completionOperation(result)
+            }
+        }
+        GCDWriter.loadObjectToMemory()
+    }
+}
+
+fileprivate class GCDMemoryManager<T: Codable> {
     
     // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
@@ -19,7 +40,7 @@ class GCDMemoryManager<T: Codable> {
     }
 }
 
-class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
+fileprivate class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
     
     private var objectToSave: T?
     
@@ -45,7 +66,7 @@ class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
     }
 }
 
-class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T> {
+fileprivate class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T> {
     
     private var objectToRead: T?
     

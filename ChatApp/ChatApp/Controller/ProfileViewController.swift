@@ -171,21 +171,21 @@ class ProfileViewController: UIViewController {
     private func saveViaGCD() {
         selectedSavingApproach = .GCD
         prepareForSaving()
-        let GCDWriter = GCDWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
+        let memoryManager = GCDMemoryManagerInterface<User>()
+        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToSave: getUserWithUpdatedData()) {
             [weak self] result in
             self?.hundleSaveToMemoryRequestResult(result: result)
         }
-        GCDWriter.loadObjectToMemory()
     }
     
     private func saveViaOperations() {
         selectedSavingApproach = .operations
         prepareForSaving()
-        let operationWriter = OperationWriteToMemoryManager(objectToSave: getUserWithUpdatedData(), plistFileName: FileNames.plistFileNameForProfileInfo) {
+        let memoryManager = OperationMemoryManagerInterface<User>()
+        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToSave: getUserWithUpdatedData()) {
             [weak self] result in
             self?.hundleSaveToMemoryRequestResult(result: result)
         }
-        operationQueue.addOperations([operationWriter], waitUntilFinished: true)
     }
     
     private func getUserWithUpdatedData() -> User {

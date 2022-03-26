@@ -70,22 +70,17 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadUserViaGCDB() {
-        let GCDLoader = GCDReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+        let memoryManager = GCDMemoryManagerInterface<User>()
+        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
             self?.hundleLoadProfileFromMemoryRequestResult(result: result)
         }
-        GCDLoader.getObjectFromMemory()
     }
     
     private func loadUserViaOperations() {
-        let operationLoader = OperationReadFromMemoryManager(plistFileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+        let memoryManager = OperationMemoryManagerInterface<User>()
+        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
             self?.hundleLoadProfileFromMemoryRequestResult(result: result)
         }
-        let operationQueue = OperationQueue()
-        operationQueue.qualityOfService = .utility
-        operationQueue.addOperations(
-            [operationLoader],
-            waitUntilFinished: true
-        )
     }
     
     private func hundleLoadProfileFromMemoryRequestResult(result: Result<User, Error>?) {
@@ -147,16 +142,16 @@ class ConversationsListViewController: UIViewController {
     
     private func saveThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        let GCDWriter = GCDWriteToMemoryManager(objectToSave: preferences, plistFileName: FileNames.plistFileNameForPreferences, completionOperation: nil)
-        GCDWriter.loadObjectToMemory()
+        let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
+        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToSave: preferences, completionOperation: nil)
     }
     
     private func setInitialThemeToApp() {
         setCurrentTheme()
-        let GCDLoader = GCDReadFromMemoryManager<ApplicationPreferences>(plistFileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+        let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
+        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
             self?.hundleLoadPreferencesFromMemoryRequestResult(result: result)
         }
-        GCDLoader.getObjectFromMemory()
     }
     
     private func hundleLoadPreferencesFromMemoryRequestResult(result: Result<ApplicationPreferences, Error>?) {
