@@ -49,7 +49,7 @@ fileprivate class OperationMemoryManager<T: Codable>: AsyncOperation {
 
 
 fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
-    // Бессмысленный элемент, но без него компилятор не мог вывести T
+
     private var objectToSave: T?
     
     init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
@@ -78,7 +78,7 @@ fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryMana
 }
 
 fileprivate class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
-    
+    // Бессмысленный элемент, но без него компилятор не мог вывести T
     private var objectToRead: T?
     
     public override func main() {
