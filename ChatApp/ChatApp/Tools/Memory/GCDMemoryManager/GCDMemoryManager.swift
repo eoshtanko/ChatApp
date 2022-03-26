@@ -41,7 +41,7 @@ fileprivate class GCDMemoryManager<T: Codable> {
 }
 
 fileprivate class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
-    
+    // Бессмысленный элемент, но без него компилятор не мог вывести T
     private var objectToSave: T?
     
     init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
