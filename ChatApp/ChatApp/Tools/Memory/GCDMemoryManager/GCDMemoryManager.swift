@@ -46,6 +46,7 @@ class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
 }
 
 class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T> {
+    
     private var objectToRead: T?
     
     func getObjectFromMemory() {

@@ -51,6 +51,7 @@ class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
 }
 
 class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
+    
     private var objectToRead: T?
     
     public override func main() {
