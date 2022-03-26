@@ -49,7 +49,7 @@ fileprivate class OperationMemoryManager<T: Codable>: AsyncOperation {
 
 
 fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
-
+    
     private var objectToSave: T?
     
     init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {

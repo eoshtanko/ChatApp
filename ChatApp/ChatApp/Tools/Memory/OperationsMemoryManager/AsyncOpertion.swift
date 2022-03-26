@@ -8,6 +8,7 @@
 import Foundation
 
 public class AsyncOperation: Operation {
+    
     public enum State: String {
         case ready, executing, finished, cancelled
         
@@ -54,7 +55,6 @@ public extension AsyncOperation {
             state = .finished
             return
         }
-        
         main()
         state = .executing
     }

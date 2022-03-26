@@ -12,7 +12,7 @@ class ImageManager {
     static let instace = ImageManager()
     
     func convertImageToString(image: UIImage) -> Data? {
-       return image.pngData()
+        return image.pngData()
     }
     
     func convertUrlToImage(pngData: Data) -> UIImage? {

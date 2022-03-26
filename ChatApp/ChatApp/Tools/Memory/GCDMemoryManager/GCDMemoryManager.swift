@@ -8,7 +8,7 @@
 import Foundation
 
 class GCDMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtocol {
-
+    
     func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
         let GCDLoader = GCDReadFromMemoryManager<T>(plistFileName: fileName) { result in
             if let completionOperation = completionOperation {
@@ -41,7 +41,7 @@ fileprivate class GCDMemoryManager<T: Codable> {
 }
 
 fileprivate class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T> {
-
+    
     private var objectToSave: T?
     
     init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
