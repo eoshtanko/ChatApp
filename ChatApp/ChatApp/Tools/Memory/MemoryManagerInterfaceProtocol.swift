@@ -11,6 +11,6 @@ protocol MemoryManagerInterfaceProtocol {
     
     associatedtype T: Codable
     
-    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?)
-    func writeDataToMemory(fileName: String, objectToSave: T, completionOperation: ((Result<T, Error>?) -> Void)?)
+    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>) -> Void)?)
+    func writeDataToMemory(fileName: String, objectToWrite: T, completionOperation: ((Result<T, Error>) -> Void)?)
 }

@@ -81,17 +81,17 @@ class ConversationsListViewController: UIViewController {
     
     private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
         memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
-            self?.hundleLoadProfileFromMemoryRequestResult(result: result as? Result<User, Error>)
+            self?.handleLoadProfileFromMemoryRequestResult(result: result as! Result<User, Error>)
         }
     }
     
-    private func hundleLoadProfileFromMemoryRequestResult(result: Result<User, Error>?) {
+    private func handleLoadProfileFromMemoryRequestResult(result: Result<User, Error>) {
         DispatchQueue.main.async { [weak self] in
             switch result {
             case .success(let user):
                 CurrentUser.user = user
                 self?.configureRightNavigationButton()
-            case .failure, .none:
+            case .failure:
                 return
             }
         }
@@ -144,24 +144,23 @@ class ConversationsListViewController: UIViewController {
     
     private func saveThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToSave: preferences, completionOperation: nil)
+        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToWrite: preferences, completionOperation: nil)
     }
     
     private func setInitialThemeToApp() {
         setCurrentTheme()
         GCDMemoryManagerForApplicationPreferences.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
-            self?.hundleLoadPreferencesFromMemoryRequestResult(result: result)
+            self?.handleLoadPreferencesFromMemoryRequestResult(result: result)
         }
     }
     
-    private func hundleLoadPreferencesFromMemoryRequestResult(result: Result<ApplicationPreferences, Error>?) {
+    private func handleLoadPreferencesFromMemoryRequestResult(result: Result<ApplicationPreferences, Error>) {
         DispatchQueue.main.async { [weak self] in
             switch result {
             case .success(let preferences):
                 self?.currentTheme = Theme(rawValue: preferences.themeId) ?? .classic
                 self?.setCurrentTheme()
-            case .failure, .none:
-                self?.setCurrentTheme()
+            case .failure:
                 return
             }
         }
@@ -176,16 +175,12 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
-        if (CurrentUser.user.imageData == nil) {
-            setDefaultImage(profileButton)
+        if let imageData = CurrentUser.user.imageData, var image = UIImage(data: imageData) {
+            image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
+                                             height: Const.sizeOfProfileNavigationButton))
+            profileButton.setImage(image, for: .normal)
         } else {
-            if var image = ImageManager.instace.convertUrlToImage(pngData: CurrentUser.user.imageData!) {
-                image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
-                                                 height: Const.sizeOfProfileNavigationButton))
-                profileButton.setImage(image, for: .normal)
-            } else {
-                setDefaultImage(profileButton)
-            }
+            setDefaultImage(profileButton)
         }
         configureImage(profileButton)
     }

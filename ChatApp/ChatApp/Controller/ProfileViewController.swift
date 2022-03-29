@@ -16,12 +16,9 @@ class ProfileViewController: UIViewController {
     
     private var currentTheme: Theme = .classic
     private var activityIndicator: UIActivityIndicatorView!
-    private var selectedSavingApproach: SavingApproach!
+    private var selectedSavingApproach: SavingApproach?
     
     private let operationQueue = OperationQueue()
-    
-    private let successAlert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: UIAlertController.Style.alert)
-    private let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные.", preferredStyle: UIAlertController.Style.alert)
     
     private var isProfileEditing: Bool = false
     private var imageDidChanged = false
@@ -101,26 +98,49 @@ class ProfileViewController: UIViewController {
         currentTheme = theme
     }
     
-    private func hundleSaveToMemoryRequestResult(result: Result<User, Error>?) {
+    private func handleSaveToMemoryRequestResult(result: Result<User, Error>?) {
         DispatchQueue.main.async { [weak self] in
             self?.finalizeSaving()
             switch result {
             case .success(let user):
-                self?.hundleSuccessSaveToMemoryRequestResult(user)
+                self?.handleSuccessSaveToMemoryRequestResult(user)
             case .failure, .none:
-                self?.hundleFailureSaveToMemoryRequestResult()
+                self?.handleFailureSaveToMemoryRequestResult()
             }
         }
     }
     
-    private func hundleSuccessSaveToMemoryRequestResult(_ user: User) {
+    private func handleSuccessSaveToMemoryRequestResult(_ user: User) {
         CurrentUser.user = user
         conversationsListViewController?.configureRightNavigationButton()
+        showSuccessAlert()
+    }
+    
+    private func showSuccessAlert() {
+        let successAlert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: UIAlertController.Style.alert)
+        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
+            self.changeProfileEditingStatus(isEditing: false)
+        })
         present(successAlert, animated: true, completion: nil)
     }
     
-    private func hundleFailureSaveToMemoryRequestResult() {
+    private func handleFailureSaveToMemoryRequestResult() {
         returnToInitialData()
+        showFailureAlert()
+    }
+    
+    private func showFailureAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные.", preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
+            self.changeProfileEditingStatus(isEditing: false)
+        })
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+            if self.selectedSavingApproach == .GCD {
+                self.saveViaGCD()
+            } else {
+                self.saveViaOperations()
+            }
+        })
         present(failureAlert, animated: true, completion: nil)
     }
     
@@ -185,9 +205,9 @@ class ProfileViewController: UIViewController {
     }
     
     private func saveWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
-        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToSave: getUserWithUpdatedData() as! M.T) {
+        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToWrite: getUserWithUpdatedData() as! M.T) {
             [weak self] result in
-            self?.hundleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
+            self?.handleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
         }
     }
     
@@ -208,7 +228,7 @@ class ProfileViewController: UIViewController {
         }
         var image: Data?
         if let profileImageViewImage = profileImageView.image {
-            image = ImageManager.instace.convertImageToString(image: profileImageViewImage)
+            image = profileImageViewImage.pngData()
         }
         return image
     }
@@ -262,7 +282,6 @@ class ProfileViewController: UIViewController {
     private func configureSubviews() {
         configureNameLabel()
         configureActivityIndicator()
-        configureAlerts()
         configureButtons(editButton, cancelButton, saveGCDButton, saveOperationsButton)
     }
     
@@ -284,13 +303,13 @@ class ProfileViewController: UIViewController {
     }
     
     private func setInitialProfileData() {
-        setInitiaoImage()
+        setInitialImage()
         setInitialName()
         setInitialInfo()
     }
     
-    private func setInitiaoImage() {
-        if let data = CurrentUser.user.imageData, let image = ImageManager.instace.convertUrlToImage(pngData: data) {
+    private func setInitialImage() {
+        if let data = CurrentUser.user.imageData, let image = UIImage(data: data) {
             profileImageView.image = image
         }
     }
@@ -327,30 +346,6 @@ class ProfileViewController: UIViewController {
         activityIndicator.style = .large
         activityIndicator.transform = CGAffineTransform(scaleX: 3, y: 3)
         view.addSubview(activityIndicator)
-    }
-    
-    private func configureAlerts() {
-        configureSuccessAlert()
-        configureFailureAlert()
-    }
-    
-    private func configureSuccessAlert() {
-        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
-            self.changeProfileEditingStatus(isEditing: false)
-        })
-    }
-    
-    private func configureFailureAlert() {
-        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
-            self.changeProfileEditingStatus(isEditing: false)
-        })
-        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
-            if self.selectedSavingApproach == .GCD {
-                self.saveViaGCD()
-            } else {
-                self.saveViaOperations()
-            }
-        })
     }
     
     private func configureStatusBar(_ style: UIStatusBarStyle) {

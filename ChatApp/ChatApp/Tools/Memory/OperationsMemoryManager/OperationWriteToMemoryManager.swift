@@ -11,11 +11,9 @@ class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtoco
     
     private let operationQueue = OperationQueue()
     
-    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
+    func readDataFromMemory(fileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
         let operationLoader = OperationReadFromMemoryManager<T>(plistFileName: fileName) { result in
-            if let completionOperation = completionOperation {
-                completionOperation(result)
-            }
+            completionOperation?(result)
         }
         operationQueue.qualityOfService = .utility
         operationQueue.addOperations(
@@ -24,11 +22,9 @@ class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtoco
         )
     }
     
-    func writeDataToMemory(fileName: String, objectToSave: T, completionOperation: ((Result<T, Error>?) -> Void)?) {
-        let operationWriter = OperationWriteToMemoryManager(objectToSave: objectToSave, plistFileName: fileName) { result in
-            if let completionOperation = completionOperation {
-                completionOperation(result)
-            }
+    func writeDataToMemory(fileName: String, objectToWrite: T, completionOperation: ((Result<T, Error>) -> Void)?) {
+        let operationWriter = OperationWriteToMemoryManager(objectToWrite: objectToWrite, plistFileName: fileName) { result in
+            completionOperation?(result)
         }
         operationQueue.addOperations([operationWriter], waitUntilFinished: false)
     }
@@ -37,10 +33,10 @@ class OperationMemoryManagerInterface<T: Codable>: MemoryManagerInterfaceProtoco
 fileprivate class OperationMemoryManager<T: Codable>: AsyncOperation {
     
     // Операция, результат которой отразиться на UI
-    fileprivate var completionOperation: ((Result<T, Error>?) -> Void)?
-    fileprivate var plistURL: URL!
+    fileprivate var completionOperation: ((Result<T, Error>) -> Void)?
+    fileprivate var plistURL: URL?
     
-    init(plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
+    init(plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
         self.plistURL = URL.getPlistURL(plistFileName: plistFileName)
         self.completionOperation = completionOperation
         super.init()
@@ -48,13 +44,13 @@ fileprivate class OperationMemoryManager<T: Codable>: AsyncOperation {
 }
 
 
-fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T> {
+fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryManager<T>, Writer {
     
-    private var objectToSave: T?
+    private var objectToWrite: T
     
-    init(objectToSave: T, plistFileName: String, completionOperation: ((Result<T, Error>?) -> Void)?) {
+    init(objectToWrite: T, plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
+        self.objectToWrite = objectToWrite
         super.init(plistFileName: plistFileName, completionOperation: completionOperation)
-        self.objectToSave = objectToSave
     }
     
     public override func main() {
@@ -62,22 +58,14 @@ fileprivate class OperationWriteToMemoryManager<T: Codable>: OperationMemoryMana
             state = .finished
             return
         }
-        if objectToSave == nil {
-            if let completionOperation = completionOperation {
-                completionOperation(.failure(WorkingWithMemoryError.formatError))
-            }
-            return
-        }
-        writeObjectToMemory(url: plistURL, objectToSave: objectToSave) { result in
+        writeObjectToMemory(url: plistURL, objectToWrite: objectToWrite) { result in
             self.state = .finished
-            if let completionOperation = self.completionOperation {
-                completionOperation(result)
-            }
+            self.completionOperation?(result)
         }
     }
 }
 
-fileprivate class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T> {
+fileprivate class OperationReadFromMemoryManager<T: Codable>: OperationMemoryManager<T>, Reader {
     // Бессмысленный элемент, но без него компилятор не мог вывести T
     private var objectToRead: T?
     
@@ -86,11 +74,9 @@ fileprivate class OperationReadFromMemoryManager<T: Codable>: OperationMemoryMan
             state = .finished
             return
         }
-        readObjectFromMemory(url: plistURL, objectToSave: objectToRead) { result in
+        readObjectFromMemory(url: plistURL, objectToRead: objectToRead) { result in
             self.state = .finished
-            if let completionOperation = self.completionOperation {
-                completionOperation(result)
-            }
+            self.completionOperation?(result)
         }
     }
 }

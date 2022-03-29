@@ -29,7 +29,6 @@
 		3460337E27EC225A00962579 /* WorkingWithMemoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337D27EC225A00962579 /* WorkingWithMemoryError.swift */; };
 		3460338027EC22E500962579 /* Writer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337F27EC22E500962579 /* Writer.swift */; };
 		3460338227EC231100962579 /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338127EC231100962579 /* Reader.swift */; };
-		3460338927EC511B00962579 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460338827EC511B00962579 /* ImageManager.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
 		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
 		34ACCFED27C4AAEB00535096 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEB27C4AAEB00535096 /* Profile.storyboard */; };
@@ -63,7 +62,6 @@
 		3460337D27EC225A00962579 /* WorkingWithMemoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkingWithMemoryError.swift; sourceTree = "<group>"; };
 		3460337F27EC22E500962579 /* Writer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Writer.swift; sourceTree = "<group>"; };
 		3460338127EC231100962579 /* Reader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
-		3460338827EC511B00962579 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				345624F127C4C6950044C73A /* LifecycleLogger.swift */,
-				3460338827EC511B00962579 /* ImageManager.swift */,
 				3460337A27EC14BF00962579 /* ApplicationPreferences.swift */,
 				342D524C27E3B0E00075C42B /* MemoryManager.swift */,
 				3460338327EC232400962579 /* Memory */,
@@ -291,7 +288,6 @@
 				342D524D27E3B0E00075C42B /* MemoryManager.swift in Sources */,
 				3427ACDD27D48A980062F749 /* ConversationTableViewCell.swift in Sources */,
 				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
-				3460338927EC511B00962579 /* ImageManager.swift in Sources */,
 				3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */,
 				3460337927EBC04B00962579 /* AsyncOpertion.swift in Sources */,
 				3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */,
