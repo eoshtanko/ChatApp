@@ -44,7 +44,7 @@ class ConversationViewController: UITableViewController {
     
     private func configureNavigationBar() {
         navigationItem.title = conversation?.name
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     private func configureTableView() {

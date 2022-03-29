@@ -9,11 +9,12 @@ import UIKit
 
 class ConversationsListViewController: UIViewController {
     
+    private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
+    
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
     
     private var currentTheme: Theme = .classic
-    private let memoryManager = MemoryManager()
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
@@ -23,14 +24,18 @@ class ConversationsListViewController: UIViewController {
     private var filteredOnlineConversations: [Conversation]!
     private var filteredOfflineConversations: [Conversation]!
     
+    private var profileViewController: ProfileViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadCurrentUser()
         filteredOnlineConversations = onlineConversations
         filteredOfflineConversations = offlineConversations
         configureAppearances()
         configureTableView()
         configureNavigationBar()
         configureSearchBar()
+        instatiateProfileViewController()
         setInitialThemeToApp()
     }
     
@@ -59,6 +64,37 @@ class ConversationsListViewController: UIViewController {
         ])
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func loadCurrentUser() {
+        //loadUserViaGCDB()
+        loadUserViaOperations()
+    }
+    
+    private func loadUserViaGCDB() {
+        loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
+    }
+    
+    private func loadUserViaOperations() {
+        loadWithMemoryManager(memoryManager: OperationMemoryManagerInterface<User>())
+    }
+    
+    private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
+        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
+            self?.handleLoadProfileFromMemoryRequestResult(result: result as! Result<User, Error>)
+        }
+    }
+    
+    private func handleLoadProfileFromMemoryRequestResult(result: Result<User, Error>) {
+        DispatchQueue.main.async { [weak self] in
+            switch result {
+            case .success(let user):
+                CurrentUser.user = user
+                self?.configureRightNavigationButton()
+            case .failure:
+                return
+            }
+        }
     }
     
     private func configureNavigationBar() {
@@ -98,12 +134,36 @@ class ConversationsListViewController: UIViewController {
                 if self?.currentTheme != theme {
                     self?.currentTheme = theme
                     self?.setCurrentTheme()
-                    self?.memoryManager.saveThemeToMemory(theme)
+                    self?.saveThemeToMemory()
                 }
             }
         })
         self.navigationItem.title = "Chat"
         navigationController?.pushViewController(themesViewController, animated: true)
+    }
+    
+    private func saveThemeToMemory() {
+        let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
+        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToWrite: preferences, completionOperation: nil)
+    }
+    
+    private func setInitialThemeToApp() {
+        setCurrentTheme()
+        GCDMemoryManagerForApplicationPreferences.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+            self?.handleLoadPreferencesFromMemoryRequestResult(result: result)
+        }
+    }
+    
+    private func handleLoadPreferencesFromMemoryRequestResult(result: Result<ApplicationPreferences, Error>) {
+        DispatchQueue.main.async { [weak self] in
+            switch result {
+            case .success(let preferences):
+                self?.currentTheme = Theme(rawValue: preferences.themeId) ?? .classic
+                self?.setCurrentTheme()
+            case .failure:
+                return
+            }
+        }
     }
     
     func configureRightNavigationButton() {
@@ -115,12 +175,12 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
-        if (CurrentUser.user.image == nil) {
-            setDefaultImage(profileButton)
-        } else {
-            let image = CurrentUser.user.image!.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
-                                                                   height: Const.sizeOfProfileNavigationButton))
+        if let imageData = CurrentUser.user.imageData, var image = UIImage(data: imageData) {
+            image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
+                                             height: Const.sizeOfProfileNavigationButton))
             profileButton.setImage(image, for: .normal)
+        } else {
+            setDefaultImage(profileButton)
         }
         configureImage(profileButton)
     }
@@ -140,11 +200,12 @@ class ConversationsListViewController: UIViewController {
         profileButton.imageView?.clipsToBounds = true
     }
     
-    @objc private func goToProfile() {
+    private func instatiateProfileViewController() {
         let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-        let profileViewController = profileStoryboard.instantiateViewController(identifier: "Profile", creator: { coder -> ProfileViewController? in
-            ProfileViewController(coder: coder, theme: self.currentTheme)
-        })
+        profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
+    }
+    
+    @objc private func goToProfile() {
         profileViewController.conversationsListViewController = self
         present(profileViewController, animated: true)
     }
@@ -255,12 +316,13 @@ extension ConversationsListViewController: ThemesPickerDelegate {
         //        if currentTheme != theme {
         //            currentTheme = theme
         //            setCurrentTheme()
-        //            memoryManager.saveThemeToMemory(theme)
+        //            memoryManager.saveThemeToMemory()
         //        }
     }
     
     private func setCurrentTheme() {
         ConversationTableViewCell.setCurrentTheme(currentTheme)
+        profileViewController?.setCurrentTheme(currentTheme)
         switch currentTheme {
         case .classic, .day:
             setDayOrClassicTheme()
@@ -268,11 +330,11 @@ extension ConversationsListViewController: ThemesPickerDelegate {
             setNightTheme()
         }
     }
-    
-    private func setInitialThemeToApp() {
-        currentTheme = memoryManager.getThemeFromMemory()
-        setCurrentTheme()
-    }
+}
+
+enum FileNames {
+    static let plistFileNameForProfileInfo = "ProfileInfo.plist"
+    static let plistFileNameForPreferences = "Preferences.plist"
 }
 
 enum Theme: Int {
