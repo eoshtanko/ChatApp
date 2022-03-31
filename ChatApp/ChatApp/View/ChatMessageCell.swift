@@ -18,6 +18,9 @@ class ChatMessageCell: UITableViewCell {
     private var leadingConstraint: NSLayoutConstraint!
     private var trailingConstraint: NSLayoutConstraint!
     
+    private var messageLabelTopConstantWithName: NSLayoutConstraint!
+    private var messageLabelTopConstantWithoutName: NSLayoutConstraint!
+    
     private var incomingMessageUIColor: UIColor!
     private var outcomingMessageUIColor: UIColor!
     
@@ -49,10 +52,18 @@ class ChatMessageCell: UITableViewCell {
         if chatMessage.senderId == CurrentUser.user.id {
             leadingConstraint.isActive = false
             trailingConstraint.isActive = true
+            
+            messageLabelTopConstantWithName.isActive = false
+            messageLabelTopConstantWithoutName.isActive = true
+            
             namelabel.isHidden = true
         } else {
             trailingConstraint.isActive = false
             leadingConstraint.isActive = true
+            
+            messageLabelTopConstantWithName.isActive = true
+            messageLabelTopConstantWithoutName.isActive = false
+            
             namelabel.isHidden = false
         }
     }
@@ -65,7 +76,6 @@ class ChatMessageCell: UITableViewCell {
         NSLayoutConstraint.activate([
             namelabel.topAnchor.constraint(equalTo: topAnchor),
             
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstant),
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Const.bottomConstant),
             messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: Const.messageLabelWidth),
             
@@ -75,6 +85,9 @@ class ChatMessageCell: UITableViewCell {
             bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: Const.messageLabelBoarderConstraint)
         ])
         namelabel.frame.size = CGSize(width: Const.messageLabelWidth, height: Const.hightOfNameLabel)
+        
+        messageLabelTopConstantWithName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithName)
+        messageLabelTopConstantWithoutName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithoutName)
         
         leadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Const.messageLabelLeadingAndTrailingConstraint)
@@ -124,7 +137,8 @@ class ChatMessageCell: UITableViewCell {
         static let messageLabelLeadingAndTrailingConstraint: CGFloat = 16 * 2
         static let messageLabelWidth: CGFloat = UIScreen.main.bounds.size.width * 3 / 4 - Const.messageLabelBoarderConstraint * 3
         static let cornerRadius: CGFloat = 12
-        static let topConstant: CGFloat = 46
+        static let topConstantWithName: CGFloat = 46
+        static let topConstantWithoutName: CGFloat = 16
         static let hightOfNameLabel: CGFloat = 21
         static let bottomConstant: CGFloat = -32
     }

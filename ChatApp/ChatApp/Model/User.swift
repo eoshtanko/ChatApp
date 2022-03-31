@@ -27,6 +27,10 @@ class User: Codable {
 }
 
 struct CurrentUser {
-    // Сделать сохранение. 
-    static var user = User(id: [UUID().uuidString, String(Date().timeIntervalSince1970)].joined())
+    static var user = createCurrentUser()
+    
+    static func createCurrentUser() -> User {
+        guard let idOfDevice = UIDevice.current.identifierForVendor?.uuidString else { fatalError() }
+        return User(id: idOfDevice)
+    }
 }
