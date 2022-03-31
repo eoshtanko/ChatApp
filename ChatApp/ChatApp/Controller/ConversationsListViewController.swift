@@ -97,8 +97,10 @@ class ConversationsListViewController: UIViewController {
         }
         
         channels[index] = channel
+        channels.sort()
+        
         if !isSearching {
-            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            tableView.reloadData()
         }
     }
     
@@ -407,14 +409,9 @@ class ConversationsListViewController: UIViewController {
     
     private func setNightThemeToNavBar() {
         UIApplication.shared.statusBarStyle = .lightContent
-        //self.setNeedsStatusBarAppearanceUpdate()
         navigationItem.standardAppearance = nightNavBarAppearance
         navigationItem.scrollEdgeAppearance = nightNavBarAppearance
     }
-    
-    //    override var preferredStatusBarStyle: UIStatusBarStyle {
-    //        return currentTheme == .night ? UIStatusBarStyle.lightContent : UIStatusBarStyle.darkContent
-    //    }
     
     private enum Const {
         static let numberOfSections = 1
