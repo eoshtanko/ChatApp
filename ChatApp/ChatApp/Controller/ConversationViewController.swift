@@ -268,7 +268,7 @@ extension ConversationViewController {
     func adjustContentForKeyboard(shown: Bool, notification: NSNotification) {
         guard let payload = KeyboardInfo(notification) else { return }
         
-        let keyboardHeight = shown ? payload.frameEnd.size.height : entreMessageBar?.bounds.size.height ?? 0
+        let keyboardHeight = shown ? payload.frameEnd?.size.height : entreMessageBar?.bounds.size.height ?? 0
         if tableView.contentInset.bottom == keyboardHeight {
             return
         }
@@ -276,7 +276,9 @@ extension ConversationViewController {
         let distanceFromBottom = bottomOffset().y - tableView.contentOffset.y
         
         var insets = tableView.contentInset
-        insets.bottom = keyboardHeight
+        if let keyboardHeight = keyboardHeight {
+            insets.bottom = keyboardHeight
+        }
         
         UIView.animate(withDuration: 0.01, delay: 0, options: .curveEaseIn, animations: {
             

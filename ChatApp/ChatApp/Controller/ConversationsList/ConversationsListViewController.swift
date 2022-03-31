@@ -10,27 +10,27 @@ import Firebase
 
 class ConversationsListViewController: UIViewController {
     
-    private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
+    lazy var db = Firestore.firestore()
+    lazy var reference = db.collection("channels")
     
-    private lazy var db = Firestore.firestore()
-    private lazy var reference = db.collection("channels")
+    var channels: [Channel] = []
+    var filteredChannels: [Channel]!
     
-    private var channels: [Channel] = []
-    private var filteredChannels: [Channel]!
+    let tableView = UITableView(frame: .zero, style: .grouped)
+    let searchBar = UISearchBar()
+    var isSearching = false
     
-    private let tableView = UITableView(frame: .zero, style: .grouped)
-    private let searchBar = UISearchBar()
-    private var isSearching = false
+    var currentTheme: Theme = .classic
+    
+    var profileViewController: ProfileViewController!
     
     private var activityIndicator: UIActivityIndicatorView!
     
-     var currentTheme: Theme = .classic
+    private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
-    
-     var profileViewController: ProfileViewController!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCurrentUser()
@@ -413,7 +413,7 @@ class ConversationsListViewController: UIViewController {
         navigationItem.scrollEdgeAppearance = nightNavBarAppearance
     }
     
-    private enum Const {
+    enum Const {
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
         static let sizeOfProfileNavigationButton: CGFloat = 40
