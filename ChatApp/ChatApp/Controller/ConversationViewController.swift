@@ -224,48 +224,39 @@ extension ConversationViewController {
 
 // Настройка view для ввода сообщения.
 extension ConversationViewController {
-    
     override var inputAccessoryView: UIView? {
-        get {
-            if entreMessageBar == nil {
-                entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
-                entreMessageBar?.setCurrentTheme(currentTheme)
-                entreMessageBar?.setSendMessageAction { [weak self] message in
-                    let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-                    self?.reference.addDocument(data: newMessage.toDict) { [weak self] error in
-                            guard let self = self else { return }
-                            if error != nil {
-                                //self.showFailTiCreateChannelAlert(name)
-                              return
-                        }
-                        self.entreMessageBar?.textView.text = ""
+        if entreMessageBar == nil {
+            entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+            entreMessageBar?.setCurrentTheme(currentTheme)
+            entreMessageBar?.setSendMessageAction { [weak self] message in
+                let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
+                self?.reference.addDocument(data: newMessage.toDict) { [weak self] error in
+                    guard let self = self else { return }
+                    if error != nil {
+                        return
                     }
+                    self.entreMessageBar?.textView.text = ""
                 }
             }
-            return entreMessageBar
         }
+        return entreMessageBar
     }
-    
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
     override var canResignFirstResponder: Bool {
         return true
     }
-    
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(_:)),
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
-        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(_:)),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
-    
     @objc func keyboardWillShow(_ notification: NSNotification) {
         adjustContentForKeyboard(shown: true, notification: notification)
     }
@@ -300,16 +291,17 @@ extension ConversationViewController {
 }
 
 struct KeyboardInfo {
-    var frameBegin: CGRect
-    var frameEnd: CGRect
+    var frameBegin: CGRect?
+    var frameEnd: CGRect?
 }
 
 extension KeyboardInfo {
     init?(_ notification: NSNotification) {
-        guard notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
-        let u = notification.userInfo!
-        
-        frameBegin = u[UIWindow.keyboardFrameBeginUserInfoKey] as! CGRect
-        frameEnd = u[UIWindow.keyboardFrameEndUserInfoKey] as! CGRect
+        guard notification.name == UIResponder.keyboardWillShowNotification ||
+                notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
+        if let userInfo = notification.userInfo {
+            frameBegin = userInfo[UIWindow.keyboardFrameBeginUserInfoKey] as? CGRect
+            frameEnd = userInfo[UIWindow.keyboardFrameEndUserInfoKey] as? CGRect
+        }
     }
 }

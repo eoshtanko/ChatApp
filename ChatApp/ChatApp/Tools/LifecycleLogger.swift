@@ -48,7 +48,7 @@ class LifecycleLogger {
     }
     
     private static func printLoggedinfo(_ newState: State?, _ time: Time?, _ methodName: String) {
-        if (methodName.starts(with: "application")) {
+        if methodName.starts(with: "application") {
             printApplicationStateInfo(newState, time, methodName)
         } else {
             printControllerStateInfo(methodName)
@@ -59,7 +59,7 @@ class LifecycleLogger {
         guard let newState = newState, let time = time else {
             return
         }
-        if (lastState != newState) {
+        if lastState != newState {
             print("📕 Application \(time.rawValue) from \(lastState) to \(newState): \(methodName).")
             lastState = newState
         } else {

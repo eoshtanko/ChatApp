@@ -10,23 +10,21 @@ import UIKit
 class ProfileViewController: UIViewController {
     
     private let GCDMemoryManager = GCDMemoryManagerInterface<User>()
-    private let operationMemoryManager = OperationMemoryManagerInterface<User>()
     
     weak var conversationsListViewController: ConversationsListViewController?
     
-    private var currentTheme: Theme = .classic
+    var currentTheme: Theme = .classic
     private var activityIndicator: UIActivityIndicatorView!
-    private var selectedSavingApproach: SavingApproach?
     
     private let operationQueue = OperationQueue()
     
-    private var isProfileEditing: Bool = false
-    private var imageDidChanged = false
-    private var initialImage: UIImage?
-    private var nameDidChanged = false
-    private var initialName: String?
-    private var infoDidChanged = false
-    private var initialInfo: String?
+    var isProfileEditing: Bool = false
+    var imageDidChanged = false
+    var initialImage: UIImage?
+    var nameDidChanged = false
+    var initialName: String?
+    var infoDidChanged = false
+    var initialInfo: String?
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -34,14 +32,11 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveGCDButton: UIButton!
-    @IBOutlet weak var saveOperationsButton: UIButton!
     @IBOutlet weak var editPhotoButton: UIButton!
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var navigationBarLabel: UILabel!
     @IBOutlet weak var navigationBarButton: UIButton!
     @IBOutlet weak var buttonVerticalStackView: UIStackView!
-    @IBOutlet weak var buttonHorizontalStackView: UIStackView!
-    
     
     @IBAction func editPhotoButtonPressed(_ sender: Any) {
         print("Выбери изображение профиля")
@@ -64,11 +59,7 @@ class ProfileViewController: UIViewController {
     @IBAction func saveGCDButtonPressed(_ sender: Any) {
         saveViaGCD()
     }
-    
-    @IBAction func saveOperationsButtonPressed(_ sender: Any) {
-        saveViaOperations()
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureOperationQueue()
@@ -135,11 +126,7 @@ class ProfileViewController: UIViewController {
             self.changeProfileEditingStatus(isEditing: false)
         })
         failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
-            if self.selectedSavingApproach == .GCD {
-                self.saveViaGCD()
-            } else {
-                self.saveViaOperations()
-            }
+            self.saveViaGCD()
         })
         present(failureAlert, animated: true, completion: nil)
     }
@@ -150,7 +137,7 @@ class ProfileViewController: UIViewController {
         activityIndicator.stopAnimating()
     }
     
-    private func changeProfileEditingStatus(isEditing: Bool) {
+    func changeProfileEditingStatus(isEditing: Bool) {
         changeHiddenPropertyOfButtons(isEditing)
         isProfileEditing = isEditing
         changeEnablePropertyOfFields(isEditing)
@@ -172,12 +159,11 @@ class ProfileViewController: UIViewController {
     private func changeHiddenPropertyOfButtons(_ isEditing: Bool) {
         editButton.isHidden = isEditing
         cancelButton.isHidden = !isEditing
-        buttonHorizontalStackView.isHidden = !isEditing
+        saveGCDButton.isHidden = !isEditing
     }
     
     private func disableSaveButtons() {
         saveGCDButton.isEnabled = false
-        saveOperationsButton.isEnabled = false
     }
     
     private func setInitialData() {
@@ -193,21 +179,15 @@ class ProfileViewController: UIViewController {
     }
     
     private func saveViaGCD() {
-        selectedSavingApproach = .GCD
         prepareForSaving()
         saveWithMemoryManager(memoryManager: GCDMemoryManager)
     }
     
-    private func saveViaOperations() {
-        selectedSavingApproach = .operations
-        prepareForSaving()
-        saveWithMemoryManager(memoryManager: operationMemoryManager)
-    }
-    
     private func saveWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
-        memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToWrite: getUserWithUpdatedData() as! M.T) {
-            [weak self] result in
-            self?.handleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
+        if let objectToWrite = getUserWithUpdatedData() as? M.MemoryObject {
+            memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToWrite: objectToWrite) { [weak self] result in
+                self?.handleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
+            }
         }
     }
     
@@ -282,12 +262,13 @@ class ProfileViewController: UIViewController {
     private func configureSubviews() {
         configureNameLabel()
         configureActivityIndicator()
-        configureButtons(editButton, cancelButton, saveGCDButton, saveOperationsButton)
+        configureButtons(editButton, cancelButton, saveGCDButton)
     }
     
     private func configureNameLabel() {
         nameLabel.delegate = self
-        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText,
+                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     }
     
     private func configureInfoLabel() {
@@ -295,7 +276,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func configureButtons(_ buttons: UIButton...) {
-        for button in buttons{
+        for button in buttons {
             button.layer.cornerRadius = Const.buttonBorderRadius
             button.clipsToBounds = true
             button.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -315,13 +296,13 @@ class ProfileViewController: UIViewController {
     }
     
     private func setInitialName() {
-        if (CurrentUser.user.name != nil) {
+        if CurrentUser.user.name != nil {
             nameLabel.text = CurrentUser.user.name
         }
     }
     
     private func setInitialInfo() {
-        if (CurrentUser.user.info != nil) {
+        if CurrentUser.user.info != nil {
             infoLabel.text = CurrentUser.user.info
         } else {
             infoLabel.text = Const.textViewPlaceholderText
@@ -389,7 +370,7 @@ class ProfileViewController: UIViewController {
     
     private func setDayOrClassicThemeToButtons() {
         editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
-        setDayOrClassicThemeToBottomButtons(editButton, cancelButton, saveGCDButton, saveOperationsButton)
+        setDayOrClassicThemeToBottomButtons(editButton, cancelButton, saveGCDButton)
     }
     
     private func setDayOrClassicThemeToBottomButtons(_ buttons: UIButton...) {
@@ -431,7 +412,7 @@ class ProfileViewController: UIViewController {
     
     private func setNightThemeToButtons() {
         editPhotoButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
-        setNightThemeToBottomButtons(editButton, cancelButton, saveGCDButton, saveOperationsButton)
+        setNightThemeToBottomButtons(editButton, cancelButton, saveGCDButton)
     }
     
     private func setNightThemeToBottomButtons(_ buttons: UIButton...) {
@@ -447,11 +428,9 @@ class ProfileViewController: UIViewController {
         navigationBarButton.setTitleColor(.systemYellow, for: .normal)
     }
     
-    
-    private func setEnableStatusToSaveButtons() {
+    func setEnableStatusToSaveButtons() {
         let someDataDidChanged = infoDidChanged || nameDidChanged || imageDidChanged
         saveGCDButton.isEnabled = someDataDidChanged
-        saveOperationsButton.isEnabled = someDataDidChanged
     }
     
     private enum SavingApproach {
@@ -459,144 +438,10 @@ class ProfileViewController: UIViewController {
         case operations
     }
     
-    private enum Const {
+    enum Const {
         static let buttonBorderRadius: CGFloat = 14
         static let maxNumOfCharsInName = 40
         static let textFieldPlaceholderText = "ФИО"
         static let textViewPlaceholderText = "Расскажите о себе :)"
-    }
-}
-
-// Все, что связано с UITextField.
-extension ProfileViewController: UITextFieldDelegate {
-    
-    // Ввожу ограничение на максимальное количество символов в имени.
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentCharacterCount = textField.text?.count ?? 0
-        if range.length + range.location > currentCharacterCount {
-            return false
-        }
-        let newLength = currentCharacterCount + string.count - range.length
-        return newLength <= Const.maxNumOfCharsInName
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        nameDidChanged = textField.text != initialName
-        setEnableStatusToSaveButtons()
-    }
-}
-
-extension ProfileViewController: UITextViewDelegate {
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray {
-            textView.text = nil
-            textView.textColor = currentTheme == .night ? .white : .black
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = Const.textViewPlaceholderText
-            textView.textColor = UIColor.lightGray
-        }
-        infoDidChanged = (textView.textColor == .lightGray ? "" : textView.text) != initialInfo
-        setEnableStatusToSaveButtons()
-    }
-}
-
-// Все, что связано с установкой фото.
-extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            DispatchQueue.main.async {
-                if !self.isProfileEditing {
-                    self.changeProfileEditingStatus(isEditing: true)
-                }
-                self.profileImageView.image = image
-                self.imageDidChanged = true
-                self.setEnableStatusToSaveButtons()
-            }
-        } else {
-            showAlertWith(message: "No image found.")
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true)
-    }
-    
-    private func pickImage() {
-        let imagePickerController = configureImagePickerController()
-        let actionSheet = configureActionSheet()
-        configureActions(actionSheet, imagePickerController)
-        self.present(actionSheet, animated: true, completion: nil)
-    }
-    
-    private func configureImagePickerController() -> UIImagePickerController {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = true
-        return imagePickerController
-    }
-    
-    private func configureActionSheet() -> UIAlertController {
-        let actionSheet = UIAlertController(title: "Image Source", message: "Select the source of your profile image", preferredStyle: .actionSheet)
-        return actionSheet
-    }
-    
-    private func configureActions(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        configureLibraryAction(actionSheet, imagePickerController)
-        configureCameraAction(actionSheet, imagePickerController)
-        configureCancelAction(actionSheet)
-    }
-    
-    private func configureLibraryAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
-            if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
-                imagePickerController.sourceType = .photoLibrary
-                self.present(imagePickerController, animated: true)
-            } else {
-                self.showAlertWith(message: "Unable to access the photo library.")
-            }
-        }))
-    }
-    
-    private func configureCameraAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action: UIAlertAction) in
-            actionSheet.dismiss(animated: true) {
-                if (UIImagePickerController.isSourceTypeAvailable(.camera)) {
-                    imagePickerController.sourceType = .camera
-                    self.present(imagePickerController, animated: true)
-                } else {
-                    self.showAlertWith(message: "Unable to access the camera.")
-                }
-            }
-        }))
-    }
-    
-    private func configureCancelAction(_ actionSheet: UIAlertController) {
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    }
-    
-    private func showAlertWith(message: String){
-        let alertController = UIAlertController(title: "Error when uploading a photo", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alertController, animated: true)
     }
 }

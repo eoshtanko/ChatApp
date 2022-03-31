@@ -73,7 +73,7 @@ class ChatMessageCell: UITableViewCell {
             bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: Const.messageLabelBoarderConstraint),
-            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: Const.messageLabelBoarderConstraint),
+            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: Const.messageLabelBoarderConstraint)
         ])
         
         leadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
@@ -119,7 +119,7 @@ class ChatMessageCell: UITableViewCell {
     private enum Const {
         static let messageLabelBoarderConstraint: CGFloat = 16
         static let messageLabelLeadingAndTrailingConstraint: CGFloat = 16 * 2
-        static let messageLabelWidth: CGFloat = UIScreen.main.bounds.size.width * 3/4 - Const.messageLabelBoarderConstraint * 3
+        static let messageLabelWidth: CGFloat = UIScreen.main.bounds.size.width * 3 / 4 - Const.messageLabelBoarderConstraint * 3
         static let cornerRadius: CGFloat = 12
         static let topConstant: CGFloat = 16
         static let bottomConstant: CGFloat = -32

@@ -8,6 +8,7 @@
 import UIKit
 
 class User: Codable {
+    
     var id: String
     var name: String?
     var info: String?

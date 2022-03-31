@@ -65,7 +65,7 @@ class ThemesViewController: UIViewController {
     func setCurrentTheme(_ theme: Theme) {
         previousTheme = currentTheme
         currentTheme = theme
-        if (classicThemeArea != nil) {
+        if classicThemeArea != nil {
             setUnselectedStateToThemeView()
             setSelectedStateToThemeView()
             configureBackground()
@@ -216,4 +216,3 @@ class ThemesViewController: UIViewController {
         static let viewsBorderWidthSelected: CGFloat = 4
     }
 }
-

@@ -20,7 +20,6 @@ class CustomNavigationBar: UINavigationBar {
             }
         }
     }
-    
     private enum Const {
         static let contentViewHeight: CGFloat = 96
     }

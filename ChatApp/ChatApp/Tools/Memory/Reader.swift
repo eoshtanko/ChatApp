@@ -8,12 +8,15 @@
 import Foundation
 
 protocol Reader {
-    func readObjectFromMemory<T: Decodable>(url plistURL: URL?, objectToRead: T?, completion: ((Result<T, Error>) -> Void)?)
+    func readObjectFromMemory<T: Decodable>(url plistURL: URL?,
+                                            objectToRead: T?,
+                                            completion: ((Result<T, Error>) -> Void)?)
 }
 
 extension Reader {
-    
-    func readObjectFromMemory<T: Decodable>(url plistURL: URL?, objectToRead: T?, completion: ((Result<T, Error>) -> Void)?) {
+    func readObjectFromMemory<T: Decodable>(url plistURL: URL?,
+                                            objectToRead: T?,
+                                            completion: ((Result<T, Error>) -> Void)?) {
         guard let completion = completion else {
             return
         }
@@ -23,7 +26,7 @@ extension Reader {
         }
         let decoder = PropertyListDecoder()
         do {
-            let data = try Data.init(contentsOf: plistURL)
+            let data = try Data(contentsOf: plistURL)
             let object = try decoder.decode(T.self, from: data)
             completion(.success(object))
         } catch {

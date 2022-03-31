@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="H33-MO-rhl" customClass="EntryMessageView" customModule="ChatApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="606" height="90"/>
+            <rect key="frame" x="0.0" y="0.0" width="592" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H95-8l-KnH">
-                    <rect key="frame" x="0.0" y="0.0" width="606" height="56"/>
+                    <rect key="frame" x="0.0" y="10" width="592" height="56"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uPc-W1-YHv">
-                            <rect key="frame" x="571" y="17.5" width="25" height="21"/>
+                            <rect key="frame" x="557" y="17.5" width="25" height="21"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title=" " image="arrow.up.circle.fill" catalog="system"/>
                             <connections>
@@ -27,10 +27,10 @@
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
-                            <rect key="frame" x="10" y="10" width="551" height="36"/>
+                            <rect key="frame" x="10" y="10" width="537" height="36"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="36" id="Rbo-fG-b91"/>
+                                <constraint firstAttribute="height" constant="36" id="IQB-EU-xtD"/>
                             </constraints>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -39,22 +39,21 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="uPc-W1-YHv" secondAttribute="trailing" constant="10" id="6cm-61-Kfb"/>
-                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="top" secondItem="H95-8l-KnH" secondAttribute="top" constant="10" id="NeB-W0-Zdn"/>
+                        <constraint firstAttribute="bottom" secondItem="5jy-Zb-Rfo" secondAttribute="bottom" constant="10" id="R4b-2b-dlO"/>
                         <constraint firstItem="5jy-Zb-Rfo" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="10" id="XpE-60-948"/>
-                        <constraint firstItem="uPc-W1-YHv" firstAttribute="leading" secondItem="5jy-Zb-Rfo" secondAttribute="trailing" constant="10" id="p5D-1A-xRn"/>
-                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="5jy-Zb-Rfo" secondAttribute="bottom" constant="10" id="sKq-fh-nPi"/>
+                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="top" secondItem="H95-8l-KnH" secondAttribute="top" constant="10" id="mLD-z8-z26"/>
                         <constraint firstItem="uPc-W1-YHv" firstAttribute="centerY" secondItem="5jy-Zb-Rfo" secondAttribute="centerY" id="t6Y-qI-w3K"/>
                         <constraint firstAttribute="trailing" secondItem="5jy-Zb-Rfo" secondAttribute="trailing" constant="45" id="uPk-sf-rhr"/>
                     </constraints>
                 </view>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="jyg-6g-I4T"/>
+            <viewLayoutGuide key="safeArea" id="k0D-Yd-S8a"/>
             <color key="backgroundColor" name="BackgroundNavigationBarColor"/>
             <constraints>
-                <constraint firstItem="jyg-6g-I4T" firstAttribute="trailing" secondItem="H95-8l-KnH" secondAttribute="trailing" id="6Yq-p0-YIZ"/>
-                <constraint firstItem="H95-8l-KnH" firstAttribute="leading" secondItem="jyg-6g-I4T" secondAttribute="leading" id="8b5-pj-Kt8"/>
-                <constraint firstItem="jyg-6g-I4T" firstAttribute="bottom" secondItem="H95-8l-KnH" secondAttribute="bottom" id="E2R-ZA-LGE"/>
-                <constraint firstItem="H95-8l-KnH" firstAttribute="top" secondItem="H33-MO-rhl" secondAttribute="top" id="j1L-87-ddz"/>
+                <constraint firstItem="H95-8l-KnH" firstAttribute="top" secondItem="H33-MO-rhl" secondAttribute="top" constant="10" id="Nd8-Ht-3Uf"/>
+                <constraint firstItem="k0D-Yd-S8a" firstAttribute="trailing" secondItem="H95-8l-KnH" secondAttribute="trailing" id="SAz-cw-ydu"/>
+                <constraint firstItem="H95-8l-KnH" firstAttribute="leading" secondItem="k0D-Yd-S8a" secondAttribute="leading" id="aMj-Uz-u0V"/>
+                <constraint firstItem="H95-8l-KnH" firstAttribute="bottom" secondItem="k0D-Yd-S8a" secondAttribute="bottom" id="okq-z4-avp"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
@@ -62,9 +61,9 @@
             <connections>
                 <outlet property="entryMessageView" destination="H95-8l-KnH" id="cyT-GS-Fmd"/>
                 <outlet property="textView" destination="5jy-Zb-Rfo" id="H2B-Gd-U7q"/>
-                <outlet property="textViewHeight" destination="Rbo-fG-b91" id="a4I-0b-6ah"/>
+                <outlet property="textViewHeight" destination="IQB-EU-xtD" id="jMg-qu-Sm7"/>
             </connections>
-            <point key="canvasLocation" x="-792.75362318840587" y="-293.30357142857139"/>
+            <point key="canvasLocation" x="-802.89855072463774" y="-312.05357142857139"/>
         </view>
     </objects>
     <resources>

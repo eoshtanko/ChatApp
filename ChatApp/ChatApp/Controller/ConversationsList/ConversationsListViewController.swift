@@ -22,12 +22,14 @@ class ConversationsListViewController: UIViewController {
     private let searchBar = UISearchBar()
     private var isSearching = false
     
-    private var currentTheme: Theme = .classic
+    private var activityIndicator: UIActivityIndicatorView!
+    
+     var currentTheme: Theme = .classic
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
     
-    private var profileViewController: ProfileViewController!
+     var profileViewController: ProfileViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,21 +140,18 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadCurrentUser() {
-        //loadUserViaGCDB()
-        loadUserViaOperations()
+        loadUserViaGCDB()
     }
     
     private func loadUserViaGCDB() {
         loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
     }
-    
-    private func loadUserViaOperations() {
-        loadWithMemoryManager(memoryManager: OperationMemoryManagerInterface<User>())
-    }
-    
+
     private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
         memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
-            self?.handleLoadProfileFromMemoryRequestResult(result: result as! Result<User, Error>)
+            if let result = result as? Result<User, Error> {
+                self?.handleLoadProfileFromMemoryRequestResult(result: result)
+            }
         }
     }
     
@@ -199,7 +198,7 @@ class ConversationsListViewController: UIViewController {
     
     private func getAddNewChannelBarButtonItem() -> UIBarButtonItem {
         let addNewChannelButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
-                                                    height: Const.sizeOfSettingsNavigationButton))
+                                                         height: Const.sizeOfSettingsNavigationButton))
         setImageToSettingsNavigationButton(addNewChannelButton, imageName: "plus")
         addNewChannelButton.addTarget(self, action: #selector(addNewChannel), for: .touchUpInside)
         return UIBarButtonItem(customView: addNewChannelButton)
@@ -248,7 +247,7 @@ class ConversationsListViewController: UIViewController {
             guard let self = self else { return }
             if error != nil {
                 self.showFailTiCreateChannelAlert(name)
-              return
+                return
             }
         }
     }
@@ -264,7 +263,9 @@ class ConversationsListViewController: UIViewController {
     
     private func saveThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToWrite: preferences, completionOperation: nil)
+        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(
+            fileName: FileNames.plistFileNameForPreferences,
+            objectToWrite: preferences, completionOperation: nil)
     }
     
     private func setInitialThemeToApp() {
@@ -347,7 +348,7 @@ class ConversationsListViewController: UIViewController {
         nightNavBarAppearance.backgroundColor = .black
     }
     
-    private func setDayOrClassicTheme() {
+     func setDayOrClassicTheme() {
         tableView.backgroundColor = .white
         setDayOrClassicThemeToSearchBar()
         setDayOrClassicThemeToNavBar()
@@ -361,14 +362,15 @@ class ConversationsListViewController: UIViewController {
         textFieldInsideSearchBar?.backgroundColor = UIColor(named: "BackgroundImageColor")
         textFieldInsideSearchBar?.textColor = .black
         
-        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
-        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-        glassIconView.tintColor = .gray
+        if let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView {
+            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+            glassIconView.tintColor = .gray
+        }
         
-        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
-        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
-        clearButton.tintColor = .gray
-        
+        if let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as? UIButton {
+            clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+            clearButton.tintColor = .gray
+        }
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
     }
     
@@ -376,12 +378,10 @@ class ConversationsListViewController: UIViewController {
     // варинингов, но нет... :.(
     private func setDayOrClassicThemeToNavBar() {
         UIApplication.shared.statusBarStyle = .darkContent
-        //self.setNeedsStatusBarAppearanceUpdate()
         navigationItem.standardAppearance = dayNavBarAppearance
         navigationItem.scrollEdgeAppearance = dayNavBarAppearance
     }
-    
-    private func setNightTheme() {
+     func setNightTheme() {
         tableView.backgroundColor = .black
         setNightThemeToSearchBar()
         setNightThemeToNavBar()
@@ -396,14 +396,14 @@ class ConversationsListViewController: UIViewController {
         textFieldInsideSearchBar?.backgroundColor = .systemYellow
         textFieldInsideSearchBar?.textColor = .black
         
-        let glassIconView = textFieldInsideSearchBar?.leftView as! UIImageView
-        glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-        glassIconView.tintColor = .black
-        
-        let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as! UIButton
-        clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
-        clearButton.tintColor = .black
-        
+        if let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView {
+            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+            glassIconView.tintColor = .black
+        }
+        if let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as? UIButton {
+            clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
+            clearButton.tintColor = .black
+        }
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
     }
     
@@ -421,108 +421,9 @@ class ConversationsListViewController: UIViewController {
     }
 }
 
-protocol ThemesPickerDelegate: AnyObject {
-    func selectTheme(_ theme: Theme)
-}
-
-extension ConversationsListViewController: ThemesPickerDelegate {
-    
-    func selectTheme(_ theme: Theme) {
-        //        if currentTheme != theme {
-        //            currentTheme = theme
-        //            setCurrentTheme()
-        //            memoryManager.saveThemeToMemory()
-        //        }
-    }
-    
-    private func setCurrentTheme() {
-        ConversationTableViewCell.setCurrentTheme(currentTheme)
-        profileViewController?.setCurrentTheme(currentTheme)
-        switch currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
-        }
-    }
-}
-
 enum FileNames {
     static let plistFileNameForProfileInfo = "ProfileInfo.plist"
     static let plistFileNameForPreferences = "Preferences.plist"
-}
-
-enum Theme: Int {
-    case classic
-    case day
-    case night
-}
-
-extension ConversationsListViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
-        self.navigationItem.title = ""
-        
-        let conversationViewController = ConversationViewController(theme: currentTheme, channel: conversation, dbChannelRef: reference)
-        if let conversationViewController = conversationViewController {
-            navigationController?.pushViewController(conversationViewController, animated: true)
-        }
-        tableView.reloadRows(at: [indexPath], with: .none)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return Const.hightOfCell
-    }
-}
-
-extension ConversationsListViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return Const.numberOfSections
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isSearching ? filteredChannels.count : channels.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ConversationTableViewCell.identifier,
-            for: indexPath)
-        guard let conversationCell = cell as? ConversationTableViewCell else {
-            return cell
-        }
-        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
-        conversationCell.configureCell(conversation)
-        return conversationCell
-    }
-}
-
-// Подумала, будет плюсом :)
-extension ConversationsListViewController: UISearchBarDelegate {
-    
-    private func configureSearchBar() {
-        tableView.tableHeaderView = searchBar
-        searchBar.delegate = self
-        searchBar.sizeToFit()
-        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
-        textFieldInsideSearchBar?.enablesReturnKeyAutomatically = false
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        isSearching = !searchText.isEmpty
-        filteredChannels = searchText.isEmpty ? channels : channels.filter {
-            (item: Channel) -> Bool in
-            return item.name.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
-        }
-        tableView.reloadData()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.searchBar.endEditing(true)
-    }
 }
 
 extension ConversationsListViewController: UITextFieldDelegate {
@@ -530,14 +431,5 @@ extension ConversationsListViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
-    }
-}
-
-extension UIImage {
-    
-    func resized(to size: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
-        }
     }
 }

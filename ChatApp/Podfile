@@ -9,6 +9,7 @@ target 'ChatApp' do
 
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'SwiftLint'
 
   # Ignore all warnings from all pods
   inhibit_all_warnings!

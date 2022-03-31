@@ -120,46 +120,22 @@
                                             <action selector="cancelButtonPressed:" destination="L8r-NT-LYG" eventType="touchUpInside" id="ozt-a1-JiP"/>
                                         </connections>
                                     </button>
-                                    <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="UFy-4P-dWj">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1l-wN-dKB">
                                         <rect key="frame" x="0.0" y="0.0" width="302" height="40"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1l-wN-dKB">
-                                                <rect key="frame" x="0.0" y="0.0" width="146" height="40"/>
-                                                <color key="backgroundColor" name="BackgroundButtonColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="6sj-gc-VWE"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Save GCD"/>
-                                                <state key="disabled">
-                                                    <color key="titleColor" name="DefaultImageColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="saveGCDButtonPressed:" destination="L8r-NT-LYG" eventType="touchUpInside" id="xaU-CB-uoN"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YmT-gv-WTH">
-                                                <rect key="frame" x="156" y="0.0" width="146" height="40"/>
-                                                <color key="backgroundColor" name="BackgroundButtonColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="pO1-hK-Mha"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
-                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" title="Save Operations"/>
-                                                <state key="disabled">
-                                                    <color key="titleColor" name="DefaultImageColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="saveOperationsButtonPressed:" destination="L8r-NT-LYG" eventType="touchUpInside" id="ymj-OL-Mrt"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
+                                        <color key="backgroundColor" name="BackgroundButtonColor"/>
                                         <constraints>
-                                            <constraint firstItem="YmT-gv-WTH" firstAttribute="width" secondItem="y1l-wN-dKB" secondAttribute="width" id="aWs-WY-077"/>
+                                            <constraint firstAttribute="height" constant="40" id="6sj-gc-VWE"/>
                                         </constraints>
-                                    </stackView>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Save"/>
+                                        <state key="disabled">
+                                            <color key="titleColor" name="DefaultImageColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="saveGCDButtonPressed:" destination="L8r-NT-LYG" eventType="touchUpInside" id="xaU-CB-uoN"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -198,7 +174,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="V6Y-Ke-s5y"/>
                     <connections>
-                        <outlet property="buttonHorizontalStackView" destination="UFy-4P-dWj" id="IAf-ep-tHc"/>
                         <outlet property="buttonVerticalStackView" destination="c83-rb-4jY" id="K41-Wv-PJk"/>
                         <outlet property="cancelButton" destination="l5y-lJ-hJJ" id="4yL-MP-157"/>
                         <outlet property="editButton" destination="Bvy-dg-Je6" id="IaQ-3m-WBb"/>
@@ -210,7 +185,6 @@
                         <outlet property="navigationBarLabel" destination="MEh-Ls-Fvu" id="ksZ-DU-QiN"/>
                         <outlet property="profileImageView" destination="406-YV-ulb" id="Vs7-ov-MWK"/>
                         <outlet property="saveGCDButton" destination="y1l-wN-dKB" id="Ege-mA-tg5"/>
-                        <outlet property="saveOperationsButton" destination="YmT-gv-WTH" id="AV4-Ob-RwK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gUK-C4-qeb" sceneMemberID="firstResponder"/>
