@@ -9,14 +9,9 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    private let GCDMemoryManager = GCDMemoryManagerInterface<User>()
-    
     weak var conversationsListViewController: ConversationsListViewController?
     
     var currentTheme: Theme = .classic
-    private var activityIndicator: UIActivityIndicatorView!
-    
-    private let operationQueue = OperationQueue()
     
     var isProfileEditing: Bool = false
     var imageDidChanged = false
@@ -25,6 +20,9 @@ class ProfileViewController: UIViewController {
     var initialName: String?
     var infoDidChanged = false
     var initialInfo: String?
+    
+    private let GCDMemoryManager = GCDMemoryManagerInterface<User>()
+    private var activityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UITextField!
@@ -62,7 +60,6 @@ class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureOperationQueue()
         configureSubviews()
         setInitialProfileData()
     }
@@ -253,10 +250,6 @@ class ProfileViewController: UIViewController {
         imageView.backgroundColor = UIColor(named: "BackgroundImageColor")
         imageView.tintColor = UIColor(named: "DefaultImageColor")
         imageView.image = UIImage(systemName: "person.fill")
-    }
-    
-    private func configureOperationQueue() {
-        operationQueue.qualityOfService = .utility
     }
     
     private func configureSubviews() {

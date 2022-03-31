@@ -27,5 +27,6 @@ class User: Codable {
 }
 
 struct CurrentUser {
+    // Сделать сохранение. 
     static var user = User(id: [UUID().uuidString, String(Date().timeIntervalSince1970)].joined())
 }

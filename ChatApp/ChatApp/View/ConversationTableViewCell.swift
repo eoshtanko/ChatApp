@@ -37,15 +37,7 @@ class ConversationTableViewCell: UITableViewCell {
         configureNameLabel(conversation.name)
         configureLastMessageDate(conversation.lastActivity)
         configureLastMessageLabel(conversation.lastMessage)
-        //    configureOnlineIdentifier(conversation.online)
-        //    configureUnreadMessagesIdentifier(conversation.hasUnreadMessages)
-        //    configureProfileImageView(conversation.image)
     }
-    
-    //    private func configureSubviews() {
-    //        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-    //        onlineSignImageView.layer.cornerRadius = onlineSignImageView.frame.size.width / 2
-    //    }
     
     private func configureNameLabel(_ name: String?) {
         if name == nil {
@@ -56,6 +48,7 @@ class ConversationTableViewCell: UITableViewCell {
             nameLabel.text = name
         }
     }
+    
     private func configureLastMessageDate(_ date: Date?) {
         guard let date = date else {
             lastMessageDateLabel.font = .italicSystemFont(ofSize: Const.textSize)
@@ -65,6 +58,7 @@ class ConversationTableViewCell: UITableViewCell {
         lastMessageDateLabel.font = .systemFont(ofSize: Const.textSize)
         lastMessageDateLabel.text = fromDateToString(from: date)
     }
+    
     private func configureLastMessageLabel(_ message: String?) {
         if message == nil {
             lastMessageLabel.text = "No messages yet"
@@ -73,13 +67,6 @@ class ConversationTableViewCell: UITableViewCell {
             lastMessageLabel.text = message
             lastMessageLabel.font = .systemFont(ofSize: Const.textSize)
         }
-    }
-    
-    private func configureOnlineIdentifier(_ online: Bool) {
-        // Делать такой идентификатор пребывания пользователя в онлайн не требовалось, но я подумала, что
-        // это будет плюсом.
-        onlineSignImageView.layer.opacity = online ? 1 : 0
-        contentView.backgroundColor = online ? UIColor(named: "OnlineIndicatorColor") : UIColor(named: "OfflineIndicatorColor")
     }
     
     private func configureUnreadMessagesIdentifier(_ hasUnreadMessages: Bool) {
@@ -93,15 +80,7 @@ class ConversationTableViewCell: UITableViewCell {
         imageView.tintColor = UIColor(named: "DefaultImageColor")
         imageView.image = UIImage(systemName: "person.fill")
     }
-    
-    // "если была передана дата вчерашняя или ранее - отображаем дату, т.е. формат dd MM."
-    // 1. Мне показалось разумным отображать еще и год
-    // 2. Если последнее сообщение было вчера будет отображаться не дата, а "yesterday".
-    // Подумала, что это будет плюсом.
-    //
-    // Чтобы у вас не возникло ощущение, что я пытаюсь увильнуть от ТЗ под видом улучшений...
-    // Вот как можно было сделать по ТЗ:
-    // ConversationTableViewCell.formatter.dateFormat = "dd MM";
+
     private func fromDateToString(from date: Date) -> String {
         if Calendar.current.isDateInToday(date) {
             ConversationTableViewCell.formatter.dateFormat = "HH:mm a"
@@ -113,6 +92,7 @@ class ConversationTableViewCell: UITableViewCell {
         ConversationTableViewCell.formatter.doesRelativeDateFormatting = true
         return ConversationTableViewCell.formatter.string(from: date)
     }
+    
     private func setCurrentTheme() {
         switch ConversationTableViewCell.currentTheme {
         case .classic, .day:
