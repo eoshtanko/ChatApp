@@ -10,9 +10,16 @@ import UIKit
 class EntryMessageView: UIView {
     
     private var currentTheme: Theme = .classic
+    private var sendMessageAction: ((String) -> Void)?
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var entryMessageView: UIView!
+    
+    @IBAction func sendMessage(_ sender: Any) {
+        if !textView.text.isEmpty {
+            sendMessageAction?(textView.text)
+        }
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -23,6 +30,10 @@ class EntryMessageView: UIView {
     
     func setCurrentTheme(_ theme: Theme) {
         currentTheme = theme
+    }
+    
+    func setSendMessageAction(_ action: ((String) -> Void)?) {
+        sendMessageAction = action
     }
     
     static func getEntyMessageViewHight() -> CGFloat {
@@ -63,6 +74,6 @@ class EntryMessageView: UIView {
     private enum Const {
         static let textViewBorderWidth = 0.1
         static let textViewCornerRadius: CGFloat = 16
-        static let entyMessageViewHight: CGFloat = 74
+        static let entyMessageViewHight: CGFloat = 80
     }
 }

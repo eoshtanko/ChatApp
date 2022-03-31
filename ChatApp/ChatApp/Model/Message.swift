@@ -15,6 +15,13 @@ struct Message {
     let senderId: String
     let senderName: String
     
+    init(content: String, senderId: String, senderName: String, created: Date) {
+        self.content = content
+        self.senderId = senderId
+        self.senderName = senderName
+        self.created = created
+    }
+    
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
         
@@ -45,6 +52,6 @@ extension Message {
 extension Message: Comparable {
     
   static func < (lhs: Message, rhs: Message) -> Bool {
-      return lhs.created > rhs.created
+      return lhs.created < rhs.created
   }
 }

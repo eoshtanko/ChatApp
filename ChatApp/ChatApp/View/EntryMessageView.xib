@@ -22,8 +22,11 @@
                             <rect key="frame" x="563" y="16.5" width="25" height="21"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title=" " image="arrow.up.circle.fill" catalog="system"/>
+                            <connections>
+                                <action selector="sendMessage:" destination="H33-MO-rhl" eventType="touchUpInside" id="fHo-aH-heU"/>
+                            </connections>
                         </button>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text=" " translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text=" " translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
                             <rect key="frame" x="10" y="10" width="543" height="34"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -56,13 +59,13 @@
                 <outlet property="entryMessageView" destination="H95-8l-KnH" id="cyT-GS-Fmd"/>
                 <outlet property="textView" destination="5jy-Zb-Rfo" id="H2B-Gd-U7q"/>
             </connections>
-            <point key="canvasLocation" x="-798.55072463768124" y="-287.61160714285711"/>
+            <point key="canvasLocation" x="-798.55072463768124" y="-287.94642857142856"/>
         </view>
     </objects>
     <resources>
         <image name="arrow.up.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="BackgroundNavigationBarColor">
-            <color red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.96899998188018799" green="0.96899998188018799" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -224,22 +224,30 @@ extension ConversationViewController {
 
 // Настройка view для ввода сообщения.
 extension ConversationViewController {
-    
+
     override var inputAccessoryView: UIView? {
         get {
             if entreMessageBar == nil {
                 entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
                 entreMessageBar?.setCurrentTheme(currentTheme)
+                entreMessageBar?.setSendMessageAction { [weak self] message in
+                    let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "", created: Date())
+                    self?.reference.addDocument(data: newMessage.toDict)
+                }
             }
             return entreMessageBar
         }
     }
-    
+
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     override var canResignFirstResponder: Bool {
         return true
+    }
+    
+    private func sendMessage() {
+        
     }
 }
