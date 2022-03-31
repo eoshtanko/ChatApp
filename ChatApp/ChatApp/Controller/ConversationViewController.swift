@@ -20,6 +20,7 @@ class ConversationViewController: UITableViewController {
     }()
     
     private var entreMessageBar: EntryMessageView?
+    private var shouldScrollToBottom: Bool = true
     
     private var currentTheme: Theme = .classic
     
@@ -39,12 +40,15 @@ class ConversationViewController: UITableViewController {
         configureTableView()
         configureSnapshotListener()
         configureAppearances()
-        becomeFirstResponder()
+        registerKeyboardNotifications()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollToBottom()
+        if shouldScrollToBottom {
+            shouldScrollToBottom = false
+            scrollToBottom(animated: false)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,35 +84,36 @@ class ConversationViewController: UITableViewController {
     }
     
     private func addMessageToTable(_ message: Message) {
-      if chatMessages.contains(message) {
-        return
-      }
-
+        if chatMessages.contains(message) {
+            return
+        }
+        
         chatMessages.append(message)
         chatMessages.sort()
-
-      guard let index = chatMessages.firstIndex(of: message) else {
-        return
-      }
-      tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        scrollToBottom(animated: false)
     }
-
+    
     private func updateMessageInTable(_ message: Message) {
-      guard let index = chatMessages.firstIndex(of: message) else {
-        return
-      }
-
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        
         chatMessages[index] = message
-      tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
-
+    
     private func removeMessageFromTable(_ message: Message) {
-      guard let index = chatMessages.firstIndex(of: message) else {
-        return
-      }
-
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        
         chatMessages.remove(at: index)
-      tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
     
     private func configureNavigationBar() {
@@ -124,18 +129,13 @@ class ConversationViewController: UITableViewController {
         tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
-    // Понимаю ли я, что это безобразие? Понимаю.
-    // Иначе долго не получалось, а в задании это не требовалось,
-    // так что я решила оставить проблему на будущее и надеятся, что оценку не снизят.
-    // К слову, хоть и выглядит это плохо, работает совершенно корректно при любом объеме сообщений
-    // на люом устройстве.
-    private var shouldScrollToBottomTimes: Int = 3
-    private func scrollToBottom() {
-        if shouldScrollToBottomTimes > 0 && tableView.contentSize.height > tableView.bounds.size.height {
-            shouldScrollToBottomTimes -= 1
-            let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + EntryMessageView.getEntyMessageViewHight())
-            tableView.setContentOffset(bottomOffset, animated: false)
-        }
+    private func scrollToBottom(animated: Bool) {
+        view.layoutIfNeeded()
+        tableView.setContentOffset(bottomOffset(), animated: false)
+    }
+    
+    private func bottomOffset() -> CGPoint {
+        return CGPoint(x: 0, y: max(-tableView.contentInset.top, tableView.contentSize.height - (tableView.bounds.size.height - tableView.contentInset.bottom)))
     }
     
     private func configureAppearances() {
@@ -224,30 +224,92 @@ extension ConversationViewController {
 
 // Настройка view для ввода сообщения.
 extension ConversationViewController {
-
+    
     override var inputAccessoryView: UIView? {
         get {
             if entreMessageBar == nil {
                 entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
                 entreMessageBar?.setCurrentTheme(currentTheme)
                 entreMessageBar?.setSendMessageAction { [weak self] message in
-                    let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "", created: Date())
-                    self?.reference.addDocument(data: newMessage.toDict)
+                    let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
+                    self?.reference.addDocument(data: newMessage.toDict) { [weak self] error in
+                            guard let self = self else { return }
+                            if error != nil {
+                                //self.showFailTiCreateChannelAlert(name)
+                              return
+                        }
+                        self.entreMessageBar?.textView.text = ""
+                    }
                 }
             }
             return entreMessageBar
         }
     }
-
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
-
+    
     override var canResignFirstResponder: Bool {
         return true
     }
     
-    private func sendMessage() {
+    func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        adjustContentForKeyboard(shown: true, notification: notification)
+    }
+    
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        adjustContentForKeyboard(shown: false, notification: notification)
+    }
+    
+    func adjustContentForKeyboard(shown: Bool, notification: NSNotification) {
+        guard let payload = KeyboardInfo(notification) else { return }
+        
+        let keyboardHeight = shown ? payload.frameEnd.size.height : entreMessageBar?.bounds.size.height ?? 0
+        if tableView.contentInset.bottom == keyboardHeight {
+            return
+        }
+        
+        let distanceFromBottom = bottomOffset().y - tableView.contentOffset.y
+        
+        var insets = tableView.contentInset
+        insets.bottom = keyboardHeight
+        
+        UIView.animate(withDuration: 0.01, delay: 0, options: .curveEaseIn, animations: {
+            
+            self.tableView.contentInset = insets
+            self.tableView.scrollIndicatorInsets = insets
+            
+            if distanceFromBottom < 10 {
+                self.tableView.contentOffset = self.bottomOffset()
+            }
+        }, completion: nil)
+    }
+}
+
+struct KeyboardInfo {
+    var frameBegin: CGRect
+    var frameEnd: CGRect
+}
+
+extension KeyboardInfo {
+    init?(_ notification: NSNotification) {
+        guard notification.name == UIResponder.keyboardWillShowNotification || notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
+        let u = notification.userInfo!
+        
+        frameBegin = u[UIWindow.keyboardFrameBeginUserInfoKey] as! CGRect
+        frameEnd = u[UIWindow.keyboardFrameEndUserInfoKey] as! CGRect
     }
 }

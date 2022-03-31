@@ -13,6 +13,7 @@ class EntryMessageView: UIView {
     private var sendMessageAction: ((String) -> Void)?
     
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     @IBOutlet weak var entryMessageView: UIView!
     
     @IBAction func sendMessage(_ sender: Any) {
@@ -25,7 +26,10 @@ class EntryMessageView: UIView {
         super.layoutSubviews()
         setCurrentTheme()
         configureTextView()
-        configureEntryMessageView()
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return textViewContentSize()
     }
     
     func setCurrentTheme(_ theme: Theme) {
@@ -36,18 +40,18 @@ class EntryMessageView: UIView {
         sendMessageAction = action
     }
     
-    static func getEntyMessageViewHight() -> CGFloat {
-        return Const.entyMessageViewHight
+    private func textViewContentSize() -> CGSize {
+        let size = CGSize(width: textView.bounds.width,
+                          height: CGFloat.greatestFiniteMagnitude)
+     
+        let textSize = textView.sizeThatFits(size)
+        return CGSize(width: bounds.width, height: textSize.height)
     }
     
     private func configureTextView() {
+        textView.delegate = self
         textView.layer.borderWidth = Const.textViewBorderWidth
         textView.layer.cornerRadius = Const.textViewCornerRadius
-    }
-    
-    private func configureEntryMessageView() {
-        entryMessageView.frame.size = CGSize(width: UIScreen.main.bounds.size.width,
-                                             height: Const.entyMessageViewHight)
     }
     
     private func setCurrentTheme() {
@@ -61,19 +65,32 @@ class EntryMessageView: UIView {
     
     private func setDayOrClassicTheme() {
         textView.backgroundColor = .white
-        entryMessageView.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
+        textView.textColor = .black
+        textView.keyboardAppearance = .light
+        backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
         entryMessageView.tintColor = .systemBlue
     }
     
     private func setNightTheme() {
         textView.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
-        entryMessageView.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
+        textView.textColor = .white
+        textView.keyboardAppearance = .dark
+        backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
         entryMessageView.tintColor = .systemYellow
     }
     
     private enum Const {
         static let textViewBorderWidth = 0.1
-        static let textViewCornerRadius: CGFloat = 16
-        static let entyMessageViewHight: CGFloat = 80
+        static let textViewCornerRadius: CGFloat = 10
+    }
+}
+
+extension EntryMessageView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        let contentHeight = textViewContentSize().height
+        if textViewHeight.constant != contentHeight {
+            textViewHeight.constant = textViewContentSize().height
+            layoutIfNeeded()
+        }
     }
 }
