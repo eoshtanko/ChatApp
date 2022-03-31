@@ -131,7 +131,9 @@ class ConversationViewController: UITableViewController {
     
     private func scrollToBottom(animated: Bool) {
         view.layoutIfNeeded()
-        tableView.setContentOffset(bottomOffset(), animated: false)
+        if tableView.contentSize.height > tableView.bounds.size.height {
+            tableView.setContentOffset(bottomOffset(), animated: false)
+        }
     }
     
     private func bottomOffset() -> CGPoint {
@@ -241,12 +243,15 @@ extension ConversationViewController {
         }
         return entreMessageBar
     }
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
+    
     override var canResignFirstResponder: Bool {
         return true
     }
+    
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(_:)),
@@ -257,6 +262,7 @@ extension ConversationViewController {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
+    
     @objc func keyboardWillShow(_ notification: NSNotification) {
         adjustContentForKeyboard(shown: true, notification: notification)
     }
@@ -268,16 +274,16 @@ extension ConversationViewController {
     func adjustContentForKeyboard(shown: Bool, notification: NSNotification) {
         guard let payload = KeyboardInfo(notification) else { return }
         
-        let keyboardHeight = shown ? payload.frameEnd?.size.height : entreMessageBar?.bounds.size.height ?? 0
-        if tableView.contentInset.bottom == keyboardHeight {
+        let insetsHeight = shown ? payload.frameEnd?.size.height : entreMessageBar?.bounds.size.height ?? 0
+        if tableView.contentInset.bottom == insetsHeight {
             return
         }
         
         let distanceFromBottom = bottomOffset().y - tableView.contentOffset.y
         
         var insets = tableView.contentInset
-        if let keyboardHeight = keyboardHeight {
-            insets.bottom = keyboardHeight
+        if let insetsHeight = insetsHeight {
+            insets.bottom = insetsHeight
         }
         
         UIView.animate(withDuration: 0.01, delay: 0, options: .curveEaseIn, animations: {
