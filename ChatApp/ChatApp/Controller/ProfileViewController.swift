@@ -212,7 +212,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func getUserWithUpdatedData() -> User {
-        return User(name: nameLabel.text, info: getInfo(), imageData: getDataFromImage())
+        return User(name: nameLabel.text, info: getInfo(), imageData: getDataFromImage(), id: CurrentUser.user.id)
     }
     
     private func getInfo() -> String? {

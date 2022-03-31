@@ -18,7 +18,7 @@ class ConversationTableViewCell: UITableViewCell {
     @IBOutlet weak var lastMessageLabel: UILabel!
     @IBOutlet weak var lastMessageDateLabel: UILabel!
     @IBOutlet weak var onlineSignImageView: UIImageView!
-    @IBOutlet weak var profileImageView: UIImageView!
+    //@IBOutlet weak var profileImageView: UIImageView!
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -26,7 +26,7 @@ class ConversationTableViewCell: UITableViewCell {
             top: Const.verticalInserts, left: Const.horizontalInserts,
             bottom: Const.verticalInserts, right: Const.horizontalInserts))
         contentView.layer.cornerRadius = Const.contentViewCornerRadius
-        configureSubviews()
+   //     configureSubviews()
         setCurrentTheme()
     }
     
@@ -34,19 +34,19 @@ class ConversationTableViewCell: UITableViewCell {
         ConversationTableViewCell.currentTheme = theme
     }
     
-    func configureCell(_ conversation: Conversation) {
+    func configureCell(_ conversation: Channel) {
         configureNameLabel(conversation.name)
-        configureLastMessageDate(conversation.date)
-        configureLastMessageLabel(conversation.message)
-        configureOnlineIdentifier(conversation.online)
-        configureUnreadMessagesIdentifier(conversation.hasUnreadMessages)
-        configureProfileImageView(conversation.image)
+        configureLastMessageDate(conversation.lastActivity)
+        configureLastMessageLabel(conversation.lastMessage)
+    //    configureOnlineIdentifier(conversation.online)
+    //    configureUnreadMessagesIdentifier(conversation.hasUnreadMessages)
+    //    configureProfileImageView(conversation.image)
     }
     
-    private func configureSubviews() {
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-        onlineSignImageView.layer.cornerRadius = onlineSignImageView.frame.size.width / 2
-    }
+    //    private func configureSubviews() {
+    //        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+    //        onlineSignImageView.layer.cornerRadius = onlineSignImageView.frame.size.width / 2
+    //    }
     
     private func configureNameLabel(_ name: String?) {
         nameLabel.text = name == nil ? "No Name" : name
@@ -92,13 +92,13 @@ class ConversationTableViewCell: UITableViewCell {
         }
     }
     
-    private func configureProfileImageView(_ image: UIImage?) {
-        if let image = image {
-            profileImageView.image = image
-        } else {
-            setDefaultImage(to: profileImageView)
-        }
-    }
+    //    private func configureProfileImageView(_ image: UIImage?) {
+    //        if let image = image {
+    //            profileImageView.image = image
+    //        } else {
+    //            setDefaultImage(to: profileImageView)
+    //        }
+    //    }
     
     private func setDefaultImage(to imageView: UIImageView) {
         imageView.backgroundColor = UIColor(named: "BackgroundImageColor")

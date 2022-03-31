@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 @main
 final class AppDelegate: UIResponder {
@@ -13,17 +14,16 @@ final class AppDelegate: UIResponder {
 }
 
 extension AppDelegate: UIApplicationDelegate {
-    func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        window?.rootViewController = UINavigationController(
-            rootViewController: ConversationsListViewController()
-        )
-        
-        window?.makeKeyAndVisible()
-        
-        return true
-    }
+    func application( _ application: UIApplication,
+                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            FirebaseApp.configure()
+            
+            window?.rootViewController = UINavigationController(
+                rootViewController: ConversationsListViewController()
+            )
+            window?.makeKeyAndVisible()
+            
+            return true
+        }
 }
 

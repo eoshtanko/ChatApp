@@ -45,18 +45,18 @@ class ChatMessageCell: UITableViewCell {
         configureConstraints()
     }
     
-    func configureCell(_ chatMessage: ChatMessage) {
-        messageLabel.text = chatMessage.text
+    func configureCell(_ chatMessage: Message) {
+        messageLabel.text = chatMessage.content
         
-        bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
-        incomingMessageUIColor : outcomingMessageUIColor
+        bubbleBackgroundView.backgroundColor = chatMessage.senderId == CurrentUser.user.id ?
+        outcomingMessageUIColor : incomingMessageUIColor
         
-        if chatMessage.isIncoming {
-            trailingConstraint.isActive = false
-            leadingConstraint.isActive = true
-        } else {
+        if chatMessage.senderId == CurrentUser.user.id {
             leadingConstraint.isActive = false
             trailingConstraint.isActive = true
+        } else {
+            trailingConstraint.isActive = false
+            leadingConstraint.isActive = true
         }
     }
     

@@ -6,33 +6,36 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationsListViewController: UIViewController {
     
     private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
     
+    private lazy var db = Firestore.firestore()
+    private lazy var reference = db.collection("channels")
+    
+    private var channels: [Channel] = []
+    private var filteredChannels: [Channel]!
+    
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
+    private var isSearching = false
     
     private var currentTheme: Theme = .classic
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
     
-    private let onlineConversations = ConversationApi.getOnlineConversations()
-    private let offlineConversations = ConversationApi.getOfflineConversations()
-    private var filteredOnlineConversations: [Conversation]!
-    private var filteredOfflineConversations: [Conversation]!
-    
     private var profileViewController: ProfileViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCurrentUser()
-        filteredOnlineConversations = onlineConversations
-        filteredOfflineConversations = offlineConversations
         configureAppearances()
+        filteredChannels = channels
         configureTableView()
+        configureSnapshotListener()
         configureNavigationBar()
         configureSearchBar()
         instatiateProfileViewController()
@@ -42,6 +45,72 @@ class ConversationsListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationTitle()
+    }
+    
+    private func configureSnapshotListener() {
+        reference.addSnapshotListener { [weak self] snapshot, error in
+            guard let self = self else { return }
+            guard error == nil, let snapshot = snapshot else {
+                // alert
+                return
+            }
+            snapshot.documentChanges.forEach { change in
+                self.handleDocumentChange(change)
+            }
+        }
+    }
+    
+    private func handleDocumentChange(_ change: DocumentChange) {
+        guard let channel = Channel(document: change.document) else {
+            return
+        }
+        
+        switch change.type {
+        case .added:
+            addChannelToTable(channel)
+        case .modified:
+            updateChannelInTable(channel)
+        case .removed:
+            removeChannelFromTable(channel)
+        }
+    }
+    
+    private func addChannelToTable(_ channel: Channel) {
+        if channels.contains(channel) {
+            return
+        }
+        
+        channels.append(channel)
+        channels.sort()
+        
+        if !isSearching {
+            guard let index = channels.firstIndex(of: channel) else {
+                return
+            }
+            tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
+    
+    private func updateChannelInTable(_ channel: Channel) {
+        guard let index = channels.firstIndex(of: channel) else {
+            return
+        }
+        
+        channels[index] = channel
+        if !isSearching {
+            tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
+    
+    private func removeChannelFromTable(_ channel: Channel) {
+        guard let index = channels.firstIndex(of: channel) else {
+            return
+        }
+        
+        channels.remove(at: index)
+        if !isSearching {
+            tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
     }
     
     private func configureTableView() {
@@ -103,26 +172,40 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureNavigationTitle() {
-        navigationItem.title = "Tinkoff Chat"
+        navigationItem.title = "Channels"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func configureNavigationButton() {
-        configureLeftNavigationButton()
+        configureLeftNavigationButtons()
         configureRightNavigationButton()
     }
     
-    private func configureLeftNavigationButton() {
-        let settingsButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
-                                                    height: Const.sizeOfSettingsNavigationButton))
-        setImageToSettingsNavigationButton(settingsButton)
-        settingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: settingsButton)
+    private func configureLeftNavigationButtons() {
+        let settingsBarButtonItem = getSettingsBarButtonItem()
+        let addNewChannelBarButtonItem = getAddNewChannelBarButtonItem()
+        self.navigationItem.leftBarButtonItems = [settingsBarButtonItem, addNewChannelBarButtonItem]
     }
     
-    private func setImageToSettingsNavigationButton(_ settingsButton: UIButton) {
-        settingsButton.setImage(UIImage(systemName: "gear"), for: .normal)
-        settingsButton.imageView?.tintColor = UIColor(named: "GearButtonColor")
+    private func getSettingsBarButtonItem() -> UIBarButtonItem {
+        let settingsButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
+                                                    height: Const.sizeOfSettingsNavigationButton))
+        setImageToSettingsNavigationButton(settingsButton, imageName: "gear")
+        settingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
+        return UIBarButtonItem(customView: settingsButton)
+    }
+    
+    private func getAddNewChannelBarButtonItem() -> UIBarButtonItem {
+        let addNewChannelButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
+                                                    height: Const.sizeOfSettingsNavigationButton))
+        setImageToSettingsNavigationButton(addNewChannelButton, imageName: "plus")
+        addNewChannelButton.addTarget(self, action: #selector(addNewChannel), for: .touchUpInside)
+        return UIBarButtonItem(customView: addNewChannelButton)
+    }
+    
+    private func setImageToSettingsNavigationButton(_ settingsButton: UIButton, imageName: String) {
+        settingsButton.setImage(UIImage(systemName: imageName), for: .normal)
+        settingsButton.imageView?.tintColor = UIColor(named: "BarButtonColor")
         settingsButton.contentHorizontalAlignment = .fill
         settingsButton.contentVerticalAlignment = .fill
     }
@@ -140,6 +223,41 @@ class ConversationsListViewController: UIViewController {
         })
         self.navigationItem.title = "Chat"
         navigationController?.pushViewController(themesViewController, animated: true)
+    }
+    
+    @objc private func addNewChannel() {
+        let alert = UIAlertController(title: "Создать новый канал", message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "Имя нового канала"
+            textField.enablesReturnKeyAutomatically = true
+        }
+        alert.addAction(UIAlertAction(title: "Создать", style: .default, handler: { [weak alert] (_) in
+            if let textFieldText = alert?.textFields?[0].text, !textFieldText.isEmpty {
+                self.createNewChannel(name: textFieldText)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Отмена", style: .default))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func createNewChannel(name: String) {
+        let channel = Channel(name: name)
+        reference.addDocument(data: channel.toDict) { [weak self] error in
+            guard let self = self else { return }
+            if error != nil {
+                self.showFailTiCreateChannelAlert(name)
+              return
+            }
+        }
+    }
+    
+    private func showFailTiCreateChannelAlert(_ name: String) {
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось создать канал.", preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+            self.createNewChannel(name: name)
+        })
+        present(failureAlert, animated: true, completion: nil)
     }
     
     private func saveThemeToMemory() {
@@ -299,7 +417,7 @@ class ConversationsListViewController: UIViewController {
     //    }
     
     private enum Const {
-        static let numberOfSections = 2
+        static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
         static let sizeOfProfileNavigationButton: CGFloat = 40
         static let sizeOfSettingsNavigationButton: CGFloat = 24.8
@@ -346,13 +464,11 @@ enum Theme: Int {
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
-        setupConversationsBeforePushViewController(conversation)
+        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
         self.navigationItem.title = ""
         
-        let conversationViewController = ConversationViewController(theme: currentTheme)
+        let conversationViewController = ConversationViewController(theme: currentTheme, channel: conversation, dbChannelRef: reference)
         if let conversationViewController = conversationViewController {
-            conversationViewController.conversation = conversation
             navigationController?.pushViewController(conversationViewController, animated: true)
         }
         tableView.reloadRows(at: [indexPath], with: .none)
@@ -362,27 +478,16 @@ extension ConversationsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Const.hightOfCell
     }
-    
-    private func setupConversationsBeforePushViewController(_ conversation: Conversation) {
-        conversation.hasUnreadMessages = false
-        if (conversation.message != nil) {
-            ConversationApi.messages[0] = ChatMessage(text: conversation.message, isIncoming: true, date: conversation.date)
-        }
-    }
 }
 
 extension ConversationsListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        Const.numberOfSections
+        return Const.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(section == 0) {
-            return filteredOnlineConversations.count
-        } else {
-            return filteredOfflineConversations.count
-        }
+        return isSearching ? filteredChannels.count : channels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -392,13 +497,9 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let conversationCell = cell as? ConversationTableViewCell else {
             return cell
         }
-        let conversation = indexPath.section == 0 ? filteredOnlineConversations[indexPath.row] : filteredOfflineConversations[indexPath.row]
+        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
         conversationCell.configureCell(conversation)
         return conversationCell
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        section == 0 ? "Online" : "History"
     }
 }
 
@@ -414,16 +515,11 @@ extension ConversationsListViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredOnlineConversations = searchText.isEmpty ? onlineConversations : onlineConversations.filter {
-            (item: Conversation) -> Bool in
-            return item.name?.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        isSearching = !searchText.isEmpty
+        filteredChannels = searchText.isEmpty ? channels : channels.filter {
+            (item: Channel) -> Bool in
+            return item.name.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
         }
-        
-        filteredOfflineConversations = searchText.isEmpty ? offlineConversations : offlineConversations.filter {
-            (item: Conversation) -> Bool in
-            return item.name?.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
-        }
-        
         tableView.reloadData()
     }
     
