@@ -18,6 +18,7 @@ class ConversationViewController: UITableViewController {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
+    // private let networkManager = NetworkManager()
     
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true
@@ -58,6 +59,10 @@ class ConversationViewController: UITableViewController {
     }
     
     private func configureSnapshotListener() {
+//        guard networkManager.isInternetConnected else {
+//            self.showFailToLoadMessagesAlert()
+//            return
+//        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -261,15 +266,14 @@ extension ConversationViewController {
             
             entreMessageBar?.setCurrentTheme(currentTheme)
             entreMessageBar?.setSendMessageAction { [weak self] message in
-                let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-                self?.reference.addDocument(data: newMessage.toDict) { [weak self] error in
-                    guard let self = self else { return }
-                    if error != nil {
-                        self.showFailToSendMessageAlert()
-                        return
-                    }
-                    self.entreMessageBar?.textView.text = ""
-                }
+                guard let self = self else { return }
+                
+//                guard networkManager.isInternetConnected else {
+//                    self.showFailToSendMessageAlert()
+//                    return
+//                }
+                
+                self.sendMessage(message: message)
             }
         }
         
@@ -284,7 +288,20 @@ extension ConversationViewController {
         return true
     }
     
-    func registerKeyboardNotifications() {
+    private func sendMessage(message: String) {
+        let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
+
+        reference.addDocument(data: newMessage.toDict) { [weak self] error in
+            guard let self = self else { return }
+            if error != nil {
+                self.showFailToSendMessageAlert()
+                return
+            }
+            self.entreMessageBar?.textView.text = ""
+        }
+    }
+    
+    private func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardDidShow(_:)),
                                                name: UIResponder.keyboardDidShowNotification,
@@ -313,6 +330,10 @@ extension ConversationViewController {
                                              preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить",
+                                             style: UIAlertAction.Style.cancel) {_ in
+            self.entreMessageBar?.sendMessage()
+        })
         present(failureAlert, animated: true, completion: nil)
     }
 }

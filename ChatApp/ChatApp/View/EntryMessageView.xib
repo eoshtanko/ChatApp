@@ -57,6 +57,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="entryMessageView" destination="H95-8l-KnH" id="cyT-GS-Fmd"/>
+                <outlet property="sendMessageButton" destination="uPc-W1-YHv" id="MJA-2g-9Rq"/>
                 <outlet property="textView" destination="5jy-Zb-Rfo" id="H2B-Gd-U7q"/>
                 <outlet property="textViewHightConstraint" destination="B2W-vx-cAi" id="2r8-M8-rLJ"/>
             </connections>

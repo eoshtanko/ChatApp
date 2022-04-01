@@ -38,6 +38,7 @@
 		34F449BD27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */; };
 		34F449BF27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449BE27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift */; };
 		34F449C127F5F80100CC4922 /* UIImage + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449C027F5F80100CC4922 /* UIImage + Extensions.swift */; };
+		34F449C627F717E900CC4922 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449C527F717E800CC4922 /* NetworkManager.swift */; };
 		34FC31F827EE2C3400A1D137 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FC31F727EE2C3400A1D137 /* URL+Extensions.swift */; };
 		34FC31FA27EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FC31F927EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift */; };
 		F7577FDA4F796502E2ADD2EF /* Pods_ChatApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B031F3F471B7018090796D2 /* Pods_ChatApp.framework */; };
@@ -78,6 +79,7 @@
 		34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UITableViewExtensions.swift"; sourceTree = "<group>"; };
 		34F449BE27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UISearchBarExtension.swift"; sourceTree = "<group>"; };
 		34F449C027F5F80100CC4922 /* UIImage + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extensions.swift"; sourceTree = "<group>"; };
+		34F449C527F717E800CC4922 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		34FC31F727EE2C3400A1D137 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		34FC31F927EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryManagerInterfaceProtocol.swift; sourceTree = "<group>"; };
 		81A7A8E9309DDCB6906E8932 /* Pods-ChatApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApp.release.xcconfig"; path = "Target Support Files/Pods-ChatApp/Pods-ChatApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		345624F327C4F0E20044C73A /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				34F449C527F717E800CC4922 /* NetworkManager.swift */,
 				345624F127C4C6950044C73A /* LifecycleLogger.swift */,
 				3460337A27EC14BF00962579 /* ApplicationPreferences.swift */,
 				3460338327EC232400962579 /* Memory */,
@@ -381,6 +384,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34F449C627F717E900CC4922 /* NetworkManager.swift in Sources */,
 				3427ACDD27D48A980062F749 /* ConversationTableViewCell.swift in Sources */,
 				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
 				3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */,

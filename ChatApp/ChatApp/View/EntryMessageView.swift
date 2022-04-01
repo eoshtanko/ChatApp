@@ -12,24 +12,30 @@ class EntryMessageView: UIView {
     private var currentTheme: Theme = .classic
     private var sendMessageAction: ((String) -> Void)?
     
+    @IBOutlet weak var sendMessageButton: UIButton!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var entryMessageView: UIView!
     @IBOutlet weak var textViewHightConstraint: NSLayoutConstraint!
     
     @IBAction func sendMessage(_ sender: Any) {
-        if !textView.text.isEmpty {
-            sendMessageAction?(textView.text)
-        }
+        sendMessage()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         setCurrentTheme()
         configureTextView()
+        sendMessageButton.isEnabled = !textView.text.isEmpty
     }
     
     override var intrinsicContentSize: CGSize {
         return textViewContentSize()
+    }
+    
+    func sendMessage() {
+        if !textView.text.isEmpty {
+            sendMessageAction?(textView.text)
+        }
     }
     
     func setCurrentTheme(_ theme: Theme) {
@@ -87,7 +93,10 @@ class EntryMessageView: UIView {
 }
 
 extension EntryMessageView: UITextViewDelegate {
+
     func textViewDidChange(_ textView: UITextView) {
+        sendMessageButton.isEnabled = !textView.text.isEmpty
+        
         let contentHeight = textViewContentSize().height
         if textViewHightConstraint.constant != contentHeight && contentHeight < Const.textViewMaxHight {
             textViewHightConstraint.constant = contentHeight
