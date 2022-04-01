@@ -147,10 +147,15 @@ class ConversationViewController: UITableViewController {
         view.layoutIfNeeded()
         let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
         
-        if tableView.contentSize.height > tableView.bounds.size.height {
+        if isScrollingNecessary() {
             tableView.setContentOffset(bottomOffset, animated: false)
         }
         view.layoutIfNeeded()
+    }
+    
+    private func isScrollingNecessary() -> Bool {
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
+        return tableView.contentSize.height > tableView.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
     }
     
     private func bottomOffsetWithKeyboard() -> CGPoint {
@@ -210,6 +215,7 @@ class ConversationViewController: UITableViewController {
     private enum Const {
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
+        static let empiricalValue: CGFloat = 70
     }
 }
 
