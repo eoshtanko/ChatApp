@@ -13,7 +13,6 @@ class EntryMessageView: UIView {
     private var sendMessageAction: ((String) -> Void)?
     
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     @IBOutlet weak var entryMessageView: UIView!
     
     @IBAction func sendMessage(_ sender: Any) {
@@ -49,7 +48,7 @@ class EntryMessageView: UIView {
     }
     
     private func configureTextView() {
-        textView.delegate = self
+        // textView.delegate = self
         textView.layer.borderWidth = Const.textViewBorderWidth
         textView.layer.cornerRadius = Const.textViewCornerRadius
     }
@@ -85,12 +84,12 @@ class EntryMessageView: UIView {
     }
 }
 
-extension EntryMessageView: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        let contentHeight = textViewContentSize().height
-        if textViewHeight.constant != contentHeight {
-            textViewHeight.constant = textViewContentSize().height
-            layoutIfNeeded()
-        }
-    }
-}
+// extension EntryMessageView: UITextViewDelegate {
+//    func textViewDidChange(_ textView: UITextView) {
+//        let contentHeight = textViewContentSize().height
+//        if textViewHeight.constant != contentHeight {
+//            textViewHeight.constant = textViewContentSize().height
+//            layoutIfNeeded()
+//        }
+//    }
+// }
