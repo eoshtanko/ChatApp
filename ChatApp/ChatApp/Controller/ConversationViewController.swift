@@ -21,7 +21,7 @@ class ConversationViewController: UITableViewController {
     
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true
-    private var hightOfKeuboard: CGFloat?
+    private var hightOfKeyboard: CGFloat?
     
     private var currentTheme: Theme = .classic
     
@@ -96,11 +96,7 @@ class ConversationViewController: UITableViewController {
             return
         }
         tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        if entreMessageBar?.textView.isFirstResponder ?? false {
-            scrollToBottomWithKeyboard(animated: false)
-        } else {
-            scrollToBottom(animated: false)
-        }
+        scrollToBottom(animated: false)
     }
     
     private func updateMessageInTable(_ message: Message) {
@@ -136,25 +132,19 @@ class ConversationViewController: UITableViewController {
     
     private func scrollToBottom(animated: Bool) {
         view.layoutIfNeeded()
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
+        
         if tableView.contentSize.height > tableView.bounds.size.height {
-            tableView.setContentOffset(bottomOffset(), animated: false)
+            tableView.setContentOffset(bottomOffset, animated: false)
         }
         view.layoutIfNeeded()
     }
     
-    private func scrollToBottomWithKeyboard(animated: Bool) {
-        view.layoutIfNeeded()
-        if tableView.contentSize.height > tableView.bounds.size.height {
-            tableView.setContentOffset(bottomOffset2(), animated: false)
-        }
-        view.layoutIfNeeded()
+    private func bottomOffsetWithKeyboard() -> CGPoint {
+        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (hightOfKeyboard ?? 0))
     }
     
-    private func bottomOffset2() -> CGPoint {
-        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (hightOfKeuboard ?? 0))
-    }
-    
-    private func bottomOffset() -> CGPoint {
+    private func bottomOffsetWithoutKeyboard() -> CGPoint {
         return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
@@ -272,8 +262,8 @@ extension ConversationViewController {
     
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillShow(_:)),
-                                               name: UIResponder.keyboardWillShowNotification,
+                                               selector: #selector(keyboardDidShow(_:)),
+                                               name: UIResponder.keyboardDidShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(_:)),
@@ -281,18 +271,12 @@ extension ConversationViewController {
                                                object: nil)
     }
     
-    @objc func keyboardWillShow(_ notification: NSNotification) {
+    @objc func keyboardDidShow(_ notification: NSNotification) {
         if entreMessageBar?.textView.isFirstResponder ?? false {
             guard let payload = KeyboardInfo(notification) else { return }
-            let insetsHeight = payload.frameEnd?.size.height ?? 0
-            hightOfKeuboard = insetsHeight
-            let t = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (insetsHeight ))
-            if tableView.contentSize.height > tableView.bounds.size.height {
-                tableView.setContentOffset(t, animated: false)
-            }
-        } else {
-            scrollToBottom(animated: false)
+            hightOfKeyboard = payload.frameEnd?.size.height
         }
+        scrollToBottom(animated: false)
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -307,7 +291,7 @@ struct KeyboardInfo {
 
 extension KeyboardInfo {
     init?(_ notification: NSNotification) {
-        guard notification.name == UIResponder.keyboardWillShowNotification ||
+        guard notification.name == UIResponder.keyboardDidShowNotification ||
                 notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
         if let userInfo = notification.userInfo {
             frameBegin = userInfo[UIWindow.keyboardFrameBeginUserInfoKey] as? CGRect
