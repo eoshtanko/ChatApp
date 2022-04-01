@@ -166,7 +166,6 @@ class ConversationViewController: UITableViewController {
         if isScrollingNecessary() {
             tableView.setContentOffset(bottomOffset, animated: false)
         }
-        view.layoutIfNeeded()
     }
     
     private func isScrollingNecessary() -> Bool {
@@ -315,7 +314,7 @@ extension ConversationViewController {
     private func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardDidShow(_:)),
-                                               name: UIResponder.keyboardDidShowNotification,
+                                               name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(_:)),
@@ -356,7 +355,7 @@ struct KeyboardInfo {
 
 extension KeyboardInfo {
     init?(_ notification: NSNotification) {
-        guard notification.name == UIResponder.keyboardDidShowNotification ||
+        guard notification.name == UIResponder.keyboardWillShowNotification ||
                 notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
         if let userInfo = notification.userInfo {
             frameBegin = userInfo[UIWindow.keyboardFrameBeginUserInfoKey] as? CGRect
