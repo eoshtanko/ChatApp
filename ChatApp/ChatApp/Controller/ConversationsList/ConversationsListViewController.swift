@@ -209,7 +209,7 @@ class ConversationsListViewController: UIViewController {
         let addNewChannelButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
                                                          height: Const.sizeOfSettingsNavigationButton))
         setImageToSettingsNavigationButton(addNewChannelButton, imageName: "plus")
-        addNewChannelButton.addTarget(self, action: #selector(addNewChannel), for: .touchUpInside)
+        addNewChannelButton.addTarget(self, action: #selector(showAddNewChannelAlert), for: .touchUpInside)
         return UIBarButtonItem(customView: addNewChannelButton)
     }
     
@@ -235,7 +235,7 @@ class ConversationsListViewController: UIViewController {
         navigationController?.pushViewController(themesViewController, animated: true)
     }
     
-    @objc private func addNewChannel() {
+    @objc private func showAddNewChannelAlert() {
         let alert = UIAlertController(title: "Создать новый канал", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "Имя нового канала"
@@ -244,6 +244,8 @@ class ConversationsListViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Создать", style: .default, handler: { [weak alert] (_) in
             if let textFieldText = alert?.textFields?[0].text, !textFieldText.isEmpty {
                 self.createNewChannel(name: textFieldText)
+            } else {
+                self.showEmptyNameAlert()
             }
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .default))
@@ -270,6 +272,17 @@ class ConversationsListViewController: UIViewController {
         failureAlert.addAction(UIAlertAction(title: "Повторить",
                                              style: UIAlertAction.Style.cancel) {_ in
             self.createNewChannel(name: name)
+        })
+        present(failureAlert, animated: true, completion: nil)
+    }
+    
+    private func showEmptyNameAlert() {
+        let failureAlert = UIAlertController(title: "Имя не должно быть пустым!",
+                                             message: nil,
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.cancel) {_ in
+            self.showAddNewChannelAlert()
         })
         present(failureAlert, animated: true, completion: nil)
     }
