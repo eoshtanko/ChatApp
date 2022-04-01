@@ -21,6 +21,7 @@ class ConversationViewController: UITableViewController {
     
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true
+    private var hightOfKeuboard: CGFloat?
     
     private var currentTheme: Theme = .classic
     
@@ -95,7 +96,11 @@ class ConversationViewController: UITableViewController {
             return
         }
         tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        scrollToBottom(animated: false)
+        if entreMessageBar?.textView.isFirstResponder ?? false {
+            scrollToBottomWithKeyboard(animated: false)
+        } else {
+            scrollToBottom(animated: false)
+        }
     }
     
     private func updateMessageInTable(_ message: Message) {
@@ -134,10 +139,23 @@ class ConversationViewController: UITableViewController {
         if tableView.contentSize.height > tableView.bounds.size.height {
             tableView.setContentOffset(bottomOffset(), animated: false)
         }
+        view.layoutIfNeeded()
+    }
+    
+    private func scrollToBottomWithKeyboard(animated: Bool) {
+        view.layoutIfNeeded()
+        if tableView.contentSize.height > tableView.bounds.size.height {
+            tableView.setContentOffset(bottomOffset2(), animated: false)
+        }
+        view.layoutIfNeeded()
+    }
+    
+    private func bottomOffset2() -> CGPoint {
+        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (hightOfKeuboard ?? 0))
     }
     
     private func bottomOffset() -> CGPoint {
-        return CGPoint(x: 0, y: max(-tableView.contentInset.top, tableView.contentSize.height - (tableView.bounds.size.height - tableView.contentInset.bottom)))
+        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
     private func configureAppearances() {
@@ -264,37 +282,21 @@ extension ConversationViewController {
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
-        adjustContentForKeyboard(shown: true, notification: notification)
+        if entreMessageBar?.textView.isFirstResponder ?? false {
+            guard let payload = KeyboardInfo(notification) else { return }
+            let insetsHeight = payload.frameEnd?.size.height ?? 0
+            hightOfKeuboard = insetsHeight
+            let t = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (insetsHeight ))
+            if tableView.contentSize.height > tableView.bounds.size.height {
+                tableView.setContentOffset(t, animated: false)
+            }
+        } else {
+            scrollToBottom(animated: false)
+        }
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        adjustContentForKeyboard(shown: false, notification: notification)
-    }
-    
-    func adjustContentForKeyboard(shown: Bool, notification: NSNotification) {
-        guard let payload = KeyboardInfo(notification) else { return }
-        
-        let insetsHeight = shown ? payload.frameEnd?.size.height : entreMessageBar?.bounds.size.height ?? 0
-        if tableView.contentInset.bottom == insetsHeight {
-            return
-        }
-        
-        let distanceFromBottom = bottomOffset().y - tableView.contentOffset.y
-        
-        var insets = tableView.contentInset
-        if let insetsHeight = insetsHeight {
-            insets.bottom = insetsHeight
-        }
-        
-        UIView.animate(withDuration: 0.01, delay: 0, options: .curveEaseIn, animations: {
-            
-            self.tableView.contentInset = insets
-            self.tableView.scrollIndicatorInsets = insets
-            
-            if distanceFromBottom < 10 {
-                self.tableView.contentOffset = self.bottomOffset()
-            }
-        }, completion: nil)
+        scrollToBottom(animated: false)
     }
 }
 
