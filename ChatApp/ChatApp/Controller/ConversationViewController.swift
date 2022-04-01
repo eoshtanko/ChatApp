@@ -43,6 +43,7 @@ class ConversationViewController: UITableViewController {
         configureSnapshotListener()
         configureAppearances()
         registerKeyboardNotifications()
+        configureTapGestureRecognizer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -133,6 +134,16 @@ class ConversationViewController: UITableViewController {
         
         chatMessages.remove(at: index)
         tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+    
+    private func configureTapGestureRecognizer() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                 action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        entreMessageBar?.textView.resignFirstResponder()
     }
     
     private func configureNavigationBar() {
