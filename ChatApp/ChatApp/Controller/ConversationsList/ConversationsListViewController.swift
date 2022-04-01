@@ -30,7 +30,7 @@ class ConversationsListViewController: UIViewController {
     
     private let dayNavBarAppearance = UINavigationBarAppearance()
     private let nightNavBarAppearance = UINavigationBarAppearance()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCurrentUser()
@@ -53,13 +53,22 @@ class ConversationsListViewController: UIViewController {
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
-                // alert
+                self.showFailToLoadChannelsAlert()
                 return
             }
             snapshot.documentChanges.forEach { change in
                 self.handleDocumentChange(change)
             }
         }
+    }
+    
+    private func showFailToLoadChannelsAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось загрузить каналы.", preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+            self.configureSnapshotListener()
+        })
+        present(failureAlert, animated: true, completion: nil)
     }
     
     private func handleDocumentChange(_ change: DocumentChange) {
@@ -146,7 +155,7 @@ class ConversationsListViewController: UIViewController {
     private func loadUserViaGCDB() {
         loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
     }
-
+    
     private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
         memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
             if let result = result as? Result<User, Error> {
@@ -246,16 +255,20 @@ class ConversationsListViewController: UIViewController {
         reference.addDocument(data: channel.toDict) { [weak self] error in
             guard let self = self else { return }
             if error != nil {
-                self.showFailTiCreateChannelAlert(name)
+                self.showFailToCreateChannelAlert(name)
                 return
             }
         }
     }
     
-    private func showFailTiCreateChannelAlert(_ name: String) {
-        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось создать канал.", preferredStyle: UIAlertController.Style.alert)
-        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
-        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+    private func showFailToCreateChannelAlert(_ name: String) {
+        let failureAlert = UIAlertController(title: "Ошибка",
+                                             message: "Не удалось создать канал \(name).",
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить",
+                                             style: UIAlertAction.Style.cancel) {_ in
             self.createNewChannel(name: name)
         })
         present(failureAlert, animated: true, completion: nil)
@@ -348,7 +361,7 @@ class ConversationsListViewController: UIViewController {
         nightNavBarAppearance.backgroundColor = .black
     }
     
-     func setDayOrClassicTheme() {
+    func setDayOrClassicTheme() {
         tableView.backgroundColor = .white
         setDayOrClassicThemeToSearchBar()
         setDayOrClassicThemeToNavBar()
@@ -381,7 +394,8 @@ class ConversationsListViewController: UIViewController {
         navigationItem.standardAppearance = dayNavBarAppearance
         navigationItem.scrollEdgeAppearance = dayNavBarAppearance
     }
-     func setNightTheme() {
+    
+    func setNightTheme() {
         tableView.backgroundColor = .black
         setNightThemeToSearchBar()
         setNightThemeToNavBar()

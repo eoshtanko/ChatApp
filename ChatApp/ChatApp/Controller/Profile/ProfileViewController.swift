@@ -57,7 +57,7 @@ class ProfileViewController: UIViewController {
     @IBAction func saveGCDButtonPressed(_ sender: Any) {
         saveViaGCD()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSubviews()
@@ -140,11 +140,10 @@ class ProfileViewController: UIViewController {
         changeEnablePropertyOfFields(isEditing)
         disableSaveButtons()
         setInitialData()
-        if !isEditing {
-            resetChangeIndicators()
-        }
         if isEditing {
             nameLabel.becomeFirstResponder()
+        } else {
+            resetChangeIndicators()
         }
     }
     

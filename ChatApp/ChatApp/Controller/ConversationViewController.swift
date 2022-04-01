@@ -61,13 +61,26 @@ class ConversationViewController: UITableViewController {
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
-                // alert
+                self.showFailToLoadMessagesAlert()
                 return
             }
             snapshot.documentChanges.forEach { change in
                 self.handleDocumentChange(change)
             }
         }
+    }
+    
+    private func showFailToLoadMessagesAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка",
+                                             message: "Не удалось загрузить сообщения.",
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить",
+                                             style: UIAlertAction.Style.cancel) {_ in
+            self.configureSnapshotListener()
+        })
+        present(failureAlert, animated: true, completion: nil)
     }
     
     private func handleDocumentChange(_ change: DocumentChange) {
@@ -234,21 +247,26 @@ extension ConversationViewController {
 
 // Настройка view для ввода сообщения.
 extension ConversationViewController {
+    
     override var inputAccessoryView: UIView? {
         if entreMessageBar == nil {
+            
             entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+            
             entreMessageBar?.setCurrentTheme(currentTheme)
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
                 self?.reference.addDocument(data: newMessage.toDict) { [weak self] error in
                     guard let self = self else { return }
                     if error != nil {
+                        self.showFailToSendMessageAlert()
                         return
                     }
                     self.entreMessageBar?.textView.text = ""
                 }
             }
         }
+        
         return entreMessageBar
     }
     
@@ -281,6 +299,15 @@ extension ConversationViewController {
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
         scrollToBottom(animated: false)
+    }
+    
+    private func showFailToSendMessageAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка",
+                                             message: "Не удалось отправить сообщение.",
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.default))
+        present(failureAlert, animated: true, completion: nil)
     }
 }
 
