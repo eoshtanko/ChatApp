@@ -307,6 +307,7 @@ extension ConversationViewController {
                 self.showFailToSendMessageAlert()
                 return
             }
+            self.entreMessageBar?.sendMessageButton.isEnabled = false
             self.entreMessageBar?.textView.text = ""
         }
     }

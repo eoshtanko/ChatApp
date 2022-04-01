@@ -61,8 +61,8 @@ class ChatMessageCell: UITableViewCell {
             trailingConstraint.isActive = false
             leadingConstraint.isActive = true
             
-            messageLabelTopConstantWithName.isActive = true
             messageLabelTopConstantWithoutName.isActive = false
+            messageLabelTopConstantWithName.isActive = true
             
             namelabel.isHidden = false
         }
