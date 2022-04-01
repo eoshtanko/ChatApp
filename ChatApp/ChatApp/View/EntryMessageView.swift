@@ -14,6 +14,7 @@ class EntryMessageView: UIView {
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var entryMessageView: UIView!
+    @IBOutlet weak var textViewHightConstraint: NSLayoutConstraint!
     
     @IBAction func sendMessage(_ sender: Any) {
         if !textView.text.isEmpty {
@@ -42,13 +43,13 @@ class EntryMessageView: UIView {
     private func textViewContentSize() -> CGSize {
         let size = CGSize(width: textView.bounds.width,
                           height: CGFloat.greatestFiniteMagnitude)
-     
+        
         let textSize = textView.sizeThatFits(size)
         return CGSize(width: bounds.width, height: textSize.height)
     }
     
     private func configureTextView() {
-        // textView.delegate = self
+        textView.delegate = self
         textView.layer.borderWidth = Const.textViewBorderWidth
         textView.layer.cornerRadius = Const.textViewCornerRadius
     }
@@ -81,15 +82,16 @@ class EntryMessageView: UIView {
     private enum Const {
         static let textViewBorderWidth = 0.1
         static let textViewCornerRadius: CGFloat = 10
+        static let textViewMaxHight: CGFloat = 71
     }
 }
 
-// extension EntryMessageView: UITextViewDelegate {
-//    func textViewDidChange(_ textView: UITextView) {
-//        let contentHeight = textViewContentSize().height
-//        if textViewHeight.constant != contentHeight {
-//            textViewHeight.constant = textViewContentSize().height
-//            layoutIfNeeded()
-//        }
-//    }
-// }
+extension EntryMessageView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        let contentHeight = textViewContentSize().height
+        if textViewHightConstraint.constant != contentHeight && contentHeight < Const.textViewMaxHight {
+            textViewHightConstraint.constant = contentHeight
+            layoutIfNeeded()
+        }
+    }
+}
