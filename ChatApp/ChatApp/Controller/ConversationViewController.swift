@@ -12,13 +12,13 @@ class ConversationViewController: UITableViewController {
     
     private var chatMessages: [Message] = []
     
+    //    private let networkManager = NetworkManager()
     private let channel: Channel?
     private let dbChannelReference: CollectionReference
     private lazy var reference: CollectionReference = {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
-    // private let networkManager = NetworkManager()
     
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true

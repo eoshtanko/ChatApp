@@ -25,7 +25,6 @@ class ConversationTableViewCell: UITableViewCell {
             top: Const.verticalInserts, left: Const.horizontalInserts,
             bottom: Const.verticalInserts, right: Const.horizontalInserts))
         contentView.layer.cornerRadius = Const.contentViewCornerRadius
-        //     configureSubviews()
         setCurrentTheme()
     }
     
@@ -121,7 +120,5 @@ class ConversationTableViewCell: UITableViewCell {
         static let verticalInserts: CGFloat = 15
         static let horizontalInserts: CGFloat = 10
         static let contentViewCornerRadius: CGFloat = 10
-        static let rationImageAndOnlineSign: CGFloat = 5
-        static let onlineSignImageViewWidth: CGFloat = 19
     }
 }

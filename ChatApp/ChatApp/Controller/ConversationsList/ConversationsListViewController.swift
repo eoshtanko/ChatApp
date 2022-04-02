@@ -10,6 +10,7 @@ import Firebase
 
 class ConversationsListViewController: UIViewController {
     
+    //    private let networkManager = NetworkManager()
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
@@ -50,6 +51,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureSnapshotListener() {
+//        guard networkManager.isInternetConnected else {
+//            self.showFailToLoadChannelsAlert()
+//            return
+//        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -253,6 +258,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func createNewChannel(name: String) {
+//        guard networkManager.isInternetConnected else {
+//            self.showFailToCreateChannelAlert()
+//            return
+//        }
         let channel = Channel(name: name)
         reference.addDocument(data: channel.toDict) { [weak self] error in
             guard let self = self else { return }
