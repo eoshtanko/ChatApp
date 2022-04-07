@@ -93,12 +93,12 @@ extension CoreDataServiceProtocol {
             do {
                 let message = try parseDBMessageToMessage(dbMessage)
                 messages.append(message)
-                CoreDataLogger.log("Сообщение был успешно прочитано из БД: ", channel)
+                CoreDataLogger.log("Сообщение был успешно прочитано из БД: ", message)
             } catch {
                 CoreDataLogger.log("Не удалось распарсить прочтенное сообщение.", .failure)
             }
         }
-        return messages
+        return messages.sorted()
     }
     
     private func saveMessageToDB(message: Message, channel: DBChannel, context: NSManagedObjectContext) {

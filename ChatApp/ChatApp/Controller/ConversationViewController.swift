@@ -22,7 +22,7 @@ class ConversationViewController: UITableViewController {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
-
+    
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true
     private var hightOfKeyboard: CGFloat?
@@ -41,6 +41,7 @@ class ConversationViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchMessagesFromCash()
         configureNavigationBar()
         configureTableView()
         configureSnapshotListener()
@@ -66,14 +67,15 @@ class ConversationViewController: UITableViewController {
         DispatchQueue.main.async {
             self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
             self.tableView.reloadData()
+            self.scrollToBottom(animated: false)
         }
     }
     
     private func configureSnapshotListener() {
-//        guard networkManager.isInternetConnected else {
-//            self.showFailToLoadMessagesAlert()
-//            return
-//        }
+        //        guard networkManager.isInternetConnected else {
+        //            self.showFailToLoadMessagesAlert()
+        //            return
+        //        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -104,12 +106,12 @@ class ConversationViewController: UITableViewController {
             return
         }
         switch change.type {
-        case .added, .modified:
+        case .added:
             coreDataStack.saveMessage(message: message, channel: channel) { [weak self] in
                 self?.fetchMessagesFromCash()
             }
-        case .removed:
-            CoreDataLogger.log("Кто-то что-то удалил, но мы об этом не узнаем, так как удаление реализовывать нас не просили :)", .success)
+        case .removed, .modified:
+            CoreDataLogger.log("Не обрабатываю, так как в ДЗ не требовалось.", .success)
         }
     }
     
@@ -256,10 +258,10 @@ extension ConversationViewController {
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 guard let self = self else { return }
                 
-//                guard networkManager.isInternetConnected else {
-//                    self.showFailToSendMessageAlert()
-//                    return
-//                }
+                //                guard networkManager.isInternetConnected else {
+                //                    self.showFailToSendMessageAlert()
+                //                    return
+                //                }
                 
                 self.sendMessage(message: message)
             }
@@ -278,15 +280,13 @@ extension ConversationViewController {
     
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-
         reference.addDocument(data: newMessage.toDict) { [weak self] error in
-            guard let self = self else { return }
             if error != nil {
-                self.showFailToSendMessageAlert()
+                self?.showFailToSendMessageAlert()
                 return
             }
-            self.entreMessageBar?.sendMessageButton.isEnabled = false
-            self.entreMessageBar?.textView.text = ""
+            self?.entreMessageBar?.sendMessageButton.isEnabled = false
+            self?.entreMessageBar?.textView.text = ""
         }
     }
     

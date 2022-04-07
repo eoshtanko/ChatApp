@@ -88,7 +88,7 @@ class ConversationsListViewController: UIViewController {
         guard let channel = Channel(document: change.document) else {
             return
         }
-        
+
         switch change.type {
         case .added, .modified:
             coreDataStack.saveChannel(channel: channel) { [weak self] in
