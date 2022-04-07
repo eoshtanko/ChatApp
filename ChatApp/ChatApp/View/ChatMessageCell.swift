@@ -7,23 +7,19 @@
 
 import UIKit
 
-// Меня смутили эти правила:
-// 1. Для входящих сообщений:
-// Текст сообщения не должен заходить на последнюю четверть ширины ячейки.
-// 2. Для исходящих сообщений:
-// Текст сообщения не должен заходить на первую четверть ширины ячейки.
-//
-// Посоветовавшись со здравым смыслом под шириной ячейки я здесь поняла не
-// ширину конкретного "messageBubble", а ширину row (ширина экрана)
 class ChatMessageCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
     
     private let messageLabel = UILabel()
     private let bubbleBackgroundView = UIView()
+    private let namelabel = UILabel()
     
     private var leadingConstraint: NSLayoutConstraint!
     private var trailingConstraint: NSLayoutConstraint!
+    
+    private var messageLabelTopConstantWithName: NSLayoutConstraint!
+    private var messageLabelTopConstantWithoutName: NSLayoutConstraint!
     
     private var incomingMessageUIColor: UIColor!
     private var outcomingMessageUIColor: UIColor!
@@ -35,28 +31,40 @@ class ChatMessageCell: UITableViewCell {
         
         addSubview(bubbleBackgroundView)
         addSubview(messageLabel)
+        addSubview(namelabel)
         
-        messageLabel.numberOfLines = 0
         self.isUserInteractionEnabled = false
         bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.numberOfLines = 0
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         setCurrentTheme()
         configureConstraints()
     }
     
-    func configureCell(_ chatMessage: ChatMessage) {
-        messageLabel.text = chatMessage.text
+    func configureCell(_ chatMessage: Message) {
+        messageLabel.text = chatMessage.content
+        namelabel.text = chatMessage.senderName.isEmpty ? "No name" : chatMessage.senderName
         
-        bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ?
-        incomingMessageUIColor : outcomingMessageUIColor
+        bubbleBackgroundView.backgroundColor = chatMessage.senderId == CurrentUser.user.id ?
+        outcomingMessageUIColor : incomingMessageUIColor
         
-        if chatMessage.isIncoming {
-            trailingConstraint.isActive = false
-            leadingConstraint.isActive = true
-        } else {
+        if chatMessage.senderId == CurrentUser.user.id {
             leadingConstraint.isActive = false
             trailingConstraint.isActive = true
+            
+            messageLabelTopConstantWithName.isActive = false
+            messageLabelTopConstantWithoutName.isActive = true
+            
+            namelabel.isHidden = true
+        } else {
+            trailingConstraint.isActive = false
+            leadingConstraint.isActive = true
+            
+            messageLabelTopConstantWithoutName.isActive = false
+            messageLabelTopConstantWithName.isActive = true
+            
+            namelabel.isHidden = false
         }
     }
     
@@ -66,15 +74,20 @@ class ChatMessageCell: UITableViewCell {
     
     private func configureConstraints() {
         NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstant),
+            namelabel.topAnchor.constraint(equalTo: topAnchor),
+            
             messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Const.bottomConstant),
             messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: Const.messageLabelWidth),
             
             bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -Const.messageLabelBoarderConstraint),
             bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: Const.messageLabelBoarderConstraint),
-            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: Const.messageLabelBoarderConstraint),
+            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: Const.messageLabelBoarderConstraint)
         ])
+        namelabel.frame.size = CGSize(width: Const.messageLabelWidth, height: Const.hightOfNameLabel)
+        
+        messageLabelTopConstantWithName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithName)
+        messageLabelTopConstantWithoutName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithoutName)
         
         leadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Const.messageLabelLeadingAndTrailingConstraint)
@@ -93,6 +106,7 @@ class ChatMessageCell: UITableViewCell {
     
     private func setClassicTheme() {
         backgroundColor = .white
+        namelabel.textColor = .darkGray
         messageLabel.textColor = .black
         incomingMessageUIColor = UIColor(named: "IncomingMessageColor")
         outcomingMessageUIColor = UIColor(named: "OutcomingMessageColor")
@@ -100,6 +114,7 @@ class ChatMessageCell: UITableViewCell {
     
     private func setDayTheme() {
         backgroundColor = .white
+        namelabel.textColor = .darkGray
         messageLabel.textColor = .black
         incomingMessageUIColor = UIColor(named: "IncomingMessageDayThemeColor")
         outcomingMessageUIColor = UIColor(named: "OutcomingMessageDayThemeColor")
@@ -107,6 +122,7 @@ class ChatMessageCell: UITableViewCell {
     
     private func setNightTheme() {
         backgroundColor = .black
+        namelabel.textColor = .lightGray
         messageLabel.textColor = .white
         incomingMessageUIColor = UIColor(named: "IncomingMessageNightThemeColor")
         outcomingMessageUIColor = UIColor(named: "OutcomingMessageNightThemeColor")
@@ -119,9 +135,11 @@ class ChatMessageCell: UITableViewCell {
     private enum Const {
         static let messageLabelBoarderConstraint: CGFloat = 16
         static let messageLabelLeadingAndTrailingConstraint: CGFloat = 16 * 2
-        static let messageLabelWidth: CGFloat = UIScreen.main.bounds.size.width * 3/4 - Const.messageLabelBoarderConstraint * 3
+        static let messageLabelWidth: CGFloat = UIScreen.main.bounds.size.width * 3 / 4 - Const.messageLabelBoarderConstraint * 3
         static let cornerRadius: CGFloat = 12
-        static let topConstant: CGFloat = 16
+        static let topConstantWithName: CGFloat = 46
+        static let topConstantWithoutName: CGFloat = 16
+        static let hightOfNameLabel: CGFloat = 21
         static let bottomConstant: CGFloat = -32
     }
 }

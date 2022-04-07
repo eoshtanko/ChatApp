@@ -6,35 +6,52 @@
 //
 
 import UIKit
+import Firebase
 
 class ConversationViewController: UITableViewController {
     
-    var conversation: Conversation?
-    private var filteredChatMessages = [[ChatMessage]]()
+    private var chatMessages: [Message] = []
+    
+    //    private let networkManager = NetworkManager()
+    private let channel: Channel?
+    private let dbChannelReference: CollectionReference
+    private lazy var reference: CollectionReference = {
+        guard let channelIdentifier = channel?.identifier else { fatalError() }
+        return dbChannelReference.document(channelIdentifier).collection("messages")
+    }()
+    
     private var entreMessageBar: EntryMessageView?
+    private var shouldScrollToBottom: Bool = true
+    private var hightOfKeyboard: CGFloat?
     
     private var currentTheme: Theme = .classic
     
     private let nightNavBarAppearance = UINavigationBarAppearance()
     private let dayNavBarAppearance = UINavigationBarAppearance()
     
-    init?(theme: Theme) {
+    init?(theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
         currentTheme = theme
+        self.channel = channel
+        self.dbChannelReference = dbChannelRef
         super.init(nibName: nil, bundle: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
-        assembleGroupedMessages()
         configureTableView()
+        configureSnapshotListener()
         configureAppearances()
-        becomeFirstResponder()
+        registerKeyboardNotifications()
+        configureTapGestureRecognizer()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollToBottom()
+        if shouldScrollToBottom {
+            shouldScrollToBottom = false
+            scrollToBottom(animated: false)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,8 +59,95 @@ class ConversationViewController: UITableViewController {
         setCurrentTheme()
     }
     
+    private func configureSnapshotListener() {
+//        guard networkManager.isInternetConnected else {
+//            self.showFailToLoadMessagesAlert()
+//            return
+//        }
+        reference.addSnapshotListener { [weak self] snapshot, error in
+            guard let self = self else { return }
+            guard error == nil, let snapshot = snapshot else {
+                self.showFailToLoadMessagesAlert()
+                return
+            }
+            snapshot.documentChanges.forEach { change in
+                self.handleDocumentChange(change)
+            }
+        }
+    }
+    
+    private func showFailToLoadMessagesAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка",
+                                             message: "Не удалось загрузить сообщения.",
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить",
+                                             style: UIAlertAction.Style.cancel) {_ in
+            self.configureSnapshotListener()
+        })
+        present(failureAlert, animated: true, completion: nil)
+    }
+    
+    private func handleDocumentChange(_ change: DocumentChange) {
+        guard let message = Message(document: change.document) else {
+            return
+        }
+        switch change.type {
+        case .added:
+            addMessageToTable(message)
+        case .modified:
+            updateMessageInTable(message)
+        case .removed:
+            removeMessageFromTable(message)
+        }
+    }
+    
+    private func addMessageToTable(_ message: Message) {
+        if chatMessages.contains(message) {
+            return
+        }
+        
+        chatMessages.append(message)
+        chatMessages.sort()
+        
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        scrollToBottom(animated: false)
+    }
+    
+    private func updateMessageInTable(_ message: Message) {
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        
+        chatMessages[index] = message
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+    
+    private func removeMessageFromTable(_ message: Message) {
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        
+        chatMessages.remove(at: index)
+        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+    
+    private func configureTapGestureRecognizer() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                 action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        entreMessageBar?.textView.resignFirstResponder()
+    }
+    
     private func configureNavigationBar() {
-        navigationItem.title = conversation?.name
+        navigationItem.title = channel?.name
         navigationItem.largeTitleDisplayMode = .never
     }
     
@@ -55,32 +159,26 @@ class ConversationViewController: UITableViewController {
         tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
-    private func assembleGroupedMessages() {
-        if(conversation?.message != nil) {
-            let groupedMessages = Dictionary(grouping: ConversationApi.messages) { (element) -> Date in
-                // reduceToMonthDayYear - помогает сгруппировать сообщения именно по дате, без учета времени
-                return element.date?.reduceToMonthDayYear() ?? ConversationApi.getDefaultDate()
-            }
-            let sortedKeys = groupedMessages.keys.sorted()
-            sortedKeys.forEach { (key) in
-                let values = groupedMessages[key]
-                filteredChatMessages.append(values ?? [])
-            }
+    private func scrollToBottom(animated: Bool) {
+        view.layoutIfNeeded()
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
+        
+        if isScrollingNecessary() {
+            tableView.setContentOffset(bottomOffset, animated: false)
         }
     }
     
-    // Понимаю ли я, что это безобразие? Понимаю.
-    // Иначе долго не получалось, а в задании это не требовалось,
-    // так что я решила оставить проблему на будущее и надеятся, что оценку не снизят.
-    // К слову, хоть и выглядит это плохо, работает совершенно корректно при любом объеме сообщений
-    // на люом устройстве.
-    private var shouldScrollToBottomTimes: Int = 3
-    private func scrollToBottom() {
-        if shouldScrollToBottomTimes > 0 && tableView.contentSize.height > tableView.bounds.size.height {
-            shouldScrollToBottomTimes -= 1
-            let bottomOffset = CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + EntryMessageView.getEntyMessageViewHight())
-            tableView.setContentOffset(bottomOffset, animated: false)
-        }
+    private func isScrollingNecessary() -> Bool {
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
+        return tableView.contentSize.height > tableView.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
+    }
+    
+    private func bottomOffsetWithKeyboard() -> CGPoint {
+        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (hightOfKeyboard ?? 0))
+    }
+    
+    private func bottomOffsetWithoutKeyboard() -> CGPoint {
+        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
     private func configureAppearances() {
@@ -132,6 +230,7 @@ class ConversationViewController: UITableViewController {
     private enum Const {
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
+        static let empiricalValue: CGFloat = 70
     }
 }
 
@@ -147,11 +246,11 @@ extension ConversationViewController {
 extension ConversationViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return filteredChatMessages.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredChatMessages[section].count
+        return chatMessages.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -161,26 +260,9 @@ extension ConversationViewController {
         guard let messageCell = cell as? ChatMessageCell else {
             return cell
         }
-        let message = filteredChatMessages[indexPath.section][indexPath.row]
+        let message = chatMessages[indexPath.row]
         messageCell.configureCell(message)
         return messageCell
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let firstMessageInSection = filteredChatMessages[section].first {
-            let dateLabel = DateHeaderLabel()
-            dateLabel.configureDate(date: firstMessageInSection.date ?? ConversationApi.getDefaultDate())
-            return getContainerView(dateLabel)
-        }
-        return nil
-    }
-    
-    private func getContainerView(_ subView: DateHeaderLabel) -> UIView {
-        let containerView = UIView()
-        containerView.addSubview(subView)
-        subView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        subView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        return containerView
     }
 }
 
@@ -188,13 +270,24 @@ extension ConversationViewController {
 extension ConversationViewController {
     
     override var inputAccessoryView: UIView? {
-        get {
-            if entreMessageBar == nil {
-                entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
-                entreMessageBar?.setCurrentTheme(currentTheme)
+        if entreMessageBar == nil {
+            
+            entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+            
+            entreMessageBar?.setCurrentTheme(currentTheme)
+            entreMessageBar?.setSendMessageAction { [weak self] message in
+                guard let self = self else { return }
+                
+//                guard networkManager.isInternetConnected else {
+//                    self.showFailToSendMessageAlert()
+//                    return
+//                }
+                
+                self.sendMessage(message: message)
             }
-            return entreMessageBar
         }
+        
+        return entreMessageBar
     }
     
     override var canBecomeFirstResponder: Bool {
@@ -204,59 +297,70 @@ extension ConversationViewController {
     override var canResignFirstResponder: Bool {
         return true
     }
+    
+    private func sendMessage(message: String) {
+        let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
+
+        reference.addDocument(data: newMessage.toDict) { [weak self] error in
+            guard let self = self else { return }
+            if error != nil {
+                self.showFailToSendMessageAlert()
+                return
+            }
+            self.entreMessageBar?.sendMessageButton.isEnabled = false
+            self.entreMessageBar?.textView.text = ""
+        }
+    }
+    
+    private func registerKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardDidShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc func keyboardDidShow(_ notification: NSNotification) {
+        if entreMessageBar?.textView.isFirstResponder ?? false {
+            guard let payload = KeyboardInfo(notification) else { return }
+            hightOfKeyboard = payload.frameEnd?.size.height
+        }
+        scrollToBottom(animated: false)
+    }
+    
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        scrollToBottom(animated: false)
+    }
+    
+    private func showFailToSendMessageAlert() {
+        let failureAlert = UIAlertController(title: "Ошибка",
+                                             message: "Не удалось отправить сообщение.",
+                                             preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK",
+                                             style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить",
+                                             style: UIAlertAction.Style.cancel) {_ in
+            self.entreMessageBar?.sendMessage()
+        })
+        present(failureAlert, animated: true, completion: nil)
+    }
 }
 
-// Отображение даты для секций сообщений.
-class DateHeaderLabel: UILabel {
-    
-    private let formatter = DateFormatter()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configureView()
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        let originalContentSize = super.intrinsicContentSize
-        let height = originalContentSize.height + Const.heightSpace
-        layer.cornerRadius = height / 2
-        layer.masksToBounds = true
-        return CGSize(width: originalContentSize.width + Const.widthSpace, height: height)
-    }
-    
-    func configureDate(date: Date) {
-        formatter.dateFormat = "dd/MM/yyyy"
-        self.text = formatter.string(from: date)
-    }
-    
-    private func configureView() {
-        backgroundColor = UIColor(named: "DataChatIndicatorColor")
-        textColor = .black
-        textAlignment = .center
-        translatesAutoresizingMaskIntoConstraints = false
-        font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private enum Const {
-        static let heightSpace: CGFloat = 5
-        static let widthSpace: CGFloat = 20
-    }
+struct KeyboardInfo {
+    var frameBegin: CGRect?
+    var frameEnd: CGRect?
 }
 
-extension Date {
-    
-    // reduceToMonthDayYear - помогает сгруппировать сообщения именно по дате, без учета времени
-    func reduceToMonthDayYear() -> Date {
-        let calendar = Calendar.current
-        let day = calendar.component(.day, from: self)
-        let month = calendar.component(.month, from: self)
-        let year = calendar.component(.year, from: self)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        return dateFormatter.date(from: "\(day)/\(month)/\(year)") ?? Date()
+extension KeyboardInfo {
+    init?(_ notification: NSNotification) {
+        guard notification.name == UIResponder.keyboardWillShowNotification ||
+                notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
+        if let userInfo = notification.userInfo {
+            frameBegin = userInfo[UIWindow.keyboardFrameBeginUserInfoKey] as? CGRect
+            frameEnd = userInfo[UIWindow.keyboardFrameEndUserInfoKey] as? CGRect
+        }
     }
 }
