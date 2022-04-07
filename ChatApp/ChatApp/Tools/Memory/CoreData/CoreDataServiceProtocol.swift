@@ -66,7 +66,12 @@ extension CoreDataServiceProtocol {
     func saveMessage(message: Message, channel: Channel, _ updateMessages: (() -> Void)?) {
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
             performSave(toSave: message, completion: updateMessages) { message, context in
-                saveMessageToDB(message: message, channel: dbChannelArr[0], context: context)
+                let objectID = dbChannelArr[0].objectID
+                if let dbChannel = context.object(with: objectID) as? DBChannel {
+                    saveMessageToDB(message: message, channel: dbChannel, context: context)
+                } else {
+                    CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
+                }
             }
         }
     }
