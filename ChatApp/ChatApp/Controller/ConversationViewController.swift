@@ -10,16 +10,19 @@ import Firebase
 
 class ConversationViewController: UITableViewController {
     
+    let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    // let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
+    
     private var chatMessages: [Message] = []
     
     //    private let networkManager = NetworkManager()
-    private let channel: Channel?
+    private let channel: Channel!
     private let dbChannelReference: CollectionReference
     private lazy var reference: CollectionReference = {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
-    
+
     private var entreMessageBar: EntryMessageView?
     private var shouldScrollToBottom: Bool = true
     private var hightOfKeyboard: CGFloat?
@@ -59,6 +62,13 @@ class ConversationViewController: UITableViewController {
         setCurrentTheme()
     }
     
+    private func fetchMessagesFromCash() {
+        DispatchQueue.main.async {
+            self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
+            self.tableView.reloadData()
+        }
+    }
+    
     private func configureSnapshotListener() {
 //        guard networkManager.isInternetConnected else {
 //            self.showFailToLoadMessagesAlert()
@@ -94,46 +104,13 @@ class ConversationViewController: UITableViewController {
             return
         }
         switch change.type {
-        case .added:
-            addMessageToTable(message)
-        case .modified:
-            updateMessageInTable(message)
+        case .added, .modified:
+            coreDataStack.saveMessage(message: message, channel: channel) { [weak self] in
+                self?.fetchMessagesFromCash()
+            }
         case .removed:
-            removeMessageFromTable(message)
+            CoreDataLogger.log("Кто-то что-то удалил, но мы об этом не узнаем, так как удаление реализовывать нас не просили :)", .success)
         }
-    }
-    
-    private func addMessageToTable(_ message: Message) {
-        if chatMessages.contains(message) {
-            return
-        }
-        
-        chatMessages.append(message)
-        chatMessages.sort()
-        
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        scrollToBottom(animated: false)
-    }
-    
-    private func updateMessageInTable(_ message: Message) {
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        
-        chatMessages[index] = message
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-    }
-    
-    private func removeMessageFromTable(_ message: Message) {
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        
-        chatMessages.remove(at: index)
-        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
     
     private func configureTapGestureRecognizer() {
@@ -228,6 +205,7 @@ class ConversationViewController: UITableViewController {
     }
     
     private enum Const {
+        static let dataModelName = "Chat"
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
         static let empiricalValue: CGFloat = 70

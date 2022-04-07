@@ -62,3 +62,9 @@ extension Channel: Comparable {
       return lhs.lastActivity ?? Date() > rhs.lastActivity ?? Date()
   }
 }
+
+extension Channel: StringConvertableProtocol {
+    func toString() -> String {
+        return "Channel(name: \(name), id: \(identifier))."
+    }
+}

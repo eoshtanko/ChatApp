@@ -55,3 +55,9 @@ extension Message: Comparable {
       return lhs.created < rhs.created
   }
 }
+
+extension Message: StringConvertableProtocol {
+    func toString() -> String {
+        return "Message(content: \(content), senderId: \(senderId))."
+    }
+}
