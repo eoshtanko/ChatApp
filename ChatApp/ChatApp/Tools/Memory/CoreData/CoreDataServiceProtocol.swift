@@ -84,6 +84,7 @@ extension CoreDataServiceProtocol {
             CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
             return []
         }
+        
         var messages = [Message]()
         for dbMessage in dbMessages {
             guard let dbMessage = dbMessage as? DBMessage else {
@@ -102,8 +103,9 @@ extension CoreDataServiceProtocol {
     }
     
     private func saveMessageToDB(message: Message, channel: DBChannel, context: NSManagedObjectContext) {
-        let dbMessage = configureDBMessage(message: message, context: context)
-        channel.addToMessages(dbMessage)
+        if let dbMessage = configureDBMessage(message: message, context: context) {
+            channel.addToMessages(dbMessage)
+        }
     }
     
     private func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
@@ -117,8 +119,11 @@ extension CoreDataServiceProtocol {
                        created: created)
     }
     
-    private func configureDBMessage(message: Message, context: NSManagedObjectContext) -> DBMessage {
-        let dbMessage = DBMessage(context: context)
+    private func configureDBMessage(message: Message, context: NSManagedObjectContext) -> DBMessage? {
+        guard let dbMessage = DBMessage(usedContext: context) else {
+            CoreDataLogger.log("Не удалось создать объект Message.", .failure)
+            return nil
+        }
         dbMessage.content = message.content
         dbMessage.created = message.created
         dbMessage.senderId = message.senderId

@@ -22,6 +22,7 @@
 		34449AE527FEA41F002763CD /* CoreDataLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34449AE427FEA41F002763CD /* CoreDataLogger.swift */; };
 		34449AE727FEFBDC002763CD /* StringConvertableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34449AE627FEFBDB002763CD /* StringConvertableProtocol.swift */; };
 		34449AE927FEFCCC002763CD /* Date + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34449AE827FEFCCC002763CD /* Date + Extension.swift */; };
+		34449AEB28000C9D002763CD /* NSManagedObject + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34449AEA28000C9D002763CD /* NSManagedObject + Extension.swift */; };
 		345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345624F127C4C6950044C73A /* LifecycleLogger.swift */; };
 		3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337427EB6A0F00962579 /* GCDMemoryManager.swift */; };
 		3460337B27EC14BF00962579 /* ApplicationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3460337A27EC14BF00962579 /* ApplicationPreferences.swift */; };
@@ -68,6 +69,7 @@
 		34449AE427FEA41F002763CD /* CoreDataLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLogger.swift; sourceTree = "<group>"; };
 		34449AE627FEFBDB002763CD /* StringConvertableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConvertableProtocol.swift; sourceTree = "<group>"; };
 		34449AE827FEFCCC002763CD /* Date + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date + Extension.swift"; sourceTree = "<group>"; };
+		34449AEA28000C9D002763CD /* NSManagedObject + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject + Extension.swift"; sourceTree = "<group>"; };
 		345624F127C4C6950044C73A /* LifecycleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleLogger.swift; sourceTree = "<group>"; };
 		3460337427EB6A0F00962579 /* GCDMemoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDMemoryManager.swift; sourceTree = "<group>"; };
 		3460337A27EC14BF00962579 /* ApplicationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationPreferences.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */,
 				34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */,
 				34E877A227FC46220018CCC7 /* OldCoreDataService.swift */,
+				34449AEA28000C9D002763CD /* NSManagedObject + Extension.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -461,6 +464,7 @@
 				3427ACF027D88FDE0062F749 /* Message.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
 				34F449BD27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift in Sources */,
+				34449AEB28000C9D002763CD /* NSManagedObject + Extension.swift in Sources */,
 				3460338227EC231100962579 /* Reader.swift in Sources */,
 				34F449B827F5F5A300CC4922 /* ProfileViewController + UITextExtensions.swift in Sources */,
 			);

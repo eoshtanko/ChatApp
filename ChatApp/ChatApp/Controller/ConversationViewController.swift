@@ -67,7 +67,7 @@ class ConversationViewController: UITableViewController {
         DispatchQueue.main.async {
             self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
             self.tableView.reloadData()
-            self.scrollToBottom(animated: false)
+            self.scrollToBottom(animated: true)
         }
     }
     
