@@ -11,10 +11,10 @@
  Достояно лишь добавить Launch Argument
 -com.apple.CoreData.SQLDebug 4 (в Product -> Scheme -> Edit Scheme)
 Можно даже выбрать log level:
-1. SQL statements and their execution time
-2. Values that are bound in the statement
-3. Fetched managed object IDs
-4. SQLite EXPLAIN statement
+   1 - SQL statements and their execution time
+   2 - Values that are bound in the statement
+   3 - Fetched managed object IDs
+   4 - SQLite EXPLAIN statement
 
 Однако, думаю, в задании от нас ожидали, что мы пропишем логирование сами, что и сделала. 
 Включить/отключить логирование Вы можете с помощью ключа isCoreDataLoggingEnable в Info.plist.
