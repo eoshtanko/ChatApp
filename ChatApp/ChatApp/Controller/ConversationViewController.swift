@@ -49,10 +49,10 @@ class ConversationViewController: UITableViewController {
         fetchMessagesFromCash()
         configureNavigationBar()
         configureTableView()
+        configureSnapshotListener()
         configureAppearances()
         registerKeyboardNotifications()
         configureTapGestureRecognizer()
-        configureSnapshotListener()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,26 +102,12 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            addMessageToTable(message)
-            coreDataStack.saveMessage(message: message, channel: channel)
+            coreDataStack.saveMessage(message: message, channel: channel) { [weak self] in
+                self?.fetchMessagesFromCash()
+            }
         case .removed, .modified:
             CoreDataLogger.log("Не обрабатываю, так как в ДЗ не требовалось.", .success)
         }
-    }
-    
-    private func addMessageToTable(_ message: Message) {
-        if chatMessages.contains(message) {
-            return
-        }
-        
-        chatMessages.append(message)
-        chatMessages.sort()
-        
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        scrollToBottom(animated: false)
     }
     
     private func configureTapGestureRecognizer() {
