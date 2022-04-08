@@ -53,7 +53,7 @@ class ConversationViewController: UITableViewController {
         super.viewWillAppear(animated)
         setCurrentTheme()
     }
-
+    
     private func fetchMessagesFromCash() {
         DispatchQueue.main.async {
             self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)

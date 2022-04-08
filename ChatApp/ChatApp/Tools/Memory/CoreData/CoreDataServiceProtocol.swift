@@ -125,7 +125,7 @@ extension CoreDataServiceProtocol {
             channel.addToMessages(dbMessage)
         }
     }
-
+    
     private func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
         guard let content = dbMessage.content, let created = dbMessage.created,
               let senderId = dbMessage.senderId, let senderName = dbMessage.senderName else {

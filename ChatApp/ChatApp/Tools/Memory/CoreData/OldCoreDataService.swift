@@ -6,7 +6,7 @@
 //
 
 import CoreData
- 
+
 final class OldCoreDataService: CoreDataServiceProtocol {
     
     private let dataModelName: String
@@ -107,11 +107,11 @@ final class OldCoreDataService: CoreDataServiceProtocol {
             return
         }
         
-        context.perform {
+        context.perform { [weak self] in
             block(toSave, context)
             if context.hasChanges {
                 do {
-                    try self.performSaveContext(in: context)
+                    try self?.performSaveContext(in: context)
                     completion?()
                     CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
                 } catch {
@@ -126,11 +126,11 @@ final class OldCoreDataService: CoreDataServiceProtocol {
             return
         }
         
-        context.perform {
+        context.perform { [weak self] in
             block(context)
             if context.hasChanges {
                 do {
-                    try self.performSaveContext(in: context)
+                    try self?.performSaveContext(in: context)
                     completion?()
                     CoreDataLogger.log("Объект был успешно удален из БД: ", toDelete)
                 } catch {

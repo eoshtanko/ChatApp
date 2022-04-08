@@ -88,7 +88,7 @@ class ConversationsListViewController: UIViewController {
         guard let channel = Channel(document: change.document) else {
             return
         }
-
+        
         switch change.type {
         case .added, .modified:
             ConversationsListViewController.coreDataStack.saveChannel(channel: channel) { [weak self] in
@@ -228,10 +228,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func createNewChannel(name: String) {
-//        guard networkManager.isInternetConnected else {
-//            self.showFailToCreateChannelAlert()
-//            return
-//        }
+        //        guard networkManager.isInternetConnected else {
+        //            self.showFailToCreateChannelAlert()
+        //            return
+        //        }
         let channel = Channel(name: name)
         reference.addDocument(data: channel.toDict) { [weak self] error in
             guard let self = self else { return }

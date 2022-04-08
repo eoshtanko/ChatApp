@@ -61,11 +61,11 @@ final class NewCoreDataService: CoreDataServiceProtocol {
     func performSave<T>(toSave: T, completion: (() -> Void)?, _ block: @escaping (T, NSManagedObjectContext) -> Void) {
         let context = container.newBackgroundContext()
         context.mergePolicy = NSOverwriteMergePolicy
-        context.perform {
+        context.perform { [weak self] in
             block(toSave, context)
             if context.hasChanges {
                 do {
-                    try self.performSaveContext(in: context)
+                    try self?.performSaveContext(in: context)
                     completion?()
                     CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
                 } catch {
@@ -78,11 +78,11 @@ final class NewCoreDataService: CoreDataServiceProtocol {
     func performDelete<T>(toDelete: T, completion: (() -> Void)?, _ block: @escaping (NSManagedObjectContext) -> Void) {
         let context = container.newBackgroundContext()
         context.mergePolicy = NSOverwriteMergePolicy
-        context.perform {
+        context.perform {  [weak self] in
             block(context)
             if context.hasChanges {
                 do {
-                    try self.performSaveContext(in: context)
+                    try self?.performSaveContext(in: context)
                     completion?()
                     CoreDataLogger.log("Объект был успешно удален из БД: ", toDelete)
                 } catch {
