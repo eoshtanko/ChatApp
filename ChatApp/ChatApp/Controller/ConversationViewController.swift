@@ -53,12 +53,12 @@ class ConversationViewController: UITableViewController {
         super.viewWillAppear(animated)
         setCurrentTheme()
     }
-    
+
     private func fetchMessagesFromCash() {
         DispatchQueue.main.async {
             self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
             self.tableView.reloadData()
-            self.scrollToBottom(animated: false)
+            self.scrollToBottomAfterFetch(animated: false)
         }
     }
     
@@ -145,11 +145,22 @@ class ConversationViewController: UITableViewController {
         tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
+    private func scrollToBottomAfterFetch(animated: Bool) {
+        // Безобразие? Несомненно. Дело в том, что сообщения имеют разную длину и
+        // swift сложно рассчитать расстояние верно, поэтому приходится проматывать несколько раз.
+        // Решение этой проблемы может быть в установлении ограничений на количество
+        // сообщений при первичной подгрузке (подгружать только 30 сообщений, например)
+        // Но пока так :(
+        for _ in 0...20 {
+            self.scrollToBottom(animated: false)
+        }
+    }
+    
     private func scrollToBottom(animated: Bool) {
         view.layoutIfNeeded()
-        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
-        
         if isScrollingNecessary() {
+            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
+            
             tableView.setContentOffset(bottomOffset, animated: animated)
         }
     }

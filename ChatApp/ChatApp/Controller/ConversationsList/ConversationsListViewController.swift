@@ -15,8 +15,8 @@ class ConversationsListViewController: UIViewController {
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
-    // static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
-    static let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
+    static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    // static let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
     
     var channels: [Channel] = []
     var filteredChannels: [Channel]!
