@@ -56,7 +56,10 @@ extension CoreDataServiceProtocol {
     }
     
     private func saveChannelToDB(channel: Channel, context: NSManagedObjectContext) {
-        let dbChannel = DBChannel(context: context)
+        guard let dbChannel = DBChannel(usedContext: context) else {
+            CoreDataLogger.log("Не удалось создать объект DBChannel.", .failure)
+            return
+        }
         dbChannel.identifier = channel.identifier
         dbChannel.name = channel.name
         dbChannel.lastMessage = channel.lastMessage
@@ -135,7 +138,7 @@ extension CoreDataServiceProtocol {
     
     private func configureDBMessage(message: Message, context: NSManagedObjectContext) -> DBMessage? {
         guard let dbMessage = DBMessage(usedContext: context) else {
-            CoreDataLogger.log("Не удалось создать объект Message.", .failure)
+            CoreDataLogger.log("Не удалось создать объект DBMessage.", .failure)
             return nil
         }
         dbMessage.content = message.content
