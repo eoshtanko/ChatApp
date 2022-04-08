@@ -101,7 +101,8 @@ class ConversationViewController: UITableViewController {
         case .added:
             addMessage(message)
         case .removed, .modified:
-            CoreDataLogger.log("Не обрабатываю удвление/радактирование, так как в ДЗ не требовалось.", .success)
+            // Будем считать, что удалять/редактировать сообщения НИЗЯ
+            return
         }
     }
     

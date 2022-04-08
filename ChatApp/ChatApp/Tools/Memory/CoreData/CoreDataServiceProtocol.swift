@@ -13,6 +13,7 @@ protocol CoreDataServiceProtocol {
     func fetchDBChannels() -> [DBChannel]?
     func fetchDBChannelById(id: String) -> [DBChannel]?
     func performSave<T>(toSave: T, completion: (() -> Void)?, _ block: @escaping (T, NSManagedObjectContext) -> Void)
+    func performDelete<T>(toDelete: T, completion: (() -> Void)?, _ block: @escaping (NSManagedObjectContext) -> Void)
 }
 
 // Работа с каналами.
@@ -21,6 +22,19 @@ extension CoreDataServiceProtocol {
     func saveChannel(channel: Channel, _ updateChannels: (() -> Void)?) {
         performSave(toSave: channel, completion: updateChannels) { channel, context in
             saveChannelToDB(channel: channel, context: context)
+        }
+    }
+    
+    func deleteChannel(channel: Channel, _ updateChannels: (() -> Void)?) {
+        if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
+            performDelete(toDelete: channel, completion: updateChannels) { context in
+                let objectID = dbChannelArr[0].objectID
+                if let dbChannel = context.object(with: objectID) as? DBChannel {
+                    context.delete(dbChannel)
+                } else {
+                    CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
+                }
+            }
         }
     }
     

@@ -95,7 +95,9 @@ class ConversationsListViewController: UIViewController {
                 self?.fetchChannelsFromCash()
             }
         case .removed:
-            CoreDataLogger.log("Кто-то что-то удалил, но мы об этом не узнаем, так как удаление реализовывать нас не просили :)", .success)
+            coreDataStack.deleteChannel(channel: channel) { [weak self] in
+                self?.fetchChannelsFromCash()
+            }
         }
     }
     

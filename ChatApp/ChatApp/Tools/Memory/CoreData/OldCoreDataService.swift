@@ -6,9 +6,7 @@
 //
 
 import CoreData
-
-// [weak self]
-
+ 
 final class OldCoreDataService: CoreDataServiceProtocol {
     
     private let dataModelName: String
@@ -116,6 +114,25 @@ final class OldCoreDataService: CoreDataServiceProtocol {
                     try self.performSaveContext(in: context)
                     completion?()
                     CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
+                } catch {
+                    CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
+                }
+            }
+        }
+    }
+    
+    func performDelete<T>(toDelete: T, completion: (() -> Void)?, _ block: @escaping (NSManagedObjectContext) -> Void) {
+        guard let context = writeContext else {
+            return
+        }
+        
+        context.perform {
+            block(context)
+            if context.hasChanges {
+                do {
+                    try self.performSaveContext(in: context)
+                    completion?()
+                    CoreDataLogger.log("Объект был успешно удален из БД: ", toDelete)
                 } catch {
                     CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
                 }
