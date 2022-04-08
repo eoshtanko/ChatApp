@@ -95,6 +95,7 @@ extension CoreDataServiceProtocol {
     
     func readMessagesFromDB(channel: Channel) -> [Message] {
         guard let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty else {
+            CoreDataLogger.log("Не удалось прочитать канал, которому принадлежит сообщение.", .failure)
             return []
         }
         guard let dbMessages = dbChannelArr[0].messages else {

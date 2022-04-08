@@ -10,8 +10,7 @@ import Firebase
 
 class ConversationViewController: UITableViewController {
     
-    // let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
-    let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
+    let coreDataStack = ConversationsListViewController.coreDataStack
     
     private var chatMessages: [Message] = []
     

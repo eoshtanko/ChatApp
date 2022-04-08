@@ -5,6 +5,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>isCoreDataLoggingEnable</key>
-	<false/>
+	<true/>
 </dict>
 </plist>

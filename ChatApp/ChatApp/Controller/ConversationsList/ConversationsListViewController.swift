@@ -15,8 +15,8 @@ class ConversationsListViewController: UIViewController {
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
-    let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
-    // let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
+    // static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    static let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
     
     var channels: [Channel] = []
     var filteredChannels: [Channel]!
@@ -57,7 +57,7 @@ class ConversationsListViewController: UIViewController {
     
     private func fetchChannelsFromCash() {
         DispatchQueue.main.async {
-            self.channels = self.coreDataStack.readChannelsFromDB()
+            self.channels = ConversationsListViewController.coreDataStack.readChannelsFromDB()
             self.tableView.reloadData()
         }
     }
@@ -91,11 +91,11 @@ class ConversationsListViewController: UIViewController {
 
         switch change.type {
         case .added, .modified:
-            coreDataStack.saveChannel(channel: channel) { [weak self] in
+            ConversationsListViewController.coreDataStack.saveChannel(channel: channel) { [weak self] in
                 self?.fetchChannelsFromCash()
             }
         case .removed:
-            coreDataStack.deleteChannel(channel: channel) { [weak self] in
+            ConversationsListViewController.coreDataStack.deleteChannel(channel: channel) { [weak self] in
                 self?.fetchChannelsFromCash()
             }
         }
