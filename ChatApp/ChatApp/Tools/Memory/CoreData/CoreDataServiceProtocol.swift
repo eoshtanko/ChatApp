@@ -63,9 +63,9 @@ extension CoreDataServiceProtocol {
 // Работа с сообщениями.
 extension CoreDataServiceProtocol {
     
-    func saveMessage(message: Message, channel: Channel, _ updateMessages: (() -> Void)?) {
+    func saveMessage(message: Message, channel: Channel) {
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
-            performSave(toSave: message, completion: updateMessages) { message, context in
+            performSave(toSave: message, completion: nil) { message, context in
                 let objectID = dbChannelArr[0].objectID
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
                     saveMessageToDB(message: message, channel: dbChannel, context: context)
@@ -94,7 +94,7 @@ extension CoreDataServiceProtocol {
             do {
                 let message = try parseDBMessageToMessage(dbMessage)
                 messages.append(message)
-                CoreDataLogger.log("Сообщение был успешно прочитано из БД: ", message)
+                CoreDataLogger.log("Сообщение было успешно прочитано из БД: ", message)
             } catch {
                 CoreDataLogger.log("Не удалось распарсить прочтенное сообщение.", .failure)
             }
@@ -107,7 +107,7 @@ extension CoreDataServiceProtocol {
             channel.addToMessages(dbMessage)
         }
     }
-    
+
     private func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
         guard let content = dbMessage.content, let created = dbMessage.created,
               let senderId = dbMessage.senderId, let senderName = dbMessage.senderName else {

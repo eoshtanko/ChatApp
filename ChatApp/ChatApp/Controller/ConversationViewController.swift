@@ -13,7 +13,12 @@ class ConversationViewController: UITableViewController {
     let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
     // let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
     
-    private var chatMessages: [Message] = []
+    private var chatMessages: [Message] = [] {
+        didSet {
+            self.tableView.reloadData()
+            self.scrollToBottom(animated: false)
+        }
+    }
     
     //    private let networkManager = NetworkManager()
     private let channel: Channel!
@@ -44,18 +49,10 @@ class ConversationViewController: UITableViewController {
         fetchMessagesFromCash()
         configureNavigationBar()
         configureTableView()
-        configureSnapshotListener()
         configureAppearances()
         registerKeyboardNotifications()
         configureTapGestureRecognizer()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if shouldScrollToBottom {
-            shouldScrollToBottom = false
-            scrollToBottom(animated: false)
-        }
+        configureSnapshotListener()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,8 +63,6 @@ class ConversationViewController: UITableViewController {
     private func fetchMessagesFromCash() {
         DispatchQueue.main.async {
             self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
-            self.tableView.reloadData()
-            self.scrollToBottom(animated: true)
         }
     }
     
@@ -107,12 +102,26 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            coreDataStack.saveMessage(message: message, channel: channel) { [weak self] in
-                self?.fetchMessagesFromCash()
-            }
+            addMessageToTable(message)
+            coreDataStack.saveMessage(message: message, channel: channel)
         case .removed, .modified:
             CoreDataLogger.log("Не обрабатываю, так как в ДЗ не требовалось.", .success)
         }
+    }
+    
+    private func addMessageToTable(_ message: Message) {
+        if chatMessages.contains(message) {
+            return
+        }
+        
+        chatMessages.append(message)
+        chatMessages.sort()
+        
+        guard let index = chatMessages.firstIndex(of: message) else {
+            return
+        }
+        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        scrollToBottom(animated: false)
     }
     
     private func configureTapGestureRecognizer() {
@@ -143,7 +152,7 @@ class ConversationViewController: UITableViewController {
         let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
         
         if isScrollingNecessary() {
-            tableView.setContentOffset(bottomOffset, animated: false)
+            tableView.setContentOffset(bottomOffset, animated: animated)
         }
     }
     

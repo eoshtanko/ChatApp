@@ -66,8 +66,8 @@ final class NewCoreDataService: CoreDataServiceProtocol {
             if context.hasChanges {
                 do {
                     try self.performSaveContext(in: context)
-                    CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
                     completion?()
+                    CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
                 } catch {
                     print(error)
                     CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
