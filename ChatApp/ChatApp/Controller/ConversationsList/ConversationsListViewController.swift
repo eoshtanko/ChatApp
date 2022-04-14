@@ -92,7 +92,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     func removeChannelFromFirebase(withID id: String) {
-        reference.document(id).delete() { [weak self] err in
+        reference.document(id).delete { [weak self] err in
             if err != nil {
                 self?.showFailToDeleteChannelAlert(id: id)
             }
