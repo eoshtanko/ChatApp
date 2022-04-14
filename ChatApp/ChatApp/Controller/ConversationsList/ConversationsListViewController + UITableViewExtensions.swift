@@ -13,10 +13,13 @@ extension ConversationsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dbChannel = fetchedResultsController.object(at: indexPath)
         do {
-            let conversation = try ConversationsListViewController.coreDataStack.parseDBChannelToChannel(dbChannel)
+            let conversation = try coreDataStack.parseDBChannelToChannel(dbChannel)
             
             self.navigationItem.title = ""
-            let conversationViewController = ConversationViewController(theme: currentTheme, channel: conversation, dbChannelRef: reference)
+            let conversationViewController = ConversationViewController(coreDataStack: coreDataStack,
+                                                                        theme: currentTheme,
+                                                                        channel: conversation,
+                                                                        dbChannelRef: reference)
             if let conversationViewController = conversationViewController {
                 navigationController?.pushViewController(conversationViewController, animated: true)
             }
@@ -53,7 +56,7 @@ extension ConversationsListViewController: UITableViewDataSource {
             return cell
         }
         let dbChannel = fetchedResultsController.object(at: indexPath)
-        let conversation = try? ConversationsListViewController.coreDataStack.parseDBChannelToChannel(dbChannel)
+        let conversation = try? coreDataStack.parseDBChannelToChannel(dbChannel)
         if let conversation = conversation {
             conversationCell.configureCell(conversation)
         }

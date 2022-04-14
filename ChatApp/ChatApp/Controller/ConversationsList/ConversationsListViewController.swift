@@ -11,9 +11,9 @@ import CoreData
 
 class ConversationsListViewController: UIViewController {
     
-    static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
     lazy var fetchedResultsController: NSFetchedResultsController<DBChannel> = {
-        let controller = ConversationsListViewController.coreDataStack.getNSFetchedResultsControllerForChannels()
+        let controller = coreDataStack.getNSFetchedResultsControllerForChannels()
         controller.delegate = self
         do {
             try controller.performFetch()
@@ -85,9 +85,9 @@ class ConversationsListViewController: UIViewController {
         
         switch change.type {
         case .added, .modified:
-            ConversationsListViewController.coreDataStack.saveChannel(channel: channel)
+            coreDataStack.saveChannel(channel: channel)
         case .removed:
-            ConversationsListViewController.coreDataStack.deleteChannel(channel: channel)
+            coreDataStack.deleteChannel(channel: channel)
         }
     }
     

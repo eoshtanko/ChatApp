@@ -11,8 +11,9 @@ import CoreData
 
 class ConversationViewController: UITableViewController {
     
+    let coreDataStack: CoreDataServiceProtocol!
     lazy var fetchedResultsController: NSFetchedResultsController<DBMessage> = {
-        let controller = ConversationsListViewController.coreDataStack.getNSFetchedResultsControllerForMessages(channelId: channel.identifier)
+        let controller = coreDataStack.getNSFetchedResultsControllerForMessages(channelId: channel.identifier)
         controller.delegate = self
         do {
             try controller.performFetch()
@@ -39,7 +40,8 @@ class ConversationViewController: UITableViewController {
     private let nightNavBarAppearance = UINavigationBarAppearance()
     private let dayNavBarAppearance = UINavigationBarAppearance()
     
-    init?(theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
+    init?(coreDataStack: CoreDataServiceProtocol, theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
+        self.coreDataStack = coreDataStack
         currentTheme = theme
         self.channel = channel
         self.dbChannelReference = dbChannelRef
@@ -94,7 +96,7 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            ConversationsListViewController.coreDataStack.saveMessage(message: message, channel: channel, id: change.document.documentID)
+            coreDataStack.saveMessage(message: message, channel: channel, id: change.document.documentID)
         case .removed, .modified:
             // Будем считать, что удалять/редактировать сообщения НИЗЯ
             return
@@ -122,17 +124,6 @@ class ConversationViewController: UITableViewController {
         tableView.backgroundColor = .white
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = Const.estimatedRowHeight
-    }
-    
-    func scrollToBottomAfterFetch(animated: Bool) {
-        // Безобразие? Несомненно. Дело в том, что сообщения имеют разную длину и
-        // swift сложно рассчитать расстояние верно, поэтому приходится проматывать несколько раз.
-        // Решение этой проблемы может быть в установлении ограничений на количество
-        // сообщений при первичной подгрузке (подгружать только 30 сообщений, например)
-        // Но пока так :(
-        for _ in 0...20 {
-            self.scrollToBottom(animated: false)
-        }
     }
     
     func scrollToBottom(animated: Bool) {
