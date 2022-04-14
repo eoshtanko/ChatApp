@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 
 struct Channel {
-
+    
     let identifier: String
     let name: String
     let lastMessage: String?
@@ -54,11 +54,17 @@ extension Channel {
 
 extension Channel: Comparable {
     
-  static func == (lhs: Channel, rhs: Channel) -> Bool {
-    return lhs.identifier == rhs.identifier
-  }
+    static func == (lhs: Channel, rhs: Channel) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+    
+    static func < (lhs: Channel, rhs: Channel) -> Bool {
+        return lhs.lastActivity ?? Date() > rhs.lastActivity ?? Date()
+    }
+}
 
-  static func < (lhs: Channel, rhs: Channel) -> Bool {
-      return lhs.lastActivity ?? Date() > rhs.lastActivity ?? Date()
-  }
+extension Channel: StringConvertableProtocol {
+    func toString() -> String {
+        return "Channel(name: \(name), id: \(identifier))."
+    }
 }

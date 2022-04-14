@@ -7,12 +7,16 @@
 
 import UIKit
 import Firebase
+import CoreData
 
 class ConversationsListViewController: UIViewController {
     
-    //    private let networkManager = NetworkManager()
+    // private let networkManager = NetworkManager()
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
+    
+    static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    // static let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
     
     var channels: [Channel] = []
     var filteredChannels: [Channel]!
@@ -34,15 +38,16 @@ class ConversationsListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchChannelsFromCash()
         loadCurrentUser()
         configureAppearances()
-        filteredChannels = channels
-        configureTableView()
         configureSnapshotListener()
         configureNavigationBar()
         configureSearchBar()
         instatiateProfileViewController()
         setInitialThemeToApp()
+        filteredChannels = channels
+        configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,11 +55,14 @@ class ConversationsListViewController: UIViewController {
         configureNavigationTitle()
     }
     
+    private func fetchChannelsFromCash() {
+        DispatchQueue.main.async {
+            self.channels = ConversationsListViewController.coreDataStack.readChannelsFromDB()
+            self.tableView.reloadData()
+        }
+    }
+    
     private func configureSnapshotListener() {
-//        guard networkManager.isInternetConnected else {
-//            self.showFailToLoadChannelsAlert()
-//            return
-//        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -82,52 +90,14 @@ class ConversationsListViewController: UIViewController {
         }
         
         switch change.type {
-        case .added:
-            addChannelToTable(channel)
-        case .modified:
-            updateChannelInTable(channel)
-        case .removed:
-            removeChannelFromTable(channel)
-        }
-    }
-    
-    private func addChannelToTable(_ channel: Channel) {
-        if channels.contains(channel) {
-            return
-        }
-        
-        channels.append(channel)
-        channels.sort()
-        
-        if !isSearching {
-            guard let index = channels.firstIndex(of: channel) else {
-                return
+        case .added, .modified:
+            ConversationsListViewController.coreDataStack.saveChannel(channel: channel) { [weak self] in
+                self?.fetchChannelsFromCash()
             }
-            tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        }
-    }
-    
-    private func updateChannelInTable(_ channel: Channel) {
-        guard let index = channels.firstIndex(of: channel) else {
-            return
-        }
-        
-        channels[index] = channel
-        channels.sort()
-        
-        if !isSearching {
-            tableView.reloadData()
-        }
-    }
-    
-    private func removeChannelFromTable(_ channel: Channel) {
-        guard let index = channels.firstIndex(of: channel) else {
-            return
-        }
-        
-        channels.remove(at: index)
-        if !isSearching {
-            tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        case .removed:
+            ConversationsListViewController.coreDataStack.deleteChannel(channel: channel) { [weak self] in
+                self?.fetchChannelsFromCash()
+            }
         }
     }
     
@@ -258,10 +228,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func createNewChannel(name: String) {
-//        guard networkManager.isInternetConnected else {
-//            self.showFailToCreateChannelAlert()
-//            return
-//        }
+        //        guard networkManager.isInternetConnected else {
+        //            self.showFailToCreateChannelAlert()
+        //            return
+        //        }
         let channel = Channel(name: name)
         reference.addDocument(data: channel.toDict) { [weak self] error in
             guard let self = self else { return }
@@ -450,6 +420,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     enum Const {
+        static let dataModelName = "Chat"
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
         static let sizeOfProfileNavigationButton: CGFloat = 40

@@ -51,7 +51,17 @@ extension Message {
 
 extension Message: Comparable {
     
-  static func < (lhs: Message, rhs: Message) -> Bool {
-      return lhs.created < rhs.created
-  }
+    static func == (lhs: Message, rhs: Message) -> Bool {
+        return "\(lhs.created)" == "\(rhs.created)" && lhs.senderId == rhs.senderId
+    }
+    
+    static func < (lhs: Message, rhs: Message) -> Bool {
+        return lhs.created < rhs.created
+    }
+}
+
+extension Message: StringConvertableProtocol {
+    func toString() -> String {
+        return "Message(content: \(content), senderId: \(senderId))."
+    }
 }

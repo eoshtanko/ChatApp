@@ -10,7 +10,6 @@ import UIKit
 class ConversationTableViewCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
-    private static let formatter = DateFormatter()
     
     private static var currentTheme: Theme = .classic
     
@@ -55,7 +54,7 @@ class ConversationTableViewCell: UITableViewCell {
             return
         }
         lastMessageDateLabel.font = .systemFont(ofSize: Const.textSize)
-        lastMessageDateLabel.text = fromDateToString(from: date)
+        lastMessageDateLabel.text = Date.fromDateToString(from: date)
     }
     
     private func configureLastMessageLabel(_ message: String?) {
@@ -78,18 +77,6 @@ class ConversationTableViewCell: UITableViewCell {
         imageView.backgroundColor = UIColor(named: "BackgroundImageColor")
         imageView.tintColor = UIColor(named: "DefaultImageColor")
         imageView.image = UIImage(systemName: "person.fill")
-    }
-
-    private func fromDateToString(from date: Date) -> String {
-        if Calendar.current.isDateInToday(date) {
-            ConversationTableViewCell.formatter.dateFormat = "HH:mm a"
-            return ConversationTableViewCell.formatter.string(from: date)
-        }
-        ConversationTableViewCell.formatter.timeStyle = .none
-        ConversationTableViewCell.formatter.dateStyle = .medium
-        ConversationTableViewCell.formatter.locale = Locale(identifier: "en_GB")
-        ConversationTableViewCell.formatter.doesRelativeDateFormatting = true
-        return ConversationTableViewCell.formatter.string(from: date)
     }
     
     private func setCurrentTheme() {

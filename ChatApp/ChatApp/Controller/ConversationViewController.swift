@@ -10,10 +10,12 @@ import Firebase
 
 class ConversationViewController: UITableViewController {
     
+    let coreDataStack = ConversationsListViewController.coreDataStack
+    
     private var chatMessages: [Message] = []
     
     //    private let networkManager = NetworkManager()
-    private let channel: Channel?
+    private let channel: Channel!
     private let dbChannelReference: CollectionReference
     private lazy var reference: CollectionReference = {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
@@ -38,20 +40,13 @@ class ConversationViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationBar()
+        fetchMessagesFromCash()
         configureTableView()
-        configureSnapshotListener()
+        configureNavigationBar()
         configureAppearances()
         registerKeyboardNotifications()
         configureTapGestureRecognizer()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if shouldScrollToBottom {
-            shouldScrollToBottom = false
-            scrollToBottom(animated: false)
-        }
+        configureSnapshotListener()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,11 +54,19 @@ class ConversationViewController: UITableViewController {
         setCurrentTheme()
     }
     
+    private func fetchMessagesFromCash() {
+        DispatchQueue.main.async {
+            self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
+            self.tableView.reloadData()
+            self.scrollToBottomAfterFetch(animated: false)
+        }
+    }
+    
     private func configureSnapshotListener() {
-//        guard networkManager.isInternetConnected else {
-//            self.showFailToLoadMessagesAlert()
-//            return
-//        }
+        //        guard networkManager.isInternetConnected else {
+        //            self.showFailToLoadMessagesAlert()
+        //            return
+        //        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -95,15 +98,14 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            addMessageToTable(message)
-        case .modified:
-            updateMessageInTable(message)
-        case .removed:
-            removeMessageFromTable(message)
+            addMessage(message)
+        case .removed, .modified:
+            // Будем считать, что удалять/редактировать сообщения НИЗЯ
+            return
         }
     }
     
-    private func addMessageToTable(_ message: Message) {
+    private func addMessage(_ message: Message) {
         if chatMessages.contains(message) {
             return
         }
@@ -116,24 +118,8 @@ class ConversationViewController: UITableViewController {
         }
         tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         scrollToBottom(animated: false)
-    }
-    
-    private func updateMessageInTable(_ message: Message) {
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
         
-        chatMessages[index] = message
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-    }
-    
-    private func removeMessageFromTable(_ message: Message) {
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        
-        chatMessages.remove(at: index)
-        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        coreDataStack.saveMessage(message: message, channel: channel)
     }
     
     private func configureTapGestureRecognizer() {
@@ -159,12 +145,23 @@ class ConversationViewController: UITableViewController {
         tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
+    private func scrollToBottomAfterFetch(animated: Bool) {
+        // Безобразие? Несомненно. Дело в том, что сообщения имеют разную длину и
+        // swift сложно рассчитать расстояние верно, поэтому приходится проматывать несколько раз.
+        // Решение этой проблемы может быть в установлении ограничений на количество
+        // сообщений при первичной подгрузке (подгружать только 30 сообщений, например)
+        // Но пока так :(
+        for _ in 0...20 {
+            self.scrollToBottom(animated: false)
+        }
+    }
+    
     private func scrollToBottom(animated: Bool) {
         view.layoutIfNeeded()
-        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
-        
         if isScrollingNecessary() {
-            tableView.setContentOffset(bottomOffset, animated: false)
+            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
+            
+            tableView.setContentOffset(bottomOffset, animated: animated)
         }
     }
     
@@ -228,6 +225,7 @@ class ConversationViewController: UITableViewController {
     }
     
     private enum Const {
+        static let dataModelName = "Chat"
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
         static let empiricalValue: CGFloat = 70
@@ -278,10 +276,10 @@ extension ConversationViewController {
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 guard let self = self else { return }
                 
-//                guard networkManager.isInternetConnected else {
-//                    self.showFailToSendMessageAlert()
-//                    return
-//                }
+                //                guard networkManager.isInternetConnected else {
+                //                    self.showFailToSendMessageAlert()
+                //                    return
+                //                }
                 
                 self.sendMessage(message: message)
             }
@@ -300,15 +298,13 @@ extension ConversationViewController {
     
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-
         reference.addDocument(data: newMessage.toDict) { [weak self] error in
-            guard let self = self else { return }
             if error != nil {
-                self.showFailToSendMessageAlert()
+                self?.showFailToSendMessageAlert()
                 return
             }
-            self.entreMessageBar?.sendMessageButton.isEnabled = false
-            self.entreMessageBar?.textView.text = ""
+            self?.entreMessageBar?.sendMessageButton.isEnabled = false
+            self?.entreMessageBar?.textView.text = ""
         }
     }
     
