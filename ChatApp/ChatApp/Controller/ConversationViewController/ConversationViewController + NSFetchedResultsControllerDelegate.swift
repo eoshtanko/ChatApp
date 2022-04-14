@@ -11,12 +11,12 @@ import CoreData
 extension ConversationViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("\(#function) в переписке")
+        CoreDataLogger.logPresenceInMethod(methodName: #function, " в переписке")
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("\(#function) в переписке")
+        CoreDataLogger.logPresenceInMethod(methodName: #function, " в переписке")
         tableView.endUpdates()
         scrollToBottom(animated: false)
     }

@@ -93,12 +93,12 @@ extension CoreDataServiceProtocol {
         return fetchRequest
     }
     
-    func saveMessage(message: Message, channel: Channel) {
+    func saveMessage(message: Message, channel: Channel, id: String) {
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
             let objectID = dbChannelArr[0].objectID
             performTaskOnMainQueueContextAndSave { context in
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
-                    saveMessageToDB(message: message, channel: dbChannel, context: context)
+                    saveMessageToDB(message: message, id: id, channel: dbChannel, context: context)
                 } else {
                     CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
                 }
@@ -106,8 +106,8 @@ extension CoreDataServiceProtocol {
         }
     }
     
-    private func saveMessageToDB(message: Message, channel: DBChannel, context: NSManagedObjectContext) {
-        if let dbMessage = configureDBMessage(message: message, context: context) {
+    private func saveMessageToDB(message: Message, id: String, channel: DBChannel, context: NSManagedObjectContext) {
+        if let dbMessage = configureDBMessage(message: message, id: id, context: context) {
             channel.addToMessages(dbMessage)
         }
     }
@@ -123,7 +123,7 @@ extension CoreDataServiceProtocol {
                        created: created)
     }
     
-    private func configureDBMessage(message: Message, context: NSManagedObjectContext) -> DBMessage? {
+    private func configureDBMessage(message: Message, id: String, context: NSManagedObjectContext) -> DBMessage? {
         guard let dbMessage = DBMessage(usedContext: context) else {
             CoreDataLogger.log("Не удалось создать объект DBMessage.", .failure)
             return nil
@@ -132,6 +132,7 @@ extension CoreDataServiceProtocol {
         dbMessage.created = message.created
         dbMessage.senderId = message.senderId
         dbMessage.senderName = message.senderName
+        dbMessage.identifier = id
         return dbMessage
     }
 }

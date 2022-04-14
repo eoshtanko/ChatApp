@@ -91,6 +91,23 @@ class ConversationsListViewController: UIViewController {
         }
     }
     
+    func removeChannelFromFirebase(withID id: String) {
+        reference.document(id).delete() { [weak self] err in
+            if err != nil {
+                self?.showFailToDeleteChannelAlert(id: id)
+            }
+        }
+    }
+    
+    private func showFailToDeleteChannelAlert(id: String) {
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось загрузить каналы.", preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+            self.removeChannelFromFirebase(withID: id)
+        })
+        present(failureAlert, animated: true, completion: nil)
+    }
+    
     private func configureTableView() {
         tableView.register(
             UINib(nibName: String(describing: ConversationTableViewCell.self), bundle: nil),

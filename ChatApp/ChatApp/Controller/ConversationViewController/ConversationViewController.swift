@@ -94,7 +94,7 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            ConversationsListViewController.coreDataStack.saveMessage(message: message, channel: channel)
+            ConversationsListViewController.coreDataStack.saveMessage(message: message, channel: channel, id: change.document.documentID)
         case .removed, .modified:
             // Будем считать, что удалять/редактировать сообщения НИЗЯ
             return

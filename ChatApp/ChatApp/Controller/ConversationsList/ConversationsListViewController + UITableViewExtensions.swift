@@ -66,7 +66,14 @@ extension ConversationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
-        return UISwipeActionsConfiguration()
+        let dbChannel = fetchedResultsController.object(at: indexPath)
+        let action = UIContextualAction(style: .destructive,
+                                        title: "Delete") { [weak self] (action, view, completionHandler) in
+            self?.removeChannelFromFirebase(withID: dbChannel.identifier)
+            completionHandler(true)
+        }
+        action.backgroundColor = .systemRed
+        action.image = UIImage(named: "trash")
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }

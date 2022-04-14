@@ -18,6 +18,13 @@ class CoreDataLogger {
         case failure
     }
     
+    public static func logPresenceInMethod(methodName: String, _ msg: String) {
+        guard isLoggingEnable ?? false else {
+            return
+        }
+        print("\(methodName) \(msg)")
+    }
+    
     public static func log(_ msg: String, _ status: SuccessStatus) {
         guard isLoggingEnable ?? false else {
             return
