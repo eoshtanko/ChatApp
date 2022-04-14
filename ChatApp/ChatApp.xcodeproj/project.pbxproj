@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		340E968C2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E968B2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift */; };
+		340E968E28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E968D28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift */; };
+		340E969028086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E968F28086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift */; };
+		340E96932808685E008A1F9B /* KeyboardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E96922808685E008A1F9B /* KeyboardInfo.swift */; };
+		340E9695280868AD008A1F9B /* ConversationViewController + UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E9694280868AD008A1F9B /* ConversationViewController + UITableViewExtensions.swift */; };
+		340E9697280868DC008A1F9B /* ConversationViewController + SendMessageMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340E9696280868DC008A1F9B /* ConversationViewController + SendMessageMethods.swift */; };
 		3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */; };
 		3427ACD927D47ED40062F749 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACD827D47ED40062F749 /* Channel.swift */; };
 		3427ACDD27D48A980062F749 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */; };
@@ -36,7 +42,6 @@
 		34ACCFF227C4AAEC00535096 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFF027C4AAEC00535096 /* LaunchScreen.storyboard */; };
 		34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */; };
 		34E8779F27FC3B720018CCC7 /* Chat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 34E8779D27FC3B720018CCC7 /* Chat.xcdatamodeld */; };
-		34E877A327FC46220018CCC7 /* OldCoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E877A227FC46220018CCC7 /* OldCoreDataService.swift */; };
 		34E877A527FC7EB40018CCC7 /* NewCoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */; };
 		34E877A727FCB17C0018CCC7 /* CoreDataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */; };
 		34F449B327F4388200CC4922 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34F449B227F4388200CC4922 /* GoogleService-Info.plist */; };
@@ -44,7 +49,6 @@
 		34F449B827F5F5A300CC4922 /* ProfileViewController + UITextExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449B727F5F5A300CC4922 /* ProfileViewController + UITextExtensions.swift */; };
 		34F449BB27F5F70900CC4922 /* ConversationsListViewController + ThemeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449BA27F5F70900CC4922 /* ConversationsListViewController + ThemeExtension.swift */; };
 		34F449BD27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */; };
-		34F449BF27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449BE27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift */; };
 		34F449C127F5F80100CC4922 /* UIImage + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449C027F5F80100CC4922 /* UIImage + Extensions.swift */; };
 		34F449C627F717E900CC4922 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34F449C527F717E800CC4922 /* NetworkManager.swift */; };
 		34FC31F827EE2C3400A1D137 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FC31F727EE2C3400A1D137 /* URL+Extensions.swift */; };
@@ -54,6 +58,12 @@
 
 /* Begin PBXFileReference section */
 		2652A65FEBBB38E600F11A91 /* Pods-ChatApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatApp.debug.xcconfig"; path = "Target Support Files/Pods-ChatApp/Pods-ChatApp.debug.xcconfig"; sourceTree = "<group>"; };
+		340E968B2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UITextFieldDelegate.swift"; sourceTree = "<group>"; };
+		340E968D28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + NSFetchedResultsControllerDelegate.swift"; sourceTree = "<group>"; };
+		340E968F28086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController + NSFetchedResultsControllerDelegate.swift"; sourceTree = "<group>"; };
+		340E96922808685E008A1F9B /* KeyboardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardInfo.swift; sourceTree = "<group>"; };
+		340E9694280868AD008A1F9B /* ConversationViewController + UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController + UITableViewExtensions.swift"; sourceTree = "<group>"; };
+		340E9696280868DC008A1F9B /* ConversationViewController + SendMessageMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController + SendMessageMethods.swift"; sourceTree = "<group>"; };
 		3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		3427ACD827D47ED40062F749 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
@@ -85,7 +95,6 @@
 		34ACCFF327C4AAEC00535096 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		34E8779E27FC3B720018CCC7 /* Chat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Chat.xcdatamodel; sourceTree = "<group>"; };
-		34E877A227FC46220018CCC7 /* OldCoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCoreDataService.swift; sourceTree = "<group>"; };
 		34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCoreDataService.swift; sourceTree = "<group>"; };
 		34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceProtocol.swift; sourceTree = "<group>"; };
 		34F449B227F4388200CC4922 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -93,7 +102,6 @@
 		34F449B727F5F5A300CC4922 /* ProfileViewController + UITextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileViewController + UITextExtensions.swift"; sourceTree = "<group>"; };
 		34F449BA27F5F70900CC4922 /* ConversationsListViewController + ThemeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + ThemeExtension.swift"; sourceTree = "<group>"; };
 		34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UITableViewExtensions.swift"; sourceTree = "<group>"; };
-		34F449BE27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UISearchBarExtension.swift"; sourceTree = "<group>"; };
 		34F449C027F5F80100CC4922 /* UIImage + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Extensions.swift"; sourceTree = "<group>"; };
 		34F449C527F717E800CC4922 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		34FC31F727EE2C3400A1D137 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -131,6 +139,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		340E969128086759008A1F9B /* ConversationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3427ACE727D61EBA0062F749 /* ConversationViewController.swift */,
+				340E9694280868AD008A1F9B /* ConversationViewController + UITableViewExtensions.swift */,
+				340E968F28086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift */,
+				340E9696280868DC008A1F9B /* ConversationViewController + SendMessageMethods.swift */,
+				340E96922808685E008A1F9B /* KeyboardInfo.swift */,
+			);
+			path = ConversationViewController;
+			sourceTree = "<group>";
+		};
 		3427ACD327D47DC20062F749 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,7 +182,7 @@
 			children = (
 				34F449B927F5F68800CC4922 /* Profile */,
 				34F449C227F5F82700CC4922 /* ConversationsList */,
-				3427ACE727D61EBA0062F749 /* ConversationViewController.swift */,
+				340E969128086759008A1F9B /* ConversationViewController */,
 				342D525027E3B21C0075C42B /* ThemesViewController.swift */,
 			);
 			path = Controller;
@@ -267,7 +287,6 @@
 				34E8779D27FC3B720018CCC7 /* Chat.xcdatamodeld */,
 				34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */,
 				34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */,
-				34E877A227FC46220018CCC7 /* OldCoreDataService.swift */,
 				34449AEA28000C9D002763CD /* NSManagedObject + Extension.swift */,
 			);
 			path = CoreData;
@@ -288,7 +307,8 @@
 			children = (
 				3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */,
 				34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */,
-				34F449BE27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift */,
+				340E968D28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift */,
+				340E968B2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift */,
 				34F449BA27F5F70900CC4922 /* ConversationsListViewController + ThemeExtension.swift */,
 				34F449C027F5F80100CC4922 /* UIImage + Extensions.swift */,
 			);
@@ -443,9 +463,12 @@
 				342D525127E3B21C0075C42B /* ThemesViewController.swift in Sources */,
 				3427ACD927D47ED40062F749 /* Channel.swift in Sources */,
 				34F449B627F5F45600CC4922 /* ProfileViewController + ImageExtensions.swift in Sources */,
+				340E9697280868DC008A1F9B /* ConversationViewController + SendMessageMethods.swift in Sources */,
+				340E9695280868AD008A1F9B /* ConversationViewController + UITableViewExtensions.swift in Sources */,
 				3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */,
 				34E877A727FCB17C0018CCC7 /* CoreDataServiceProtocol.swift in Sources */,
 				34E877A527FC7EB40018CCC7 /* NewCoreDataService.swift in Sources */,
+				340E969028086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift in Sources */,
 				34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */,
 				3427ACE627D610970062F749 /* User.swift in Sources */,
 				34E8779F27FC3B720018CCC7 /* Chat.xcdatamodeld in Sources */,
@@ -453,20 +476,21 @@
 				345624F227C4C6950044C73A /* LifecycleLogger.swift in Sources */,
 				34449AE527FEA41F002763CD /* CoreDataLogger.swift in Sources */,
 				3460337B27EC14BF00962579 /* ApplicationPreferences.swift in Sources */,
-				34F449BF27F5F7BA00CC4922 /* ConversationsListViewController + UISearchBarExtension.swift in Sources */,
 				34449AE727FEFBDC002763CD /* StringConvertableProtocol.swift in Sources */,
 				34FC31FA27EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift in Sources */,
 				34FC31F827EE2C3400A1D137 /* URL+Extensions.swift in Sources */,
 				3427ACFC27D9C2B10062F749 /* EntryMessageView.swift in Sources */,
+				340E968E28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift in Sources */,
 				34F449C127F5F80100CC4922 /* UIImage + Extensions.swift in Sources */,
-				34E877A327FC46220018CCC7 /* OldCoreDataService.swift in Sources */,
 				3460337E27EC225A00962579 /* WorkingWithMemoryError.swift in Sources */,
 				3427ACF027D88FDE0062F749 /* Message.swift in Sources */,
+				340E96932808685E008A1F9B /* KeyboardInfo.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
 				34F449BD27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift in Sources */,
 				34449AEB28000C9D002763CD /* NSManagedObject + Extension.swift in Sources */,
 				3460338227EC231100962579 /* Reader.swift in Sources */,
 				34F449B827F5F5A300CC4922 /* ProfileViewController + UITextExtensions.swift in Sources */,
+				340E968C2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

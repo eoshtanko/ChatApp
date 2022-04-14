@@ -7,26 +7,34 @@
 
 import UIKit
 import Firebase
+import CoreData
 
 class ConversationViewController: UITableViewController {
     
-    let coreDataStack = ConversationsListViewController.coreDataStack
-    
-    private var chatMessages: [Message] = []
+    lazy var fetchedResultsController: NSFetchedResultsController<DBMessage> = {
+        let controller = ConversationsListViewController.coreDataStack.getNSFetchedResultsControllerForMessages(channelId: channel.identifier)
+        controller.delegate = self
+        do {
+            try controller.performFetch()
+        } catch {
+            CoreDataLogger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
+        }
+        return controller
+    }()
     
     //    private let networkManager = NetworkManager()
     private let channel: Channel!
     private let dbChannelReference: CollectionReference
-    private lazy var reference: CollectionReference = {
+    lazy var reference: CollectionReference = {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
     
-    private var entreMessageBar: EntryMessageView?
-    private var shouldScrollToBottom: Bool = true
-    private var hightOfKeyboard: CGFloat?
+    var entreMessageBar: EntryMessageView?
+    var shouldScrollToBottom: Bool = true
+    var hightOfKeyboard: CGFloat?
     
-    private var currentTheme: Theme = .classic
+    var currentTheme: Theme = .classic
     
     private let nightNavBarAppearance = UINavigationBarAppearance()
     private let dayNavBarAppearance = UINavigationBarAppearance()
@@ -40,13 +48,13 @@ class ConversationViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMessagesFromCash()
         configureTableView()
         configureNavigationBar()
         configureAppearances()
         registerKeyboardNotifications()
         configureTapGestureRecognizer()
         configureSnapshotListener()
+        scrollToBottom(animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,19 +62,7 @@ class ConversationViewController: UITableViewController {
         setCurrentTheme()
     }
     
-    private func fetchMessagesFromCash() {
-        DispatchQueue.main.async {
-            self.chatMessages = self.coreDataStack.readMessagesFromDB(channel: self.channel)
-            self.tableView.reloadData()
-            self.scrollToBottomAfterFetch(animated: false)
-        }
-    }
-    
     private func configureSnapshotListener() {
-        //        guard networkManager.isInternetConnected else {
-        //            self.showFailToLoadMessagesAlert()
-        //            return
-        //        }
         reference.addSnapshotListener { [weak self] snapshot, error in
             guard let self = self else { return }
             guard error == nil, let snapshot = snapshot else {
@@ -98,28 +94,11 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            addMessage(message)
+            ConversationsListViewController.coreDataStack.saveMessage(message: message, channel: channel)
         case .removed, .modified:
             // Будем считать, что удалять/редактировать сообщения НИЗЯ
             return
         }
-    }
-    
-    private func addMessage(_ message: Message) {
-        if chatMessages.contains(message) {
-            return
-        }
-        
-        chatMessages.append(message)
-        chatMessages.sort()
-        
-        guard let index = chatMessages.firstIndex(of: message) else {
-            return
-        }
-        tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        scrollToBottom(animated: false)
-        
-        coreDataStack.saveMessage(message: message, channel: channel)
     }
     
     private func configureTapGestureRecognizer() {
@@ -145,7 +124,7 @@ class ConversationViewController: UITableViewController {
         tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
-    private func scrollToBottomAfterFetch(animated: Bool) {
+    func scrollToBottomAfterFetch(animated: Bool) {
         // Безобразие? Несомненно. Дело в том, что сообщения имеют разную длину и
         // swift сложно рассчитать расстояние верно, поэтому приходится проматывать несколько раз.
         // Решение этой проблемы может быть в установлении ограничений на количество
@@ -156,7 +135,7 @@ class ConversationViewController: UITableViewController {
         }
     }
     
-    private func scrollToBottom(animated: Bool) {
+    func scrollToBottom(animated: Bool) {
         view.layoutIfNeeded()
         if isScrollingNecessary() {
             let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
@@ -224,139 +203,10 @@ class ConversationViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private enum Const {
+    enum Const {
         static let dataModelName = "Chat"
         static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
         static let empiricalValue: CGFloat = 70
-    }
-}
-
-// Все, что касается UITableView Delegate
-extension ConversationViewController {
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return Const.heightOfHeader
-    }
-}
-
-// Все, что касается UITableView DataSource
-extension ConversationViewController {
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatMessages.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ChatMessageCell.identifier,
-            for: indexPath)
-        guard let messageCell = cell as? ChatMessageCell else {
-            return cell
-        }
-        let message = chatMessages[indexPath.row]
-        messageCell.configureCell(message)
-        return messageCell
-    }
-}
-
-// Настройка view для ввода сообщения.
-extension ConversationViewController {
-    
-    override var inputAccessoryView: UIView? {
-        if entreMessageBar == nil {
-            
-            entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
-            
-            entreMessageBar?.setCurrentTheme(currentTheme)
-            entreMessageBar?.setSendMessageAction { [weak self] message in
-                guard let self = self else { return }
-                
-                //                guard networkManager.isInternetConnected else {
-                //                    self.showFailToSendMessageAlert()
-                //                    return
-                //                }
-                
-                self.sendMessage(message: message)
-            }
-        }
-        
-        return entreMessageBar
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-    
-    override var canResignFirstResponder: Bool {
-        return true
-    }
-    
-    private func sendMessage(message: String) {
-        let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-        reference.addDocument(data: newMessage.toDict) { [weak self] error in
-            if error != nil {
-                self?.showFailToSendMessageAlert()
-                return
-            }
-            self?.entreMessageBar?.sendMessageButton.isEnabled = false
-            self?.entreMessageBar?.textView.text = ""
-        }
-    }
-    
-    private func registerKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardDidShow(_:)),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide(_:)),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
-    }
-    
-    @objc func keyboardDidShow(_ notification: NSNotification) {
-        if entreMessageBar?.textView.isFirstResponder ?? false {
-            guard let payload = KeyboardInfo(notification) else { return }
-            hightOfKeyboard = payload.frameEnd?.size.height
-        }
-        scrollToBottom(animated: false)
-    }
-    
-    @objc func keyboardWillHide(_ notification: NSNotification) {
-        scrollToBottom(animated: false)
-    }
-    
-    private func showFailToSendMessageAlert() {
-        let failureAlert = UIAlertController(title: "Ошибка",
-                                             message: "Не удалось отправить сообщение.",
-                                             preferredStyle: UIAlertController.Style.alert)
-        failureAlert.addAction(UIAlertAction(title: "OK",
-                                             style: UIAlertAction.Style.default))
-        failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
-            self.entreMessageBar?.sendMessage()
-        })
-        present(failureAlert, animated: true, completion: nil)
-    }
-}
-
-struct KeyboardInfo {
-    var frameBegin: CGRect?
-    var frameEnd: CGRect?
-}
-
-extension KeyboardInfo {
-    init?(_ notification: NSNotification) {
-        guard notification.name == UIResponder.keyboardWillShowNotification ||
-                notification.name == UIResponder.keyboardWillChangeFrameNotification else { return nil }
-        if let userInfo = notification.userInfo {
-            frameBegin = userInfo[UIWindow.keyboardFrameBeginUserInfoKey] as? CGRect
-            frameEnd = userInfo[UIWindow.keyboardFrameEndUserInfoKey] as? CGRect
-        }
     }
 }
