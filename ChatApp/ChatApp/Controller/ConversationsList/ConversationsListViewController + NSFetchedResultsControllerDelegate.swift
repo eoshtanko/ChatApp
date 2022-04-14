@@ -8,6 +8,16 @@
 import UIKit
 import CoreData
 
+// Понимаю ли я, что безобразие прописывать подобный почти идентичный код как в ConversationsListViewController,
+// так и в ConversationViewController ?
+// Понимаю.
+// Я попробовала сделать протокол, что-то вроде NSFetchedResultsControllerDelegateVC и
+// в extension-е реализовать дублирующиеся методы,
+// но столкнулась с проблемой: @objс методы не могут находиться в реализациях протокола, только в классах.
+// При этом, на занятии преподаватель сказал, что тому, как грамотно организовать данную архитектуру, будет посвящена
+// следующая лекции.
+// Так что я решила не думать пока об этом и оставить как есть, думая, что это будет мое следующее ДЗ :)
+
 extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
