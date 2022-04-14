@@ -123,7 +123,6 @@ class ConversationViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .white
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = Const.estimatedRowHeight
     }
     
     func scrollToBottom(animated: Bool) {

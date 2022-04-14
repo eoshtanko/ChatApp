@@ -63,10 +63,8 @@ class ConversationsListViewController: UIViewController {
                 self.showFailToLoadChannelsAlert()
                 return
             }
-            DispatchQueue.global(qos: .background).async {
-                snapshot.documentChanges.forEach { change in
-                    self.handleDocumentChange(change)
-                }
+            snapshot.documentChanges.forEach { change in
+                self.handleDocumentChange(change)
             }
         }
     }
