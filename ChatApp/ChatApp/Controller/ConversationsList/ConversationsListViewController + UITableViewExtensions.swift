@@ -11,15 +11,23 @@ import UIKit
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
-        self.navigationItem.title = ""
-        
-        let conversationViewController = ConversationViewController(theme: currentTheme, channel: conversation, dbChannelRef: reference)
-        if let conversationViewController = conversationViewController {
-            navigationController?.pushViewController(conversationViewController, animated: true)
+        let dbChannel = fetchedResultsController.object(at: indexPath)
+        do {
+            let conversation = try coreDataStack.parseDBChannelToChannel(dbChannel)
+            
+            self.navigationItem.title = ""
+            let conversationViewController = ConversationViewController(coreDataStack: coreDataStack,
+                                                                        theme: currentTheme,
+                                                                        channel: conversation,
+                                                                        dbChannelRef: reference)
+            if let conversationViewController = conversationViewController {
+                navigationController?.pushViewController(conversationViewController, animated: true)
+            }
+            tableView.deselectRow(at: indexPath, animated: true)
+        } catch {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
         }
-        tableView.reloadRows(at: [indexPath], with: .none)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -34,7 +42,10 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isSearching ? filteredChannels.count : channels.count
+        guard let sections = fetchedResultsController.sections else {
+            return 0
+        }
+        return sections[section].numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,8 +55,30 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let conversationCell = cell as? ConversationTableViewCell else {
             return cell
         }
-        let conversation = isSearching ? filteredChannels[indexPath.row] : channels[indexPath.row]
-        conversationCell.configureCell(conversation)
+        let dbChannel = fetchedResultsController.object(at: indexPath)
+        let conversation = try? coreDataStack.parseDBChannelToChannel(dbChannel)
+        if let conversation = conversation {
+            conversationCell.configureCell(conversation)
+        }
         return conversationCell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let dbChannel = fetchedResultsController.object(at: indexPath)
+        let action = UIContextualAction(style: .destructive,
+                                        title: "Delete") { [weak self] (_, _, completionHandler) in
+            if let id = dbChannel.identifier {
+                self?.removeChannelFromFirebase(withID: id)
+            }
+            completionHandler(true)
+        }
+        action.backgroundColor = .systemRed
+        action.image = UIImage(named: "trash")
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }

@@ -12,6 +12,12 @@ final class NewCoreDataService: CoreDataServiceProtocol {
     
     private let dataModelName: String
     
+    lazy var viewContext: NSManagedObjectContext = {
+        let context = container.viewContext
+        context.mergePolicy = NSOverwriteMergePolicy
+        return context
+    }()
+    
     private lazy var container: NSPersistentContainer = {
         let container = NSPersistentContainer(name: dataModelName)
         container.loadPersistentStores { _, error in
@@ -26,77 +32,31 @@ final class NewCoreDataService: CoreDataServiceProtocol {
         self.dataModelName = dataModelName
     }
     
-    //    Казалось бы, следовало сделать универсальный метод и для канала и для сообщения ...
-    //
-    //    func fetchDBChannels<T: NSManagedObject>() -> [T]? {
-    //        if let fetchRequest = T.fetchRequest() as? NSFetchRequest<T> {
-    //            return try? container.viewContext.fetch(fetchRequest)
-    //        }
-    //        return nil
-    //    }
-    //
-    //    Но почему-то это отказывается работать "executeFetchRequest:error: A fetch request must have an entity."
-    
-    func fetchDBChannels() -> [DBChannel]? {
-        let fetchRequest = DBChannel.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(DBChannel.lastActivity), ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        guard let dbChannels = try? container.viewContext.fetch(fetchRequest) else {
-            CoreDataLogger.log("Не удалось корректно выполнить Channels-fetch-запрос.", .failure)
-            return nil
-        }
-        return dbChannels
-    }
-    
     func fetchDBChannelById(id: String) -> [DBChannel]? {
         let fetchRequest = DBChannel.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", id)
-        guard let dbChannel = try? container.viewContext.fetch(fetchRequest) else {
+        guard let dbChannel = try? viewContext.fetch(fetchRequest) else {
             CoreDataLogger.log("Не удалось корректно выполнить Channel-fetch-запрос.", .failure)
             return nil
         }
         return dbChannel
     }
     
-    func performSave<T>(toSave: T, completion: (() -> Void)?, _ block: @escaping (T, NSManagedObjectContext) -> Void) {
-        let context = container.newBackgroundContext()
-        context.mergePolicy = NSOverwriteMergePolicy
-        context.perform { [weak self] in
-            block(toSave, context)
-            if context.hasChanges {
-                do {
-                    try self?.performSaveContext(in: context)
-                    completion?()
-                    CoreDataLogger.log("Объект был успешно записан в БД: ", toSave)
-                } catch {
-                    CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
-                }
-            }
+    func performTaskOnMainQueueContextAndSave(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        viewContext.performAndWait {
+            block(viewContext)
         }
+        saveViewContext()
     }
     
-    func performDelete<T>(toDelete: T, completion: (() -> Void)?, _ block: @escaping (NSManagedObjectContext) -> Void) {
-        let context = container.newBackgroundContext()
-        context.mergePolicy = NSOverwriteMergePolicy
-        context.perform {  [weak self] in
-            block(context)
-            if context.hasChanges {
-                do {
-                    try self?.performSaveContext(in: context)
-                    completion?()
-                    CoreDataLogger.log("Объект был успешно удален из БД: ", toDelete)
-                } catch {
-                    CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
-                }
+    private func saveViewContext() {
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+                CoreDataLogger.log("Изменение объекта в бд прошло успешно.", .success)
+            } catch {
+                CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
             }
-        }
-    }
-    
-    private func performSaveContext(in context: NSManagedObjectContext) throws {
-        try context.save()
-        // Не нужно, но мало ли...
-        if let parent = context.parent {
-            try performSaveContext(in: parent)
         }
     }
 }

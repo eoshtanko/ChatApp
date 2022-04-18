@@ -10,25 +10,39 @@ import CoreData
 protocol CoreDataServiceProtocol {
     
     init(dataModelName: String)
-    func fetchDBChannels() -> [DBChannel]?
+    var viewContext: NSManagedObjectContext { get }
+    func performTaskOnMainQueueContextAndSave(_ block: @escaping (NSManagedObjectContext) -> Void)
     func fetchDBChannelById(id: String) -> [DBChannel]?
-    func performSave<T>(toSave: T, completion: (() -> Void)?, _ block: @escaping (T, NSManagedObjectContext) -> Void)
-    func performDelete<T>(toDelete: T, completion: (() -> Void)?, _ block: @escaping (NSManagedObjectContext) -> Void)
 }
 
 // Работа с каналами.
 extension CoreDataServiceProtocol {
     
-    func saveChannel(channel: Channel, _ updateChannels: (() -> Void)?) {
-        performSave(toSave: channel, completion: updateChannels) { channel, context in
+    func getNSFetchedResultsControllerForChannels() -> NSFetchedResultsController<DBChannel> {
+        return NSFetchedResultsController(fetchRequest: getChannelsFetchRequest(),
+                                          managedObjectContext: viewContext,
+                                          sectionNameKeyPath: nil,
+                                          cacheName: nil)
+    }
+    
+    private func getChannelsFetchRequest() -> NSFetchRequest<DBChannel> {
+        let fetchRequest = DBChannel.fetchRequest()
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: #keyPath(DBChannel.lastActivity), ascending: false)
+        ]
+        return fetchRequest
+    }
+    
+    func saveChannel(channel: Channel) {
+        performTaskOnMainQueueContextAndSave { context in
             saveChannelToDB(channel: channel, context: context)
         }
     }
     
-    func deleteChannel(channel: Channel, _ updateChannels: (() -> Void)?) {
+    func deleteChannel(channel: Channel) {
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
-            performDelete(toDelete: channel, completion: updateChannels) { context in
-                let objectID = dbChannelArr[0].objectID
+            let objectID = dbChannelArr[0].objectID
+            performTaskOnMainQueueContextAndSave { context in
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
                     context.delete(dbChannel)
                 } else {
@@ -36,23 +50,6 @@ extension CoreDataServiceProtocol {
                 }
             }
         }
-    }
-    
-    func readChannelsFromDB() -> [Channel] {
-        var channels = [Channel]()
-        
-        if let dbChannels: [DBChannel] = fetchDBChannels() {
-            for dbChannel in dbChannels {
-                do {
-                    let channel = try parseDBChannelToChannel(dbChannel)
-                    channels.append(channel)
-                    CoreDataLogger.log("Канал был успешно прочитан из БД: ", channel)
-                } catch {
-                    CoreDataLogger.log("Не удалось распарсить прочтенный канал.", .failure)
-                }
-            }
-        }
-        return channels
     }
     
     private func saveChannelToDB(channel: Channel, context: NSManagedObjectContext) {
@@ -66,7 +63,7 @@ extension CoreDataServiceProtocol {
         dbChannel.lastActivity = channel.lastActivity
     }
     
-    private func parseDBChannelToChannel(_ dbChannel: DBChannel) throws -> Channel {
+    func parseDBChannelToChannel(_ dbChannel: DBChannel) throws -> Channel {
         guard let identifier = dbChannel.identifier, let name = dbChannel.name else {
             throw WorkingWithMemoryError.formatError
         }
@@ -80,12 +77,28 @@ extension CoreDataServiceProtocol {
 // Работа с сообщениями.
 extension CoreDataServiceProtocol {
     
-    func saveMessage(message: Message, channel: Channel) {
+    func getNSFetchedResultsControllerForMessages(channelId: String) -> NSFetchedResultsController<DBMessage> {
+        return NSFetchedResultsController(fetchRequest: getMessagesFetchRequest(channelId),
+                                          managedObjectContext: viewContext,
+                                          sectionNameKeyPath: nil,
+                                          cacheName: nil)
+    }
+    
+    private func getMessagesFetchRequest(_ channelId: String) -> NSFetchRequest<DBMessage> {
+        let fetchRequest = DBMessage.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "channel.identifier == %@", channelId)
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: #keyPath(DBMessage.created), ascending: true)
+        ]
+        return fetchRequest
+    }
+    
+    func saveMessage(message: Message, channel: Channel, id: String) {
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
-            performSave(toSave: message, completion: nil) { message, context in
-                let objectID = dbChannelArr[0].objectID
+            let objectID = dbChannelArr[0].objectID
+            performTaskOnMainQueueContextAndSave { context in
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
-                    saveMessageToDB(message: message, channel: dbChannel, context: context)
+                    saveMessageToDB(message: message, id: id, channel: dbChannel, context: context)
                 } else {
                     CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
                 }
@@ -93,40 +106,13 @@ extension CoreDataServiceProtocol {
         }
     }
     
-    func readMessagesFromDB(channel: Channel) -> [Message] {
-        guard let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty else {
-            CoreDataLogger.log("Не удалось прочитать канал, которому принадлежит сообщение.", .failure)
-            return []
-        }
-        guard let dbMessages = dbChannelArr[0].messages else {
-            CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
-            return []
-        }
-        
-        var messages = [Message]()
-        for dbMessage in dbMessages {
-            guard let dbMessage = dbMessage as? DBMessage else {
-                CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
-                return []
-            }
-            do {
-                let message = try parseDBMessageToMessage(dbMessage)
-                messages.append(message)
-                CoreDataLogger.log("Сообщение было успешно прочитано из БД: ", message)
-            } catch {
-                CoreDataLogger.log("Не удалось распарсить прочтенное сообщение.", .failure)
-            }
-        }
-        return messages.sorted()
-    }
-    
-    private func saveMessageToDB(message: Message, channel: DBChannel, context: NSManagedObjectContext) {
-        if let dbMessage = configureDBMessage(message: message, context: context) {
+    private func saveMessageToDB(message: Message, id: String, channel: DBChannel, context: NSManagedObjectContext) {
+        if let dbMessage = configureDBMessage(message: message, id: id, context: context) {
             channel.addToMessages(dbMessage)
         }
     }
     
-    private func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
+    func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
         guard let content = dbMessage.content, let created = dbMessage.created,
               let senderId = dbMessage.senderId, let senderName = dbMessage.senderName else {
                   throw WorkingWithMemoryError.formatError
@@ -137,7 +123,7 @@ extension CoreDataServiceProtocol {
                        created: created)
     }
     
-    private func configureDBMessage(message: Message, context: NSManagedObjectContext) -> DBMessage? {
+    private func configureDBMessage(message: Message, id: String, context: NSManagedObjectContext) -> DBMessage? {
         guard let dbMessage = DBMessage(usedContext: context) else {
             CoreDataLogger.log("Не удалось создать объект DBMessage.", .failure)
             return nil
@@ -146,6 +132,7 @@ extension CoreDataServiceProtocol {
         dbMessage.created = message.created
         dbMessage.senderId = message.senderId
         dbMessage.senderName = message.senderName
+        dbMessage.identifier = id
         return dbMessage
     }
 }

@@ -11,19 +11,23 @@ import CoreData
 
 class ConversationsListViewController: UIViewController {
     
+    let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    lazy var fetchedResultsController: NSFetchedResultsController<DBChannel> = {
+        let controller = coreDataStack.getNSFetchedResultsControllerForChannels()
+        controller.delegate = self
+        do {
+            try controller.performFetch()
+        } catch {
+            CoreDataLogger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
+        }
+        return controller
+    }()
+    
     // private let networkManager = NetworkManager()
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
-    static let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
-    // static let coreDataStack = OldCoreDataService(dataModelName: Const.dataModelName)
-    
-    var channels: [Channel] = []
-    var filteredChannels: [Channel]!
-    
     let tableView = UITableView(frame: .zero, style: .grouped)
-    let searchBar = UISearchBar()
-    var isSearching = false
     
     var currentTheme: Theme = .classic
     
@@ -38,28 +42,18 @@ class ConversationsListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchChannelsFromCash()
         loadCurrentUser()
         configureAppearances()
         configureSnapshotListener()
         configureNavigationBar()
-        configureSearchBar()
         instatiateProfileViewController()
         setInitialThemeToApp()
-        filteredChannels = channels
         configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationTitle()
-    }
-    
-    private func fetchChannelsFromCash() {
-        DispatchQueue.main.async {
-            self.channels = ConversationsListViewController.coreDataStack.readChannelsFromDB()
-            self.tableView.reloadData()
-        }
     }
     
     private func configureSnapshotListener() {
@@ -91,14 +85,27 @@ class ConversationsListViewController: UIViewController {
         
         switch change.type {
         case .added, .modified:
-            ConversationsListViewController.coreDataStack.saveChannel(channel: channel) { [weak self] in
-                self?.fetchChannelsFromCash()
-            }
+            coreDataStack.saveChannel(channel: channel)
         case .removed:
-            ConversationsListViewController.coreDataStack.deleteChannel(channel: channel) { [weak self] in
-                self?.fetchChannelsFromCash()
+            coreDataStack.deleteChannel(channel: channel)
+        }
+    }
+    
+    func removeChannelFromFirebase(withID id: String) {
+        reference.document(id).delete { [weak self] err in
+            if err != nil {
+                self?.showFailToDeleteChannelAlert(id: id)
             }
         }
+    }
+    
+    private func showFailToDeleteChannelAlert(id: String) {
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось загрузить каналы.", preferredStyle: UIAlertController.Style.alert)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+            self.removeChannelFromFirebase(withID: id)
+        })
+        present(failureAlert, animated: true, completion: nil)
     }
     
     private func configureTableView() {
@@ -355,28 +362,8 @@ class ConversationsListViewController: UIViewController {
     
     func setDayOrClassicTheme() {
         tableView.backgroundColor = .white
-        setDayOrClassicThemeToSearchBar()
         setDayOrClassicThemeToNavBar()
         tableView.reloadData()
-    }
-    
-    private func setDayOrClassicThemeToSearchBar() {
-        searchBar.barTintColor = .white
-        searchBar.barStyle = .default
-        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
-        textFieldInsideSearchBar?.backgroundColor = UIColor(named: "BackgroundImageColor")
-        textFieldInsideSearchBar?.textColor = .black
-        
-        if let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView {
-            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-            glassIconView.tintColor = .gray
-        }
-        
-        if let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as? UIButton {
-            clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
-            clearButton.tintColor = .gray
-        }
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
     }
     
     // ДОЛГО ДОЛГО ДОЛГО пыталась избавиться от этих
@@ -389,28 +376,8 @@ class ConversationsListViewController: UIViewController {
     
     func setNightTheme() {
         tableView.backgroundColor = .black
-        setNightThemeToSearchBar()
         setNightThemeToNavBar()
         tableView.reloadData()
-    }
-    
-    private func setNightThemeToSearchBar() {
-        searchBar.barTintColor = .black
-        searchBar.barStyle = .black
-        searchBar.tintColor = .black
-        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
-        textFieldInsideSearchBar?.backgroundColor = .systemYellow
-        textFieldInsideSearchBar?.textColor = .black
-        
-        if let glassIconView = textFieldInsideSearchBar?.leftView as? UIImageView {
-            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-            glassIconView.tintColor = .black
-        }
-        if let clearButton = textFieldInsideSearchBar?.value(forKey: "clearButton") as? UIButton {
-            clearButton.setImage(clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate), for: .normal)
-            clearButton.tintColor = .black
-        }
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
     }
     
     private func setNightThemeToNavBar() {
@@ -431,12 +398,4 @@ class ConversationsListViewController: UIViewController {
 enum FileNames {
     static let plistFileNameForProfileInfo = "ProfileInfo.plist"
     static let plistFileNameForPreferences = "Preferences.plist"
-}
-
-extension ConversationsListViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }
 }
