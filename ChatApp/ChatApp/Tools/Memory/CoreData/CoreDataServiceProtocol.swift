@@ -77,8 +77,12 @@ extension CoreDataServiceProtocol {
 // Работа с сообщениями.
 extension CoreDataServiceProtocol {
     
-    func getNSFetchedResultsControllerForMessages(channelId: String) -> NSFetchedResultsController<DBMessage> {
-        return NSFetchedResultsController(fetchRequest: getMessagesFetchRequest(channelId),
+    func getNSFetchedResultsControllerForMessages(channelId: String?) -> NSFetchedResultsController<DBMessage>? {
+        guard let id = channelId else {
+            CoreDataLogger.log("ID канала - nil.", .failure)
+            return nil
+        }
+        return NSFetchedResultsController(fetchRequest: getMessagesFetchRequest(id),
                                           managedObjectContext: viewContext,
                                           sectionNameKeyPath: nil,
                                           cacheName: nil)
@@ -93,7 +97,11 @@ extension CoreDataServiceProtocol {
         return fetchRequest
     }
     
-    func saveMessage(message: Message, channel: Channel, id: String) {
+    func saveMessage(message: Message, channel: Channel?, id: String) {
+        guard let channel = channel else {
+            CoreDataLogger.log("Канал не инициализирован.", .failure)
+            return
+        }
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
             let objectID = dbChannelArr[0].objectID
             performTaskOnMainQueueContextAndSave { context in
@@ -112,9 +120,10 @@ extension CoreDataServiceProtocol {
         }
     }
     
-    func parseDBMessageToMessage(_ dbMessage: DBMessage) throws -> Message {
-        guard let content = dbMessage.content, let created = dbMessage.created,
-              let senderId = dbMessage.senderId, let senderName = dbMessage.senderName else {
+    func parseDBMessageToMessage(_ dbMessage: DBMessage?) throws -> Message {
+        guard let dbMessage = dbMessage, let content = dbMessage.content,
+                let created = dbMessage.created, let senderId = dbMessage.senderId,
+                let senderName = dbMessage.senderName else {
                   throw WorkingWithMemoryError.formatError
               }
         return Message(content: content,

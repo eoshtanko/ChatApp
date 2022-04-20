@@ -12,6 +12,7 @@ class ConversationTableViewCell: UITableViewCell {
     static let identifier = String(describing: ConversationTableViewCell.self)
     
     private static var currentTheme: Theme = .classic
+    private let formatter = DateFormatter()
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var lastMessageLabel: UILabel!
@@ -54,7 +55,19 @@ class ConversationTableViewCell: UITableViewCell {
             return
         }
         lastMessageDateLabel.font = .systemFont(ofSize: Const.textSize)
-        lastMessageDateLabel.text = Date.fromDateToString(from: date)
+        lastMessageDateLabel.text = fromDateToString(from: date)
+    }
+    
+    private func fromDateToString(from date: Date) -> String {
+        if Calendar.current.isDateInToday(date) {
+            formatter.dateFormat = "HH:mm a"
+            return formatter.string(from: date)
+        }
+        formatter.timeStyle = .none
+        formatter.dateStyle = .medium
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.doesRelativeDateFormatting = true
+        return formatter.string(from: date)
     }
     
     private func configureLastMessageLabel(_ message: String?) {

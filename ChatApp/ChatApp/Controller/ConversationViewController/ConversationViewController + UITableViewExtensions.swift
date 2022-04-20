@@ -23,7 +23,7 @@ extension ConversationViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchedResultsController.sections else {
+        guard let sections = fetchedResultsController?.sections else {
             return 0
         }
         return sections[section].numberOfObjects
@@ -36,8 +36,8 @@ extension ConversationViewController {
         guard let messageCell = cell as? ChatMessageCell else {
             return cell
         }
-        let dbMessage = fetchedResultsController.object(at: indexPath)
-        let message = try? coreDataStack.parseDBMessageToMessage(dbMessage)
+        let dbMessage = fetchedResultsController?.object(at: indexPath)
+        let message = try? coreDataStack?.parseDBMessageToMessage(dbMessage)
         if let message = message {
             messageCell.configureCell(message)
         }

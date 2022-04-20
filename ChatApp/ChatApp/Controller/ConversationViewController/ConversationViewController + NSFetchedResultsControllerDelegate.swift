@@ -23,6 +23,7 @@ extension ConversationViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         CoreDataLogger.logPresenceInMethod(methodName: #function, " в переписке")
         tableView.beginUpdates()
+        scrollToBottom(animated: false)
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
