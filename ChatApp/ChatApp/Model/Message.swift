@@ -52,7 +52,7 @@ extension Message {
 extension Message: Comparable {
     
     static func == (lhs: Message, rhs: Message) -> Bool {
-        return "\(lhs.created)" == "\(rhs.created)" && lhs.senderId == rhs.senderId
+        return lhs.created == rhs.created && lhs.senderId == rhs.senderId
     }
     
     static func < (lhs: Message, rhs: Message) -> Bool {

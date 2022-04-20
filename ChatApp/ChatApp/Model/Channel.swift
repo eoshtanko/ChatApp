@@ -59,7 +59,10 @@ extension Channel: Comparable {
     }
     
     static func < (lhs: Channel, rhs: Channel) -> Bool {
-        return lhs.lastActivity ?? Date() > rhs.lastActivity ?? Date()
+        guard let lhsDate = lhs.lastActivity, let rhsDate = rhs.lastActivity else {
+            return false
+        }
+        return lhsDate > rhsDate
     }
 }
 

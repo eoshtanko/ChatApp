@@ -11,12 +11,12 @@ import CoreData
 
 class ConversationViewController: UITableViewController {
     
-    let coreDataStack: CoreDataServiceProtocol!
-    lazy var fetchedResultsController: NSFetchedResultsController<DBMessage> = {
-        let controller = coreDataStack.getNSFetchedResultsControllerForMessages(channelId: channel.identifier)
-        controller.delegate = self
+    let coreDataStack: CoreDataServiceProtocol?
+    lazy var fetchedResultsController: NSFetchedResultsController<DBMessage>? = {
+        let controller = coreDataStack?.getNSFetchedResultsControllerForMessages(channelId: channel?.identifier)
+        controller?.delegate = self
         do {
-            try controller.performFetch()
+            try controller?.performFetch()
         } catch {
             CoreDataLogger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
         }
@@ -24,7 +24,7 @@ class ConversationViewController: UITableViewController {
     }()
     
     //    private let networkManager = NetworkManager()
-    private let channel: Channel!
+    private let channel: Channel?
     private let dbChannelReference: CollectionReference
     lazy var reference: CollectionReference = {
         guard let channelIdentifier = channel?.identifier else { fatalError() }
@@ -32,7 +32,6 @@ class ConversationViewController: UITableViewController {
     }()
     
     var entreMessageBar: EntryMessageView?
-    var shouldScrollToBottom: Bool = true
     var hightOfKeyboard: CGFloat?
     
     var currentTheme: Theme = .classic
@@ -96,7 +95,7 @@ class ConversationViewController: UITableViewController {
         }
         switch change.type {
         case .added:
-            coreDataStack.saveMessage(message: message, channel: channel, id: change.document.documentID)
+            coreDataStack?.saveMessage(message: message, channel: channel, id: change.document.documentID)
         case .removed, .modified:
             // Будем считать, что удалять/редактировать сообщения НИЗЯ
             return
