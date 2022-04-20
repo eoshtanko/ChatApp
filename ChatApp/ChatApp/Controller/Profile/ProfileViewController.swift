@@ -16,10 +16,10 @@ class ProfileViewController: UIViewController {
     var isProfileEditing: Bool = false
     var imageDidChanged = false
     var initialImage: UIImage?
-    var nameDidChanged = false
-    var initialName: String?
     var infoDidChanged = false
     var initialInfo: String?
+    private var nameDidChanged = false
+    private var initialName: String?
     
     private let GCDMemoryManager = GCDMemoryManagerInterface<User>()
     private var activityIndicator: UIActivityIndicatorView!
@@ -259,8 +259,14 @@ class ProfileViewController: UIViewController {
     
     private func configureNameLabel() {
         nameLabel.delegate = self
+        nameLabel.addTarget(self, action: #selector(nameLabelDidChange), for: .editingChanged)
         nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText,
                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+    }
+    
+    @objc private func nameLabelDidChange() {
+        nameDidChanged = nameLabel.text != initialName
+        setEnableStatusToSaveButtons()
     }
     
     private func configureInfoLabel() {

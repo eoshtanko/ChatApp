@@ -24,11 +24,6 @@ extension ProfileViewController: UITextFieldDelegate {
         self.view.endEditing(true)
         return false
     }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        nameDidChanged = textField.text != initialName
-        setEnableStatusToSaveButtons()
-    }
 }
 
 extension ProfileViewController: UITextViewDelegate {
@@ -48,12 +43,15 @@ extension ProfileViewController: UITextViewDelegate {
         }
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        infoDidChanged = (textView.text.isEmpty ? "" : textView.text) != initialInfo
+        setEnableStatusToSaveButtons()
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = Const.textViewPlaceholderText
             textView.textColor = UIColor.lightGray
         }
-        infoDidChanged = (textView.textColor == .lightGray ? "" : textView.text) != initialInfo
-        setEnableStatusToSaveButtons()
     }
 }
