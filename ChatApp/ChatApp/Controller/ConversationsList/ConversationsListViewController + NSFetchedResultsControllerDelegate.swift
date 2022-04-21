@@ -21,12 +21,12 @@ import CoreData
 extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        CoreDataLogger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
+        Logger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
         tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        CoreDataLogger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
+        Logger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
         tableView.endUpdates()
     }
     

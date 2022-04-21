@@ -11,6 +11,13 @@ import CoreData
 
 class ConversationsListViewController: UIViewController {
     
+    private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    var currentTheme: Theme = .classic {
+        didSet {
+            setCurrentTheme()
+        }
+    }
+    
     let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
     lazy var fetchedResultsController: NSFetchedResultsController<DBChannel> = {
         let controller = coreDataStack.getNSFetchedResultsControllerForChannels()
@@ -18,22 +25,19 @@ class ConversationsListViewController: UIViewController {
         do {
             try controller.performFetch()
         } catch {
-            CoreDataLogger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
+            Logger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
         }
         return controller
     }()
     
-    // private let networkManager = NetworkManager()
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
     let tableView = UITableView(frame: .zero, style: .grouped)
     
-    var currentTheme: Theme = .classic
+    var profileViewController: ProfileViewController?
     
-    var profileViewController: ProfileViewController!
-    
-    private var activityIndicator: UIActivityIndicatorView!
+    private var activityIndicator: UIActivityIndicatorView?
     
     private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
     
@@ -138,7 +142,7 @@ class ConversationsListViewController: UIViewController {
         loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
     }
     
-    private func loadWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
+    private func loadWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M) {
         memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
             if let result = result as? Result<User, Error> {
                 self?.handleLoadProfileFromMemoryRequestResult(result: result)
@@ -209,7 +213,7 @@ class ConversationsListViewController: UIViewController {
                 if self?.currentTheme != theme {
                     self?.currentTheme = theme
                     self?.setCurrentTheme()
-                    self?.saveThemeToMemory()
+                    self?.themeManager.writeThemeToMemory()
                 }
             }
         })
@@ -235,10 +239,6 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func createNewChannel(name: String) {
-        //        guard networkManager.isInternetConnected else {
-        //            self.showFailToCreateChannelAlert()
-        //            return
-        //        }
         let channel = Channel(name: name)
         reference.addDocument(data: channel.toDict) { [weak self] error in
             guard let self = self else { return }
@@ -273,16 +273,9 @@ class ConversationsListViewController: UIViewController {
         present(failureAlert, animated: true, completion: nil)
     }
     
-    private func saveThemeToMemory() {
-        let preferences = ApplicationPreferences(themeId: currentTheme.rawValue)
-        GCDMemoryManagerForApplicationPreferences.writeDataToMemory(
-            fileName: FileNames.plistFileNameForPreferences,
-            objectToWrite: preferences, completionOperation: nil)
-    }
-    
     private func setInitialThemeToApp() {
         setCurrentTheme()
-        GCDMemoryManagerForApplicationPreferences.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { [weak self] result in
+        themeManager.readThemeFromMemory { [weak self] result in
             self?.handleLoadPreferencesFromMemoryRequestResult(result: result)
         }
     }
@@ -339,8 +332,10 @@ class ConversationsListViewController: UIViewController {
     }
     
     @objc private func goToProfile() {
-        profileViewController.conversationsListViewController = self
-        present(profileViewController, animated: true)
+        if let profile = profileViewController {
+            profile.conversationsListViewController = self
+            present(profile, animated: true)
+        }
     }
     
     private func configureAppearances() {

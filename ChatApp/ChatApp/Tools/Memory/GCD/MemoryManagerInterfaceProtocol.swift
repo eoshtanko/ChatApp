@@ -7,9 +7,9 @@
 
 import Foundation
 
-protocol MemoryManagerInterfaceProtocol {
+protocol MemoryManagerProtocol {
     
     associatedtype MemoryObject: Codable
-    func readDataFromMemory(fileName: String, completionOperation: ((Result<MemoryObject, Error>) -> Void)?)
-    func writeDataToMemory(fileName: String, objectToWrite: MemoryObject, completionOperation: ((Result<MemoryObject, Error>) -> Void)?)
+    func readDataFromMemory(fileName: String, completion: ((Result<MemoryObject, Error>) -> Void)?)
+    func writeDataToMemory(fileName: String, objectToWrite: MemoryObject, completion: ((Result<MemoryObject, Error>) -> Void)?)
 }

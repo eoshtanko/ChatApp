@@ -30,7 +30,10 @@ struct CurrentUser {
     static var user = createCurrentUser()
     
     static func createCurrentUser() -> User {
-        guard let idOfDevice = UIDevice.current.identifierForVendor?.uuidString else { fatalError() }
+        guard let idOfDevice = UIDevice.current.identifierForVendor?.uuidString else {
+            Logger.log("Не удалось получить id устройства.", .failure)
+            return User(name: nil, info: nil, imageData: nil, id: "")
+        }
         return User(id: idOfDevice)
     }
 }

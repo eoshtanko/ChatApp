@@ -18,7 +18,7 @@ class ConversationViewController: UITableViewController {
         do {
             try controller?.performFetch()
         } catch {
-            CoreDataLogger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
+            Logger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
         }
         return controller
     }()

@@ -15,18 +15,15 @@ struct Channel {
     let lastMessage: String?
     let lastActivity: Date?
     
-    init(name: String) {
-        self.name = name
-        self.identifier = "111"
-        self.lastMessage = nil
-        self.lastActivity = nil
-    }
-    
     init(identifier: String, name: String, lastMessage: String?, lastActivity: Date?) {
-        self.identifier = identifier
         self.name = name
+        self.identifier = identifier
         self.lastMessage = lastMessage
         self.lastActivity = lastActivity
+    }
+    
+    init(name: String) {
+        self.init(identifier: "111", name: name, lastMessage: nil, lastActivity: nil)
     }
     
     init?(document: QueryDocumentSnapshot) {
@@ -38,10 +35,10 @@ struct Channel {
                   return nil
               }
         
-        self.identifier = document.documentID
-        self.name = name
-        self.lastMessage = lastMessage
-        self.lastActivity = lastActivity.dateValue()
+        self.init(identifier: document.documentID,
+                  name: name,
+                  lastMessage: lastMessage,
+                  lastActivity: lastActivity.dateValue())
     }
 }
 

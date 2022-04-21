@@ -80,18 +80,6 @@ class ConversationTableViewCell: UITableViewCell {
         }
     }
     
-    private func configureUnreadMessagesIdentifier(_ hasUnreadMessages: Bool) {
-        if hasUnreadMessages {
-            lastMessageLabel.font = .systemFont(ofSize: Const.textSize, weight: .bold)
-        }
-    }
-    
-    private func setDefaultImage(to imageView: UIImageView) {
-        imageView.backgroundColor = UIColor(named: "BackgroundImageColor")
-        imageView.tintColor = UIColor(named: "DefaultImageColor")
-        imageView.image = UIImage(systemName: "person.fill")
-    }
-    
     private func setCurrentTheme() {
         switch ConversationTableViewCell.currentTheme {
         case .classic, .day:

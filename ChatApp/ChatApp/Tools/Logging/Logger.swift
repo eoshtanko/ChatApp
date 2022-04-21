@@ -7,10 +7,10 @@
 
 import Foundation
 
-class CoreDataLogger {
+class Logger {
     
     // В Info.plist в ключе isLoggingEnable Вы можете указать, будет ли приложение вести логи.
-    private static let isLoggingEnable = Bundle.main.object(forInfoDictionaryKey: "isCoreDataLoggingEnable") as? Bool
+    private static let isLoggingEnable = Bundle.main.object(forInfoDictionaryKey: "isLoggingEnable") as? Bool
     private static let formatter = DateFormatter()
     
     public enum SuccessStatus: String {

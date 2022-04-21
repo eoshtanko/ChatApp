@@ -32,10 +32,7 @@ struct Message {
                   return nil
               }
         
-        self.content = content
-        self.senderId = senderId
-        self.senderName = senderName
-        self.created = created.dateValue()
+        self.init(content: content, senderId: senderId, senderName: senderName, created: created.dateValue())
     }
 }
 

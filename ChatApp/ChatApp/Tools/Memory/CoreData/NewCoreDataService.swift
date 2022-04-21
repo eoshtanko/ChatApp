@@ -22,7 +22,7 @@ final class NewCoreDataService: CoreDataServiceProtocol {
         let container = NSPersistentContainer(name: dataModelName)
         container.loadPersistentStores { _, error in
             if let error = error {
-                CoreDataLogger.log("Не удалось загрузить постоянные хранилища.", .failure)
+                Logger.log("Не удалось загрузить постоянные хранилища.", .failure)
             }
         }
         return container
@@ -36,7 +36,7 @@ final class NewCoreDataService: CoreDataServiceProtocol {
         let fetchRequest = DBChannel.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "identifier == %@", id)
         guard let dbChannel = try? viewContext.fetch(fetchRequest) else {
-            CoreDataLogger.log("Не удалось корректно выполнить Channel-fetch-запрос.", .failure)
+            Logger.log("Не удалось корректно выполнить Channel-fetch-запрос.", .failure)
             return nil
         }
         return dbChannel
@@ -53,9 +53,9 @@ final class NewCoreDataService: CoreDataServiceProtocol {
         if viewContext.hasChanges {
             do {
                 try viewContext.save()
-                CoreDataLogger.log("Изменение объекта в бд прошло успешно.", .success)
+                Logger.log("Изменение объекта в бд прошло успешно.", .success)
             } catch {
-                CoreDataLogger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
+                Logger.log("Не удалось сохранить изменения объектов в родительском хранилище контекста.", .failure)
             }
         }
     }

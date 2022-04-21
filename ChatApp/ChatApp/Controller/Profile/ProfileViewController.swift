@@ -10,8 +10,13 @@ import UIKit
 class ProfileViewController: UIViewController {
     
     weak var conversationsListViewController: ConversationsListViewController?
+    private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     
-    var currentTheme: Theme = .classic
+    var currentTheme: Theme = .classic {
+        didSet {
+            setCurrentTheme()
+        }
+    }
     
     var isProfileEditing: Bool = false
     var imageDidChanged = false
@@ -74,7 +79,6 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureStatusBar(.lightContent)
-        setCurrentTheme()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -179,7 +183,7 @@ class ProfileViewController: UIViewController {
         saveWithMemoryManager(memoryManager: GCDMemoryManager)
     }
     
-    private func saveWithMemoryManager<M: MemoryManagerInterfaceProtocol>(memoryManager: M) {
+    private func saveWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M) {
         if let objectToWrite = getUserWithUpdatedData() as? M.MemoryObject {
             memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToWrite: objectToWrite) { [weak self] result in
                 self?.handleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
@@ -266,6 +270,7 @@ class ProfileViewController: UIViewController {
     
     @objc private func nameLabelDidChange() {
         nameDidChanged = nameLabel.text != initialName
+        setEmptyIndicatorColorToNameLabel()
         setEnableStatusToSaveButtons()
     }
     
@@ -334,106 +339,42 @@ class ProfileViewController: UIViewController {
     }
     
     private func setCurrentTheme() {
-        switch currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
-        }
+        themeManager.theme = currentTheme
+        view.backgroundColor = themeManager.themeSettings?.backgroundColor
+        setThemeToButtons()
+        setThemeToNavigationBar()
+        setEmptyIndicatorColorToInfoLabel()
+        setEmptyIndicatorColorToNameLabel()
     }
     
-    private func setDayOrClassicTheme() {
-        view.backgroundColor = .white
-        setDayOrClassicThemeToActivityIndicator()
-        setDayOrClassicThemeToLabels()
-        setDayOrClassicThemeToButtons()
-        setDayOrClassicThemeToNavBar()
-        infoLabel.keyboardAppearance = .light
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.light
+    private func setThemeToButtons() {
+        editPhotoButton.backgroundColor = themeManager.themeSettings?.photoButtonBackgroundColor
+        setThemeToBottomButtons(editButton, cancelButton, saveGCDButton)
     }
     
-    private func setDayOrClassicThemeToActivityIndicator() {
-        activityIndicator.color = .darkGray
-    }
-    
-    private func setDayOrClassicThemeToLabels() {
-        if nameLabel.textColor != .lightGray {
-            nameLabel.textColor = .black
-        }
-        if infoLabel.textColor != .lightGray {
-            infoLabel.textColor = .black
-        }
-        infoLabel.backgroundColor = .white
-    }
-    
-    private func setDayOrClassicThemeToButtons() {
-        editPhotoButton.backgroundColor = UIColor(named: "CameraButtonColor")
-        setDayOrClassicThemeToBottomButtons(editButton, cancelButton, saveGCDButton)
-    }
-    
-    private func setDayOrClassicThemeToBottomButtons(_ buttons: UIButton...) {
+    private func setThemeToBottomButtons(_ buttons: UIButton...) {
         for button in buttons {
-            button.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
-            button.backgroundColor = UIColor(named: "BackgroundButtonColor")
+            button.setTitleColor(themeManager.themeSettings?.buttonTextColor, for: .normal)
+            button.backgroundColor = themeManager.themeSettings?.textButtonBackgroundColor
         }
     }
     
-    private func setDayOrClassicThemeToNavBar() {
-        navigationBar.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
-        navigationBarLabel.textColor = .black
-        navigationBarButton.setTitleColor(UIColor(named: "BlueTextColor"), for: .normal)
+    private func setThemeToNavigationBar() {
+        navigationBarLabel.textColor = themeManager.themeSettings?.primaryTextColor
+        navigationBarButton.setTitleColor(themeManager.themeSettings?.navigationBarButtonColor, for: .normal)
     }
     
-    private func setNightTheme() {
-        view.backgroundColor = .black
-        setNightThemeToActivityIndicator()
-        setNightThemeToLabels()
-        setNightThemeToButtons()
-        setNightThemeToNavBar()
-        infoLabel.keyboardAppearance = .dark
-        UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.dark
+    func setEmptyIndicatorColorToNameLabel() {
+        nameLabel.textColor = nameLabel.text?.isEmpty ?? false ? .lightGray : themeManager.themeSettings?.primaryTextColor
     }
     
-    private func setNightThemeToActivityIndicator() {
-        activityIndicator.color = .lightGray
-    }
-    
-    private func setNightThemeToLabels() {
-        if nameLabel.textColor != .lightGray {
-            nameLabel.textColor = .white
-        }
-        if infoLabel.textColor != .lightGray {
-            infoLabel.textColor = .white
-        }
-        infoLabel.backgroundColor = .black
-    }
-    
-    private func setNightThemeToButtons() {
-        editPhotoButton.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
-        setNightThemeToBottomButtons(editButton, cancelButton, saveGCDButton)
-    }
-    
-    private func setNightThemeToBottomButtons(_ buttons: UIButton...) {
-        for button in buttons {
-            button.setTitleColor(.white, for: .normal)
-            button.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
-        }
-    }
-    
-    private func setNightThemeToNavBar() {
-        navigationBar.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
-        navigationBarLabel.textColor = .white
-        navigationBarButton.setTitleColor(.systemYellow, for: .normal)
+    func setEmptyIndicatorColorToInfoLabel() {
+        infoLabel.textColor = infoLabel.text == Const.textViewPlaceholderText ? .lightGray : themeManager.themeSettings?.primaryTextColor
     }
     
     func setEnableStatusToSaveButtons() {
         let someDataDidChanged = infoDidChanged || nameDidChanged || imageDidChanged
         saveGCDButton.isEnabled = someDataDidChanged
-    }
-    
-    private enum SavingApproach {
-        case GCD
-        case operations
     }
     
     enum Const {

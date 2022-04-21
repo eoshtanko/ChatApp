@@ -46,7 +46,7 @@ extension CoreDataServiceProtocol {
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
                     context.delete(dbChannel)
                 } else {
-                    CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
+                    Logger.log("В БД находятся ошибочные данные.", .failure)
                 }
             }
         }
@@ -54,7 +54,7 @@ extension CoreDataServiceProtocol {
     
     private func saveChannelToDB(channel: Channel, context: NSManagedObjectContext) {
         guard let dbChannel = DBChannel(usedContext: context) else {
-            CoreDataLogger.log("Не удалось создать объект DBChannel.", .failure)
+            Logger.log("Не удалось создать объект DBChannel.", .failure)
             return
         }
         dbChannel.identifier = channel.identifier
@@ -79,7 +79,7 @@ extension CoreDataServiceProtocol {
     
     func getNSFetchedResultsControllerForMessages(channelId: String?) -> NSFetchedResultsController<DBMessage>? {
         guard let id = channelId else {
-            CoreDataLogger.log("ID канала - nil.", .failure)
+            Logger.log("ID канала - nil.", .failure)
             return nil
         }
         return NSFetchedResultsController(fetchRequest: getMessagesFetchRequest(id),
@@ -99,7 +99,7 @@ extension CoreDataServiceProtocol {
     
     func saveMessage(message: Message, channel: Channel?, id: String) {
         guard let channel = channel else {
-            CoreDataLogger.log("Канал не инициализирован.", .failure)
+            Logger.log("Канал не инициализирован.", .failure)
             return
         }
         if let dbChannelArr = fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
@@ -108,7 +108,7 @@ extension CoreDataServiceProtocol {
                 if let dbChannel = context.object(with: objectID) as? DBChannel {
                     saveMessageToDB(message: message, id: id, channel: dbChannel, context: context)
                 } else {
-                    CoreDataLogger.log("В БД находятся ошибочные данные.", .failure)
+                    Logger.log("В БД находятся ошибочные данные.", .failure)
                 }
             }
         }
@@ -134,7 +134,7 @@ extension CoreDataServiceProtocol {
     
     private func configureDBMessage(message: Message, id: String, context: NSManagedObjectContext) -> DBMessage? {
         guard let dbMessage = DBMessage(usedContext: context) else {
-            CoreDataLogger.log("Не удалось создать объект DBMessage.", .failure)
+            Logger.log("Не удалось создать объект DBMessage.", .failure)
             return nil
         }
         dbMessage.content = message.content

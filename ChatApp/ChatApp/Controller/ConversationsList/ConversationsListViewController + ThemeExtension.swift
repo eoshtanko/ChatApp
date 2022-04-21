@@ -7,12 +7,6 @@
 
 import Foundation
 
-enum Theme: Int {
-    case classic
-    case day
-    case night
-}
-
 protocol ThemesPickerDelegate: AnyObject {
     func selectTheme(_ theme: Theme)
 }
