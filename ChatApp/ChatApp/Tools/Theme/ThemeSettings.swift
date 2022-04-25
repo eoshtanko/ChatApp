@@ -41,6 +41,7 @@ protocol ChatMessageCellThemeProtocol {
     var outcomingMessageColor: UIColor { get }
 }
 
+// Все, что необходимо для учтановки темы панели отправки сообщений
 protocol EnterMessageViewThemeProtocol {
     var sendMessageButtonColor: UIColor { get }
     var enterMessageViewBackgroundColor: UIColor { get }

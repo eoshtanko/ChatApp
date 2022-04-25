@@ -193,7 +193,6 @@ class ProfileViewController: UIViewController {
         showFailureAlert()
     }
     
-    // .. //
     private func showSuccessAlert() {
         let successAlert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: UIAlertController.Style.alert)
         successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
@@ -212,7 +211,6 @@ class ProfileViewController: UIViewController {
         })
         present(failureAlert, animated: true, completion: nil)
     }
-    // // // // //
     
     private func returnToInitialData() {
         if nameDidChanged {

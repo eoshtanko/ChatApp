@@ -299,6 +299,23 @@
 			path = Memory;
 			sourceTree = "<group>";
 		};
+		346A55D328174A6D00349718 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				3427ACD327D47DC20062F749 /* Model */,
+				3427ACD427D47DCE0062F749 /* View */,
+				3427ACD527D47DE40062F749 /* Controller */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		346A55D428174BBD00349718 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		34ACCFD927C4AAEA00535096 = {
 			isa = PBXGroup;
 			children = (
@@ -320,9 +337,8 @@
 		34ACCFE427C4AAEB00535096 /* ChatApp */ = {
 			isa = PBXGroup;
 			children = (
-				3427ACD327D47DC20062F749 /* Model */,
-				3427ACD427D47DCE0062F749 /* View */,
-				3427ACD527D47DE40062F749 /* Controller */,
+				346A55D328174A6D00349718 /* Presentation */,
+				346A55D428174BBD00349718 /* Service */,
 				345624F327C4F0E20044C73A /* Tools */,
 				3427ACD727D47E8C0062F749 /* Resources */,
 				3427ACD627D47E6A0062F749 /* Supporting files */,
