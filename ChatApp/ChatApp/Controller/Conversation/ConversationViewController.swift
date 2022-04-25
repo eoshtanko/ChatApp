@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import CoreData
 
-class ConversationViewController: UITableViewController {
+class ConversationViewController: UIViewController {
     
     private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     var currentTheme: Theme = .classic {
@@ -51,22 +51,26 @@ class ConversationViewController: UITableViewController {
     }
     
     override func loadView() {
-        let conversationView = ConversationView()
-        conversationView.delegate = self
-        conversationView.dataSource = self
-        view = conversationView
+        view = ConversationView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         registerKeyboardNotifications()
+        themeManager.theme = currentTheme
         configureSnapshotListener()
         configureTapGestureRecognizer()
-        conversationView?.configureView(navigationItem: navigationItem, title: channel?.name, entreMessageBar: entreMessageBar)
-        conversationView?.setCurrentTheme(themeManager: themeManager,
-                                          theme: currentTheme,
-                                          navigationController: navigationController,
-                                          navigationItem: navigationItem)
+        configureTableView()
+        conversationView?.configureView(themeManager: themeManager, theme: currentTheme,
+                                        navigationItem: navigationItem, title: channel?.name,
+                                        navigationController: navigationController,
+                                        entreMessageBar: entreMessageBar)
+    }
+    
+    private func configureTableView() {
+        conversationView?.tableView.dataSource = self
+        conversationView?.tableView.delegate = self
+        conversationView?.configureTableView()
     }
     
     private func configureSnapshotListener() {

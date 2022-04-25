@@ -19,13 +19,13 @@ extension ConversationViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, " в переписке")
-        tableView.beginUpdates()
+        conversationView?.tableView.beginUpdates()
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, " в переписке")
-        tableView.endUpdates()
+        conversationView?.tableView.endUpdates()
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
@@ -41,24 +41,24 @@ extension ConversationViewController: NSFetchedResultsControllerDelegate {
         case .insert:
             guard let newIndexPath = newIndexPath else { return }
             
-            tableView.insertRows(at: [newIndexPath], with: .bottom)
+            conversationView?.tableView.insertRows(at: [newIndexPath], with: .bottom)
             
         case .delete:
             guard let indexPath = indexPath else { return }
             
-            tableView.deleteRows(at: [indexPath], with: .left)
+            conversationView?.tableView.deleteRows(at: [indexPath], with: .left)
             
         case .move:
             guard let indexPath = indexPath,
                   let newIndexPath = newIndexPath else { return }
             
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            conversationView?.tableView.deleteRows(at: [indexPath], with: .automatic)
+            conversationView?.tableView.insertRows(at: [newIndexPath], with: .automatic)
             
         case .update:
             guard let indexPath = indexPath else { return }
             
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            conversationView?.tableView.reloadRows(at: [indexPath], with: .automatic)
             
         @unknown default:
             return

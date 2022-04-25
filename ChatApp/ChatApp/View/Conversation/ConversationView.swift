@@ -7,22 +7,27 @@
 
 import UIKit
 
-class ConversationView: UITableView {
+class ConversationView: UIView {
     
+    let tableView = UITableView(frame: .zero, style: .grouped)
     var hightOfKeyboard: CGFloat?
     
     private lazy var bottomOffsetWithKeyboard: CGPoint = {
-        return CGPoint(x: 0, y: self.contentSize.height - self.bounds.size.height + (hightOfKeyboard ?? 0))
+        return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (hightOfKeyboard ?? 0))
     }()
     
     private func getBottomOffsetWithoutKeyboard(_ entreMessageBar: EnterMessageView?) -> CGPoint {
-        return CGPoint(x: 0, y: self.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
+        return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
-    func configureView(navigationItem: UINavigationItem, title: String?, entreMessageBar: EnterMessageView?) {
+    func configureView(themeManager: ThemeManagerProtocol, theme: Theme,
+                       navigationItem: UINavigationItem, title: String?,
+                       navigationController: UINavigationController?,
+                       entreMessageBar: EnterMessageView?) {
         configureTableView()
         configureNavigationBar(navigationItem, title)
         scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
+        setCurrentTheme(themeManager, theme, navigationController, navigationItem)
     }
     
    private func configureNavigationBar(_ navigationItem: UINavigationItem, _ title: String?) {
@@ -30,44 +35,54 @@ class ConversationView: UITableView {
         navigationItem.largeTitleDisplayMode = .never
     }
     
-    private func configureTableView() {
-        self.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
-        self.separatorStyle = .none
-        self.rowHeight = UITableView.automaticDimension
-        self.addTopBounceAreaView()
+    func configureTableView() {
+        self.addSubview(tableView)
+        registerCell()
+        configureTableViewAppearance()
+        backgroundColor = .white
+    }
+    
+    private func registerCell() {
+        tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
+    }
+    
+    private func configureTableViewAppearance() {
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.topAnchor.constraint(equalTo: self.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
     }
     
     func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
-        self.layoutIfNeeded()
+        tableView.layoutIfNeeded()
         if isScrollingNecessary(entreMessageBar) {
             let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard : getBottomOffsetWithoutKeyboard(entreMessageBar)
             
-            self.setContentOffset(bottomOffset, animated: animated)
+            tableView.setContentOffset(bottomOffset, animated: animated)
         }
     }
     
     private func isScrollingNecessary(_ entreMessageBar: EnterMessageView?) -> Bool {
         let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
-        return self.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
+        return tableView.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
     }
     
-    func setCurrentTheme(themeManager: ThemeManagerProtocol, theme: Theme, navigationController: UINavigationController?, navigationItem: UINavigationItem) {
+    func setCurrentTheme(_ themeManager: ThemeManagerProtocol, _ theme: Theme,
+                         _ navigationController: UINavigationController?,
+                         _ navigationItem: UINavigationItem) {
+        tableView.backgroundColor = themeManager.themeSettings?.backgroundColor
         self.backgroundColor = themeManager.themeSettings?.backgroundColor
         navigationItem.standardAppearance = themeManager.themeSettings?.navigationBarAppearance
         navigationController?.navigationBar.tintColor = themeManager.themeSettings?.navigationBarButtonColor
-        self.reloadData()
+        tableView.reloadData()
         ChatMessageCell.setCurrentTheme(theme)
     }
-    
-    func addTopBounceAreaView(color: UIColor = .white) {
-         var frame = UIScreen.main.bounds
-         frame.origin.y = -frame.size.height
-
-         let view = UIView(frame: frame)
-         view.backgroundColor = color
-
-         self.addSubview(view)
-     }
     
     enum Const {
         static let estimatedRowHeight: CGFloat = 60

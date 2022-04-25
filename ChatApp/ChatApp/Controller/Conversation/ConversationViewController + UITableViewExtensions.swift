@@ -7,29 +7,27 @@
 
 import UIKit
 
-// Все, что касается UITableView Delegate
-extension ConversationViewController {
+extension ConversationViewController: UITableViewDelegate {
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return Const.heightOfHeader
     }
 }
 
-// Все, что касается UITableView DataSource
-extension ConversationViewController {
+extension ConversationViewController: UITableViewDataSource {
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return Const.numberOfSections
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sections = fetchedResultsController?.sections else {
             return 0
         }
         return sections[section].numberOfObjects
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: ChatMessageCell.identifier,
             for: indexPath)
