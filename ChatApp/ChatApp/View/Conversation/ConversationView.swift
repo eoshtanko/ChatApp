@@ -34,6 +34,7 @@ class ConversationView: UITableView {
         self.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
         self.separatorStyle = .none
         self.rowHeight = UITableView.automaticDimension
+        self.addTopBounceAreaView()
     }
     
     func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
@@ -57,6 +58,16 @@ class ConversationView: UITableView {
         self.reloadData()
         ChatMessageCell.setCurrentTheme(theme)
     }
+    
+    func addTopBounceAreaView(color: UIColor = .white) {
+         var frame = UIScreen.main.bounds
+         frame.origin.y = -frame.size.height
+
+         let view = UIView(frame: frame)
+         view.backgroundColor = color
+
+         self.addSubview(view)
+     }
     
     enum Const {
         static let estimatedRowHeight: CGFloat = 60
