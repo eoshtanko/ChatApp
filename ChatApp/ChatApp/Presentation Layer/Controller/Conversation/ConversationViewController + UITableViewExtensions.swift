@@ -35,7 +35,7 @@ extension ConversationViewController: UITableViewDataSource {
             return cell
         }
         let dbMessage = fetchedResultsController?.object(at: indexPath)
-        let message = try? coreDataStack?.parseDBMessageToMessage(dbMessage)
+        let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
         if let message = message {
             messageCell.configureCell(message)
         }

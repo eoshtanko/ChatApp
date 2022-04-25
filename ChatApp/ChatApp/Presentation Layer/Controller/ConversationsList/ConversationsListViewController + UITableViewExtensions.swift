@@ -11,13 +11,12 @@ import UIKit
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dbChannel = fetchedResultsController.object(at: indexPath)
+        guard let dbChannel = fetchedResultsController?.object(at: indexPath) else { return }
         do {
-            let conversation = try coreDataStack.parseDBChannelToChannel(dbChannel)
+            let conversation = try coreDataService.parseDBChannelToChannel(dbChannel)
             
             self.navigationItem.title = ""
-            let conversationViewController = ConversationViewController(coreDataStack: coreDataStack,
-                                                                        theme: currentTheme,
+            let conversationViewController = ConversationViewController(theme: currentTheme,
                                                                         channel: conversation,
                                                                         dbChannelRef: reference)
             if let conversationViewController = conversationViewController {
@@ -42,7 +41,7 @@ extension ConversationsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchedResultsController.sections else {
+        guard let sections = fetchedResultsController?.sections else {
             return 0
         }
         return sections[section].numberOfObjects
@@ -55,8 +54,8 @@ extension ConversationsListViewController: UITableViewDataSource {
         guard let conversationCell = cell as? ConversationTableViewCell else {
             return cell
         }
-        let dbChannel = fetchedResultsController.object(at: indexPath)
-        let conversation = try? coreDataStack.parseDBChannelToChannel(dbChannel)
+        guard let dbChannel = fetchedResultsController?.object(at: indexPath) else { return cell }
+        let conversation = try? coreDataService.parseDBChannelToChannel(dbChannel)
         if let conversation = conversation {
             conversationCell.configureCell(conversation)
         }
@@ -69,10 +68,10 @@ extension ConversationsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let dbChannel = fetchedResultsController.object(at: indexPath)
+        let dbChannel = fetchedResultsController?.object(at: indexPath)
         let action = UIContextualAction(style: .destructive,
                                         title: "Delete") { [weak self] (_, _, completionHandler) in
-            if let id = dbChannel.identifier {
+            if let id = dbChannel?.identifier {
                 self?.removeChannelFromFirebase(withID: id)
             }
             completionHandler(true)

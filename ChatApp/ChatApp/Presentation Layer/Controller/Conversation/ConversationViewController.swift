@@ -23,17 +23,8 @@ class ConversationViewController: UIViewController {
         view as? ConversationView
     }
     
-    let coreDataStack: CoreDataServiceProtocol?
-    lazy var fetchedResultsController: NSFetchedResultsController<DBMessage>? = {
-        let controller = coreDataStack?.getNSFetchedResultsControllerForMessages(channelId: channel?.identifier)
-        controller?.delegate = self
-        do {
-            try controller?.performFetch()
-        } catch {
-            Logger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
-        }
-        return controller
-    }()
+    let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
+    lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self, id: channel?.identifier)
     
     private let channel: Channel?
     private let dbChannelReference: CollectionReference
@@ -42,8 +33,7 @@ class ConversationViewController: UIViewController {
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
     
-    init?(coreDataStack: CoreDataServiceProtocol, theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
-        self.coreDataStack = coreDataStack
+    init?(theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
         self.channel = channel
         self.dbChannelReference = dbChannelRef
         self.currentTheme = theme
@@ -105,7 +95,7 @@ class ConversationViewController: UIViewController {
         }
         switch change.type {
         case .added:
-            coreDataStack?.saveMessage(message: message, channel: channel, id: change.document.documentID)
+            coreDataService.saveMessage(message: message, channel: channel, id: change.document.documentID)
         case .removed, .modified:
             return
         }

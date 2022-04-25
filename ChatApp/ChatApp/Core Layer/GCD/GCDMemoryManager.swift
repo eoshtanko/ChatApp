@@ -7,27 +7,20 @@
 
 import Foundation
 
-class GCDMemoryManagerInterface<T: Codable>: MemoryManagerProtocol {
-    
-    func readDataFromMemory(fileName: String, completion: ((Result<T, Error>) -> Void)?) {
-        let GCDLoader = GCDReadFromMemoryManager<T>(plistFileName: fileName) { result in
-            completion?(result)
-        }
-        GCDLoader.getObjectFromMemory()
-    }
-    
-    func writeDataToMemory(fileName: String, objectToWrite: T, completion: ((Result<T, Error>) -> Void)?) {
-        let GCDWriter = GCDWriteToMemoryManager(objectToWrite: objectToWrite, plistFileName: fileName) { result in
-            completion?(result)
-        }
-        GCDWriter.loadObjectToMemory()
-    }
+protocol WriteToMemoryManager {
+    associatedtype OBJ: Codable
+    func loadObjectToMemory()
+    init(objectToWrite: OBJ, plistFileName: String, completionOperation: ((Result<OBJ, Error>) -> Void)?)
 }
 
-private class GCDMemoryManager<T: Codable> {
+protocol ReadFromMemoryManager {
+    associatedtype OBJ: Codable
+    func getObjectFromMemory()
+}
+
+class GCDMemoryManager<T: Codable> {
     
     fileprivate let dispatchQueue = DispatchQueue.global(qos: .background)
-    // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>) -> Void)?
     fileprivate var plistURL: URL?
     init(plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
@@ -36,10 +29,11 @@ private class GCDMemoryManager<T: Codable> {
     }
 }
 
-private class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T>, Writer {
+class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T>, Writer, WriteToMemoryManager {
+    typealias OBJ = T
     
     private var objectToWrite: T
-    init(objectToWrite: T, plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
+    required init(objectToWrite: T, plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
         self.objectToWrite = objectToWrite
         super.init(plistFileName: plistFileName, completionOperation: completionOperation)
     }
@@ -52,7 +46,8 @@ private class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T>, Writer {
     }
 }
 
-private class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T>, Reader {
+class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T>, Reader, ReadFromMemoryManager {
+    typealias OBJ = T
     
     private var objectToRead: T?
     func getObjectFromMemory() {

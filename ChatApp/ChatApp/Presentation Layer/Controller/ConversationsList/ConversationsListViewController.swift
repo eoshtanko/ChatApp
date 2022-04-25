@@ -9,7 +9,6 @@ import UIKit
 import Firebase
 import CoreData
 
-// Вынести алерты
 class ConversationsListViewController: UIViewController {
     
     var conversationsListView: ConversationsListView? {
@@ -23,19 +22,9 @@ class ConversationsListViewController: UIViewController {
             conversationsListView?.setCurrentTheme(theme: currentTheme, themeManager: themeManager, navigationItem: navigationItem)
         }
     }
-    
-    let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
-    // TODO подумать. Наверное, это можно убрать из этого контроллера
-    lazy var fetchedResultsController: NSFetchedResultsController<DBChannel> = {
-        let controller = coreDataStack.getNSFetchedResultsControllerForChannels()
-        controller.delegate = self
-        do {
-            try controller.performFetch()
-        } catch {
-            Logger.log("Ошибка при попытке выполнить Fetch-запрос.", .failure)
-        }
-        return controller
-    }()
+
+    let coreDataService = CoreDataServiceForChannels(dataModelName: Const.dataModelName)
+    lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self)
     
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
@@ -86,9 +75,9 @@ class ConversationsListViewController: UIViewController {
         }
         switch change.type {
         case .added, .modified:
-            coreDataStack.saveChannel(channel: channel)
+            coreDataService.saveChannel(channel: channel)
         case .removed:
-            coreDataStack.deleteChannel(channel: channel)
+            coreDataService.deleteChannel(channel: channel)
         }
     }
     
