@@ -14,22 +14,19 @@ import CoreData
 // Я попробовала сделать протокол, что-то вроде NSFetchedResultsControllerDelegateVC и
 // в extension-е реализовать дублирующиеся методы,
 // но столкнулась с проблемой: @objс методы не могут находиться в реализациях протокола, только в классах.
-// При этом, на занятии преподаватель сказал, что тому, как грамотно организовать данную архитектуру, будет посвящена
-// следующая лекции.
-// Так что я решила не думать пока об этом и оставить как есть, думая, что это будет мое следующее ДЗ :)
 
 extension ConversationViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, " в переписке")
         tableView.beginUpdates()
-        scrollToBottom(animated: false)
+        conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, " в переписке")
         tableView.endUpdates()
-        scrollToBottom(animated: false)
+        conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
     func controller(

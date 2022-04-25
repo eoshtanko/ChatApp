@@ -8,7 +8,6 @@
 import CoreData
 
 protocol CoreDataServiceProtocol {
-    
     init(dataModelName: String)
     var viewContext: NSManagedObjectContext { get }
     func performTaskOnMainQueueContextAndSave(_ block: @escaping (NSManagedObjectContext) -> Void)

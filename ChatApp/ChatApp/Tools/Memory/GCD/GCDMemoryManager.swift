@@ -25,6 +25,7 @@ class GCDMemoryManagerInterface<T: Codable>: MemoryManagerProtocol {
 }
 
 private class GCDMemoryManager<T: Codable> {
+    
     fileprivate let dispatchQueue = DispatchQueue.global(qos: .background)
     // Операция, результат которой отразиться на UI
     fileprivate var completionOperation: ((Result<T, Error>) -> Void)?
@@ -36,6 +37,7 @@ private class GCDMemoryManager<T: Codable> {
 }
 
 private class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T>, Writer {
+    
     private var objectToWrite: T
     init(objectToWrite: T, plistFileName: String, completionOperation: ((Result<T, Error>) -> Void)?) {
         self.objectToWrite = objectToWrite
@@ -51,7 +53,7 @@ private class GCDWriteToMemoryManager<T: Codable>: GCDMemoryManager<T>, Writer {
 }
 
 private class GCDReadFromMemoryManager<T: Codable>: GCDMemoryManager<T>, Reader {
-    // Бессмысленный элемент, но без него компилятор не мог вывести T
+    
     private var objectToRead: T?
     func getObjectFromMemory() {
         dispatchQueue.async {

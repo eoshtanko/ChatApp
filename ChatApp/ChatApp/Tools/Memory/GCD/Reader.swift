@@ -14,6 +14,7 @@ protocol Reader {
 }
 
 extension Reader {
+    
     func readObjectFromMemory<T: Decodable>(url plistURL: URL?,
                                             objectToRead: T?,
                                             completion: ((Result<T, Error>) -> Void)?) {

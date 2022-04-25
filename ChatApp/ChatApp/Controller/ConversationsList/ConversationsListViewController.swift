@@ -9,16 +9,23 @@ import UIKit
 import Firebase
 import CoreData
 
+// Вынести алерты
 class ConversationsListViewController: UIViewController {
+    
+    var conversationsListView: ConversationsListView? {
+        view as? ConversationsListView
+    }
     
     private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     var currentTheme: Theme = .classic {
         didSet {
-            setCurrentTheme()
+            themeManager.theme = currentTheme
+            conversationsListView?.setCurrentTheme(theme: currentTheme, themeManager: themeManager, navigationItem: navigationItem)
         }
     }
     
     let coreDataStack = NewCoreDataService(dataModelName: Const.dataModelName)
+    // TODO подумать. Наверное, это можно убрать из этого контроллера
     lazy var fetchedResultsController: NSFetchedResultsController<DBChannel> = {
         let controller = coreDataStack.getNSFetchedResultsControllerForChannels()
         controller.delegate = self
@@ -33,31 +40,22 @@ class ConversationsListViewController: UIViewController {
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")
     
-    let tableView = UITableView(frame: .zero, style: .grouped)
-    
-    var profileViewController: ProfileViewController?
-    
-    private var activityIndicator: UIActivityIndicatorView?
-    
-    private let GCDMemoryManagerForApplicationPreferences = GCDMemoryManagerInterface<ApplicationPreferences>()
-    
-    private let dayNavBarAppearance = UINavigationBarAppearance()
-    private let nightNavBarAppearance = UINavigationBarAppearance()
+    override func loadView() {
+        view = ConversationsListView()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCurrentUser()
-        configureAppearances()
         configureSnapshotListener()
         configureNavigationBar()
-        instatiateProfileViewController()
         setInitialThemeToApp()
         configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationTitle()
+        conversationsListView?.configureNavigationTitle(navigationItem: navigationItem, navigationController: navigationController)
     }
     
     private func configureSnapshotListener() {
@@ -86,7 +84,6 @@ class ConversationsListViewController: UIViewController {
         guard let channel = Channel(document: change.document) else {
             return
         }
-        
         switch change.type {
         case .added, .modified:
             coreDataStack.saveChannel(channel: channel)
@@ -104,7 +101,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func showFailToDeleteChannelAlert(id: String) {
-        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось загрузить каналы.", preferredStyle: UIAlertController.Style.alert)
+        let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось удалить каналы.", preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
             self.removeChannelFromFirebase(withID: id)
@@ -113,32 +110,12 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureTableView() {
-        tableView.register(
-            UINib(nibName: String(describing: ConversationTableViewCell.self), bundle: nil),
-            forCellReuseIdentifier: ConversationTableViewCell.identifier
-        )
-        tableView.dataSource = self
-        tableView.delegate = self
-        view.addSubview(tableView)
-        configureTableViewAppearance()
-    }
-    
-    private func configureTableViewAppearance() {
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        conversationsListView?.tableView.dataSource = self
+        conversationsListView?.tableView.delegate = self
+        conversationsListView?.configureTableView()
     }
     
     private func loadCurrentUser() {
-        loadUserViaGCDB()
-    }
-    
-    private func loadUserViaGCDB() {
         loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
     }
     
@@ -163,16 +140,11 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
-        configureNavigationTitle()
-        configureNavigationButton()
+        conversationsListView?.configureNavigationTitle(navigationItem: navigationItem, navigationController: navigationController)
+        configureNavigationButtons()
     }
     
-    private func configureNavigationTitle() {
-        navigationItem.title = "Channels"
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    private func configureNavigationButton() {
+    private func configureNavigationButtons() {
         configureLeftNavigationButtons()
         configureRightNavigationButton()
     }
@@ -180,40 +152,34 @@ class ConversationsListViewController: UIViewController {
     private func configureLeftNavigationButtons() {
         let settingsBarButtonItem = getSettingsBarButtonItem()
         let addNewChannelBarButtonItem = getAddNewChannelBarButtonItem()
-        self.navigationItem.leftBarButtonItems = [settingsBarButtonItem, addNewChannelBarButtonItem]
+        if let settingsButton = settingsBarButtonItem, let addButton = addNewChannelBarButtonItem {
+            self.navigationItem.leftBarButtonItems = [settingsButton, addButton]
+        }
     }
     
-    private func getSettingsBarButtonItem() -> UIBarButtonItem {
-        let settingsButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
-                                                    height: Const.sizeOfSettingsNavigationButton))
-        setImageToSettingsNavigationButton(settingsButton, imageName: "gear")
-        settingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
-        return UIBarButtonItem(customView: settingsButton)
+    private func getSettingsBarButtonItem() -> UIBarButtonItem? {
+        let settingsButton = conversationsListView?.getNavigationButton(name: "gear")
+        settingsButton?.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
+        if let settingsButton = settingsButton {
+            return UIBarButtonItem(customView: settingsButton)
+        } else { return nil }
     }
     
-    private func getAddNewChannelBarButtonItem() -> UIBarButtonItem {
-        let addNewChannelButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfSettingsNavigationButton,
-                                                         height: Const.sizeOfSettingsNavigationButton))
-        setImageToSettingsNavigationButton(addNewChannelButton, imageName: "plus")
-        addNewChannelButton.addTarget(self, action: #selector(showAddNewChannelAlert), for: .touchUpInside)
-        return UIBarButtonItem(customView: addNewChannelButton)
-    }
-    
-    private func setImageToSettingsNavigationButton(_ settingsButton: UIButton, imageName: String) {
-        settingsButton.setImage(UIImage(systemName: imageName), for: .normal)
-        settingsButton.imageView?.tintColor = UIColor(named: "BarButtonColor")
-        settingsButton.contentHorizontalAlignment = .fill
-        settingsButton.contentVerticalAlignment = .fill
+    private func getAddNewChannelBarButtonItem() -> UIBarButtonItem? {
+        let settingsButton = conversationsListView?.getNavigationButton(name: "plus")
+        settingsButton?.addTarget(self, action: #selector(showAddNewChannelAlert), for: .touchUpInside)
+        if let settingsButton = settingsButton {
+            return UIBarButtonItem(customView: settingsButton)
+        } else { return nil }
     }
     
     @objc private func goToSettings() {
         let themesStoryboard = UIStoryboard(name: "Themes", bundle: nil)
         let themesViewController = themesStoryboard.instantiateViewController(identifier: "Themes", creator: { coder -> ThemesViewController? in
-            ThemesViewController(coder: coder, themesPickerDelegate: self, theme: self.currentTheme) { [weak self] theme in
+            ThemesViewController(coder: coder, theme: self.currentTheme) { [weak self] theme in
                 if self?.currentTheme != theme {
+                    self?.themeManager.theme = theme
                     self?.currentTheme = theme
-                    self?.setCurrentTheme()
-                    self?.themeManager.writeThemeToMemory()
                 }
             }
         })
@@ -274,7 +240,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func setInitialThemeToApp() {
-        setCurrentTheme()
+        conversationsListView?.setCurrentTheme(theme: currentTheme, themeManager: themeManager, navigationItem: navigationItem)
         themeManager.readThemeFromMemory { [weak self] result in
             self?.handleLoadPreferencesFromMemoryRequestResult(result: result)
         }
@@ -285,7 +251,6 @@ class ConversationsListViewController: UIViewController {
             switch result {
             case .success(let preferences):
                 self?.currentTheme = Theme(rawValue: preferences.themeId) ?? .classic
-                self?.setCurrentTheme()
             case .failure:
                 return
             }
@@ -293,104 +258,25 @@ class ConversationsListViewController: UIViewController {
     }
     
     func configureRightNavigationButton() {
-        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfProfileNavigationButton,
-                                                   height: Const.sizeOfProfileNavigationButton))
-        setImageToProfileNavigationButton(profileButton)
-        profileButton.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileButton)
-    }
-    
-    private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
-        if let imageData = CurrentUser.user.imageData, var image = UIImage(data: imageData) {
-            image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
-                                             height: Const.sizeOfProfileNavigationButton))
-            profileButton.setImage(image, for: .normal)
-        } else {
-            setDefaultImage(profileButton)
+        if let profileButton = conversationsListView?.getProfileNavigationButton() {
+            profileButton.addTarget(self, action: #selector(goToProfile), for: .touchUpInside)
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profileButton)
         }
-        configureImage(profileButton)
-    }
-    
-    private func setDefaultImage(_ profileButton: UIButton) {
-        profileButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
-        profileButton.imageView?.tintColor = UIColor(named: "DefaultImageColor")
-        profileButton.backgroundColor = UIColor(named: "BackgroundImageColor")
-    }
-    
-    private func configureImage(_ profileButton: UIButton) {
-        profileButton.imageView?.layer.cornerRadius = profileButton.frame.size.width / 2
-        profileButton.layer.cornerRadius = profileButton.frame.size.width / 2
-        profileButton.contentHorizontalAlignment = .fill
-        profileButton.contentVerticalAlignment = .fill
-        profileButton.imageView?.contentMode = .scaleAspectFill
-        profileButton.imageView?.clipsToBounds = true
-    }
-    
-    private func instatiateProfileViewController() {
-        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
-        profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
     }
     
     @objc private func goToProfile() {
-        if let profile = profileViewController {
-            profile.conversationsListViewController = self
-            present(profile, animated: true)
+        let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
+        let profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
+        if let profileViewController = profileViewController {
+            profileViewController.setCurrentTheme(currentTheme)
+            profileViewController.conversationsListViewController = self
+            present(profileViewController, animated: true)
         }
-    }
-    
-    private func configureAppearances() {
-        configureDayNavBarAppearance()
-        configureNightNavBarAppearance()
-    }
-    
-    private func configureDayNavBarAppearance() {
-        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
-    }
-    
-    private func configureNightNavBarAppearance() {
-        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        nightNavBarAppearance.backgroundColor = .black
-    }
-    
-    func setDayOrClassicTheme() {
-        tableView.backgroundColor = .white
-        setDayOrClassicThemeToNavBar()
-        tableView.reloadData()
-    }
-    
-    // ДОЛГО ДОЛГО ДОЛГО пыталась избавиться от этих
-    // варинингов, но нет... :.(
-    private func setDayOrClassicThemeToNavBar() {
-        UIApplication.shared.statusBarStyle = .darkContent
-        navigationItem.standardAppearance = dayNavBarAppearance
-        navigationItem.scrollEdgeAppearance = dayNavBarAppearance
-    }
-    
-    func setNightTheme() {
-        tableView.backgroundColor = .black
-        setNightThemeToNavBar()
-        tableView.reloadData()
-    }
-    
-    private func setNightThemeToNavBar() {
-        UIApplication.shared.statusBarStyle = .lightContent
-        navigationItem.standardAppearance = nightNavBarAppearance
-        navigationItem.scrollEdgeAppearance = nightNavBarAppearance
     }
     
     enum Const {
         static let dataModelName = "Chat"
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
-        static let sizeOfProfileNavigationButton: CGFloat = 40
-        static let sizeOfSettingsNavigationButton: CGFloat = 24.8
     }
-}
-
-enum FileNames {
-    static let plistFileNameForProfileInfo = "ProfileInfo.plist"
-    static let plistFileNameForPreferences = "Preferences.plist"
 }

@@ -14,20 +14,17 @@ import CoreData
 // Я попробовала сделать протокол, что-то вроде NSFetchedResultsControllerDelegateVC и
 // в extension-е реализовать дублирующиеся методы,
 // но столкнулась с проблемой: @objс методы не могут находиться в реализациях протокола, только в классах.
-// При этом, на занятии преподаватель сказал, что тому, как грамотно организовать данную архитектуру, будет посвящена
-// следующая лекции.
-// Так что я решила не думать пока об этом и оставить как есть, думая, что это будет мое следующее ДЗ :)
 
 extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
-        tableView.beginUpdates()
+        conversationsListView?.tableView.beginUpdates()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         Logger.logPresenceInMethod(methodName: #function, "в списке с переписками.")
-        tableView.endUpdates()
+        conversationsListView?.tableView.endUpdates()
     }
     
     func controller(
@@ -37,29 +34,28 @@ extension ConversationsListViewController: NSFetchedResultsControllerDelegate {
         for type: NSFetchedResultsChangeType,
         newIndexPath: IndexPath?
     ) {
-        
         switch type {
         case .insert:
             guard let newIndexPath = newIndexPath else { return }
             
-            tableView.insertRows(at: [newIndexPath], with: .bottom)
+            conversationsListView?.tableView.insertRows(at: [newIndexPath], with: .bottom)
             
         case .delete:
             guard let indexPath = indexPath else { return }
             
-            tableView.deleteRows(at: [indexPath], with: .left)
+            conversationsListView?.tableView.deleteRows(at: [indexPath], with: .left)
             
         case .move:
             guard let indexPath = indexPath,
                   let newIndexPath = newIndexPath else { return }
             
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            conversationsListView?.tableView.deleteRows(at: [indexPath], with: .automatic)
+            conversationsListView?.tableView.insertRows(at: [newIndexPath], with: .automatic)
             
         case .update:
             guard let indexPath = indexPath else { return }
             
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            conversationsListView?.tableView.reloadRows(at: [indexPath], with: .automatic)
             
         @unknown default:
             return

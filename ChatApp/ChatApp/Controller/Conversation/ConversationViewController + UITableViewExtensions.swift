@@ -19,7 +19,7 @@ extension ConversationViewController {
 extension ConversationViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return Const.numberOfSections
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

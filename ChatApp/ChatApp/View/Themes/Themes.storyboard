@@ -14,7 +14,7 @@
         <scene sceneID="mhg-QC-k16">
             <objects>
                 <viewController storyboardIdentifier="Themes" id="VcV-Z0-Pwj" customClass="ThemesViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="laD-Me-6kh">
+                    <view key="view" contentMode="scaleToFill" id="laD-Me-6kh" customClass="ThemesView" customModule="ChatApp" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -140,20 +140,23 @@
                             <constraint firstItem="xjo-B2-lo9" firstAttribute="top" secondItem="V3z-h3-o20" secondAttribute="bottom" constant="20" id="rE3-Hg-qC7"/>
                             <constraint firstItem="csT-He-hIv" firstAttribute="centerX" secondItem="laD-Me-6kh" secondAttribute="centerX" id="rNd-OS-7z0"/>
                         </constraints>
+                        <connections>
+                            <outlet property="classicThemeArea" destination="sGM-JJ-VaO" id="nHf-S8-SdJ"/>
+                            <outlet property="classicThemeIncomingMessage" destination="PGN-86-u7u" id="ATb-lB-ydV"/>
+                            <outlet property="classicThemeLabel" destination="Ydr-5r-Z9h" id="wVe-W3-WRi"/>
+                            <outlet property="classicThemeOutcomingMessage" destination="tJc-ya-iKz" id="uGy-O5-0CR"/>
+                            <outlet property="dayThemeArea" destination="c8F-yT-jWv" id="nXG-Eu-iSv"/>
+                            <outlet property="dayThemeIncomingMessage" destination="lmw-Fr-GAM" id="maT-yV-cSW"/>
+                            <outlet property="dayThemeLabel" destination="csT-He-hIv" id="dH3-LJ-wiT"/>
+                            <outlet property="dayThemeOutcomingMessage" destination="yf6-13-jT5" id="Y7g-mw-0KG"/>
+                            <outlet property="nightThemeArea" destination="V3z-h3-o20" id="0da-A3-mtJ"/>
+                            <outlet property="nightThemeIncomingMessage" destination="XZg-zl-VzV" id="XH4-mI-24p"/>
+                            <outlet property="nightThemeLabel" destination="xjo-B2-lo9" id="TJM-R9-eZd"/>
+                            <outlet property="nightThemeOutcomingMessage" destination="tZ6-DM-HzX" id="P06-Nk-NLh"/>
+                        </connections>
                     </view>
                     <connections>
-                        <outlet property="classicThemeArea" destination="sGM-JJ-VaO" id="KFc-XA-TuE"/>
-                        <outlet property="classicThemeIncomingMessage" destination="PGN-86-u7u" id="Tbo-3p-r8v"/>
-                        <outlet property="classicThemeLabel" destination="Ydr-5r-Z9h" id="sdS-vg-FJE"/>
-                        <outlet property="classicThemeOutcomingMessage" destination="tJc-ya-iKz" id="Ztg-sm-Z3O"/>
-                        <outlet property="dayThemeArea" destination="c8F-yT-jWv" id="Xb2-YP-J1a"/>
-                        <outlet property="dayThemeIncomingMessage" destination="lmw-Fr-GAM" id="hSC-Ui-V7M"/>
-                        <outlet property="dayThemeLabel" destination="csT-He-hIv" id="g9h-ob-ZDT"/>
-                        <outlet property="dayThemeOutcomingMessage" destination="yf6-13-jT5" id="BIi-PY-9zq"/>
-                        <outlet property="nightThemeArea" destination="V3z-h3-o20" id="Z0D-sa-zSm"/>
-                        <outlet property="nightThemeIncomingMessage" destination="XZg-zl-VzV" id="g5k-gp-ayz"/>
-                        <outlet property="nightThemeLabel" destination="xjo-B2-lo9" id="a6o-To-soZ"/>
-                        <outlet property="nightThemeOutcomingMessage" destination="tZ6-DM-HzX" id="vy0-mI-nuP"/>
+                        <outlet property="themesView" destination="laD-Me-6kh" id="KAC-OW-HRP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="01N-2R-5rh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -163,25 +166,25 @@
     </scenes>
     <resources>
         <namedColor name="BackgroundClassicThemeColor">
-            <color red="0.094117647058823528" green="0.21176470588235294" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.093999996781349182" green="0.21199999749660492" blue="0.37999999523162842" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="IncomingMessageColor">
-            <color red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.875" green="0.875" blue="0.875" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="IncomingMessageDayThemeColor">
-            <color red="0.91764705882352937" green="0.92156862745098034" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.9179999828338623" green="0.92199999094009399" blue="0.92900002002716064" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="IncomingMessageNightThemeColor">
-            <color red="0.16470588235294117" green="0.16470588235294117" blue="0.16470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.16500000655651093" green="0.16500000655651093" blue="0.16500000655651093" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="OutcomingMessageColor">
-            <color red="0.86274509803921573" green="0.96862745098039216" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.86299997568130493" green="0.96899998188018799" blue="0.77300000190734863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="OutcomingMessageDayThemeColor">
             <color red="0.24705882352941178" green="0.53725490196078429" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="OutcomingMessageNightThemeColor">
-            <color red="0.36078431372549019" green="0.36078431372549019" blue="0.36078431372549019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.36100000143051147" green="0.36100000143051147" blue="0.36100000143051147" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

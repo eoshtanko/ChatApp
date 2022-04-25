@@ -19,7 +19,7 @@ class ThemeManager: ThemeManagerProtocol {
     private let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
     
     // Струтура ответственная за создание тем
-    private let themes: ThemesProtocol = Themes()
+    private lazy var themes: ThemesProtocol = Themes()
     
     // Текущая тема
     var theme: Theme {
@@ -32,13 +32,14 @@ class ThemeManager: ThemeManagerProtocol {
             case .night:
                 themeSettings = themes.nightTheme
             }
+            writeThemeToMemory()
         }
     }
     
     // Пареметры текущей темы
     private(set) var themeSettings: ThemeSettingsProtocol? {
         didSet {
-            setTheme(temeSettings: themeSettings ?? themes.classicTheme)
+            setTheme(themeSettings: themeSettings ?? themes.classicTheme)
         }
     }
     
@@ -59,13 +60,14 @@ class ThemeManager: ThemeManagerProtocol {
         }
     }
     
-    private func setTheme(temeSettings: ThemeSettingsProtocol) {
-        UIActivityIndicatorView.appearance().color = temeSettings.activityIndicatorColor
-        UITextView.appearance().textColor = temeSettings.primaryTextColor
-        UITextView.appearance().backgroundColor = themeSettings?.backgroundColor
-        UITextField.appearance().textColor = temeSettings.primaryTextColor
-        UITextField.appearance().keyboardAppearance = temeSettings.keyboardAppearance
-        UINavigationBar.appearance().backgroundColor = temeSettings.navigationBarColor
+    private func setTheme(themeSettings: ThemeSettingsProtocol) {
+        UIActivityIndicatorView.appearance().color = themeSettings.activityIndicatorColor
+        UITextView.appearance().textColor = themeSettings.primaryTextColor
+        UITextView.appearance().backgroundColor = themeSettings.backgroundColor
+        UITextField.appearance().textColor = themeSettings.primaryTextColor
+        UITextField.appearance().keyboardAppearance = themeSettings.keyboardAppearance
+        UINavigationBar.appearance().backgroundColor = themeSettings.navigationBarColor
+        UIApplication.shared.statusBarStyle = themeSettings.statusBarStyle
     }
 }
 

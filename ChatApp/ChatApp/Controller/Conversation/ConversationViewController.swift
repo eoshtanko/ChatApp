@@ -11,6 +11,18 @@ import CoreData
 
 class ConversationViewController: UITableViewController {
     
+    private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+        }
+    }
+    
+    var entreMessageBar: EnterMessageView?
+    var conversationView: ConversationView? {
+        view as? ConversationView
+    }
+    
     let coreDataStack: CoreDataServiceProtocol?
     lazy var fetchedResultsController: NSFetchedResultsController<DBMessage>? = {
         let controller = coreDataStack?.getNSFetchedResultsControllerForMessages(channelId: channel?.identifier)
@@ -23,7 +35,6 @@ class ConversationViewController: UITableViewController {
         return controller
     }()
     
-    //    private let networkManager = NetworkManager()
     private let channel: Channel?
     private let dbChannelReference: CollectionReference
     lazy var reference: CollectionReference = {
@@ -31,36 +42,31 @@ class ConversationViewController: UITableViewController {
         return dbChannelReference.document(channelIdentifier).collection("messages")
     }()
     
-    var entreMessageBar: EntryMessageView?
-    var hightOfKeyboard: CGFloat?
-    
-    var currentTheme: Theme = .classic
-    
-    private let nightNavBarAppearance = UINavigationBarAppearance()
-    private let dayNavBarAppearance = UINavigationBarAppearance()
-    
     init?(coreDataStack: CoreDataServiceProtocol, theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
         self.coreDataStack = coreDataStack
-        currentTheme = theme
         self.channel = channel
         self.dbChannelReference = dbChannelRef
+        self.currentTheme = theme
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    override func loadView() {
+        let conversationView = ConversationView()
+        conversationView.delegate = self
+        conversationView.dataSource = self
+        view = conversationView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureTableView()
-        configureNavigationBar()
-        configureAppearances()
         registerKeyboardNotifications()
-        configureTapGestureRecognizer()
         configureSnapshotListener()
-        scrollToBottom(animated: false)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setCurrentTheme()
+        configureTapGestureRecognizer()
+        conversationView?.configureView(navigationItem: navigationItem, title: channel?.name, entreMessageBar: entreMessageBar)
+        conversationView?.setCurrentTheme(themeManager: themeManager,
+                                          theme: currentTheme,
+                                          navigationController: navigationController,
+                                          navigationItem: navigationItem)
     }
     
     private func configureSnapshotListener() {
@@ -97,95 +103,8 @@ class ConversationViewController: UITableViewController {
         case .added:
             coreDataStack?.saveMessage(message: message, channel: channel, id: change.document.documentID)
         case .removed, .modified:
-            // Будем считать, что удалять/редактировать сообщения НИЗЯ
             return
         }
-    }
-    
-    private func configureTapGestureRecognizer() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                 action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        entreMessageBar?.textView.resignFirstResponder()
-    }
-    
-    private func configureNavigationBar() {
-        navigationItem.title = channel?.name
-        navigationItem.largeTitleDisplayMode = .never
-    }
-    
-    private func configureTableView() {
-        tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
-        tableView.rowHeight = UITableView.automaticDimension
-    }
-    
-    func scrollToBottom(animated: Bool) {
-        view.layoutIfNeeded()
-        if isScrollingNecessary() {
-            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard() : bottomOffsetWithoutKeyboard()
-            
-            tableView.setContentOffset(bottomOffset, animated: animated)
-        }
-    }
-    
-    private func isScrollingNecessary() -> Bool {
-        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
-        return tableView.contentSize.height > tableView.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
-    }
-    
-    private func bottomOffsetWithKeyboard() -> CGPoint {
-        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (hightOfKeyboard ?? 0))
-    }
-    
-    private func bottomOffsetWithoutKeyboard() -> CGPoint {
-        return CGPoint(x: 0, y: tableView.contentSize.height - tableView.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
-    }
-    
-    private func configureAppearances() {
-        configureNavBarAppearanceForNightTheme()
-        configureNavBarAppearanceForDayOrClassicTheme()
-    }
-    
-    private func configureNavBarAppearanceForNightTheme() {
-        nightNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        nightNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        nightNavBarAppearance.backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
-    }
-    
-    private func configureNavBarAppearanceForDayOrClassicTheme() {
-        dayNavBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        dayNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
-        dayNavBarAppearance.backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
-    }
-    
-    private func setCurrentTheme() {
-        switch currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
-        }
-    }
-    
-    private func setDayOrClassicTheme() {
-        view.backgroundColor = .white
-        navigationController?.navigationBar.tintColor = .systemBlue
-        navigationItem.standardAppearance = dayNavBarAppearance
-        ChatMessageCell.setCurrentTheme(currentTheme)
-        tableView.reloadData()
-    }
-    
-    private func setNightTheme() {
-        tableView.backgroundColor = .black
-        navigationController?.navigationBar.tintColor = .systemYellow
-        navigationItem.standardAppearance = nightNavBarAppearance
-        ChatMessageCell.setCurrentTheme(currentTheme)
-        tableView.reloadData()
     }
     
     required init?(coder: NSCoder) {
@@ -194,8 +113,7 @@ class ConversationViewController: UITableViewController {
     
     enum Const {
         static let dataModelName = "Chat"
-        static let estimatedRowHeight: CGFloat = 60
         static let heightOfHeader: CGFloat = 50
-        static let empiricalValue: CGFloat = 70
+        static let numberOfSections = 1
     }
 }

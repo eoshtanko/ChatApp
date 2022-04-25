@@ -11,7 +11,13 @@ class ConversationTableViewCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
     
-    private static var currentTheme: Theme = .classic
+    private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    static var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+        }
+    }
+    
     private let formatter = DateFormatter()
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -81,28 +87,12 @@ class ConversationTableViewCell: UITableViewCell {
     }
     
     private func setCurrentTheme() {
-        switch ConversationTableViewCell.currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
-        }
+        backgroundColor = ConversationTableViewCell.themeManager.themeSettings?.backgroundColor
+        nameLabel.textColor = ConversationTableViewCell.themeManager.themeSettings?.primaryTextColor
+        lastMessageLabel.textColor = ConversationTableViewCell.themeManager.themeSettings?.primaryTextColor
+        lastMessageDateLabel.textColor = ConversationTableViewCell.themeManager.themeSettings?.primaryTextColor
     }
-    
-    private func setDayOrClassicTheme() {
-        backgroundColor = .white
-        nameLabel.textColor = .black
-        lastMessageLabel.textColor = .black
-        lastMessageDateLabel.textColor = .black
-    }
-    
-    private func setNightTheme() {
-        backgroundColor = .black
-        nameLabel.textColor = .white
-        lastMessageLabel.textColor = .white
-        lastMessageDateLabel.textColor = .white
-    }
-    
+
     private enum Const {
         static let textSize: CGFloat = 15
         static let verticalInserts: CGFloat = 15

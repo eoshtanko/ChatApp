@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-// Все, что связано с установкой фото.
+// TODO Возможно работу с фото стоит вынести в отдельную сущность (?)
+
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController,
@@ -18,7 +19,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                 if !self.isProfileEditing {
                     self.changeProfileEditingStatus(isEditing: true)
                 }
-                self.profileImageView.image = image
+                self.profileView?.setImage(image: image)
                 self.imageDidChanged = true
                 self.setEnableStatusToSaveButtons()
             }

@@ -7,14 +7,21 @@
 
 import UIKit
 
-class EntryMessageView: UIView {
+class EnterMessageView: UIView {
     
-    private var currentTheme: Theme = .classic
+    private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+            setCurrentTheme()
+        }
+    }
+    
     private var sendMessageAction: ((String) -> Void)?
     
     @IBOutlet weak var sendMessageButton: UIButton!
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var entryMessageView: UIView!
+    @IBOutlet weak var enterMessageView: UIView!
     @IBOutlet weak var textViewHightConstraint: NSLayoutConstraint!
     
     @IBAction func sendMessage(_ sender: Any) {
@@ -23,7 +30,6 @@ class EntryMessageView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setCurrentTheme()
         configureTextView()
         sendMessageButton.isEnabled = !textView.text.isEmpty
     }
@@ -32,18 +38,25 @@ class EntryMessageView: UIView {
         return textViewContentSize()
     }
     
-    func sendMessage() {
-        if !textView.text.isEmpty {
-            sendMessageAction?(textView.text)
+    func setCurrentTheme(_ theme: Theme?) {
+        if let theme = theme {
+            currentTheme = theme
         }
-    }
-    
-    func setCurrentTheme(_ theme: Theme) {
-        currentTheme = theme
     }
     
     func setSendMessageAction(_ action: ((String) -> Void)?) {
         sendMessageAction = action
+    }
+    
+    func resetData() {
+        sendMessageButton.isEnabled = false
+        textView.text = ""
+    }
+    
+    func sendMessage() {
+        if !textView.text.isEmpty {
+            sendMessageAction?(textView.text)
+        }
     }
     
     private func textViewContentSize() -> CGSize {
@@ -61,28 +74,13 @@ class EntryMessageView: UIView {
     }
     
     private func setCurrentTheme() {
-        switch currentTheme {
-        case .classic, .day:
-            setDayOrClassicTheme()
-        case .night:
-            setNightTheme()
+        textView.backgroundColor = themeManager.themeSettings?.enterMessageTextViewBackgroundColor
+        textView.textColor = themeManager.themeSettings?.primaryTextColor
+        if let appearance = themeManager.themeSettings?.keyboardAppearance {
+        textView.keyboardAppearance = appearance
         }
-    }
-    
-    private func setDayOrClassicTheme() {
-        textView.backgroundColor = .white
-        textView.textColor = .black
-        textView.keyboardAppearance = .light
-        backgroundColor = UIColor(named: "BackgroundNavigationBarColor")
-        entryMessageView.tintColor = .systemBlue
-    }
-    
-    private func setNightTheme() {
-        textView.backgroundColor = UIColor(named: "OutcomingMessageNightThemeColor")
-        textView.textColor = .white
-        textView.keyboardAppearance = .dark
-        backgroundColor = UIColor(named: "IncomingMessageNightThemeColor")
-        entryMessageView.tintColor = .systemYellow
+        backgroundColor = themeManager.themeSettings?.enterMessageViewBackgroundColor
+        enterMessageView.tintColor = themeManager.themeSettings?.sendMessageButtonColor
     }
     
     private enum Const {
@@ -92,8 +90,8 @@ class EntryMessageView: UIView {
     }
 }
 
-extension EntryMessageView: UITextViewDelegate {
-
+extension EnterMessageView: UITextViewDelegate {
+    
     func textViewDidChange(_ textView: UITextView) {
         sendMessageButton.isEnabled = !textView.text.isEmpty
         

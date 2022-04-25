@@ -14,7 +14,7 @@
         <scene sceneID="Ouu-RY-Pp2">
             <objects>
                 <viewController storyboardIdentifier="Profile" id="L8r-NT-LYG" customClass="ProfileViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="DhB-gP-nx8">
+                    <view key="view" contentMode="scaleToFill" id="DhB-gP-nx8" customClass="ProfileView" customModule="ChatApp" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -171,20 +171,23 @@
                             <constraint firstItem="c83-rb-4jY" firstAttribute="centerX" secondItem="iBc-Zk-3dl" secondAttribute="centerX" id="vio-ah-KeA"/>
                             <constraint firstItem="406-YV-ulb" firstAttribute="centerX" secondItem="iBc-Zk-3dl" secondAttribute="centerX" id="zHc-TG-ucp"/>
                         </constraints>
+                        <connections>
+                            <outlet property="buttonVerticalStackView" destination="c83-rb-4jY" id="MJU-8A-p9F"/>
+                            <outlet property="cancelButton" destination="l5y-lJ-hJJ" id="nah-ZG-WwE"/>
+                            <outlet property="editButton" destination="Bvy-dg-Je6" id="6lh-qF-FDN"/>
+                            <outlet property="editPhotoButton" destination="ovk-pa-pTs" id="OmD-hI-a88"/>
+                            <outlet property="infoLabel" destination="3q8-tL-q9h" id="bPD-5N-BkA"/>
+                            <outlet property="nameLabel" destination="xHk-dq-ajH" id="0ds-w2-Odi"/>
+                            <outlet property="navigationBar" destination="Q0c-Bi-gtM" id="kxX-2E-cny"/>
+                            <outlet property="navigationBarButton" destination="kbm-hq-M2p" id="8MN-ar-v5D"/>
+                            <outlet property="navigationBarLabel" destination="MEh-Ls-Fvu" id="DZF-sr-DhZ"/>
+                            <outlet property="profileImageView" destination="406-YV-ulb" id="GIq-L6-L6v"/>
+                            <outlet property="saveGCDButton" destination="y1l-wN-dKB" id="vna-jv-i1Q"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="V6Y-Ke-s5y"/>
                     <connections>
-                        <outlet property="buttonVerticalStackView" destination="c83-rb-4jY" id="K41-Wv-PJk"/>
-                        <outlet property="cancelButton" destination="l5y-lJ-hJJ" id="4yL-MP-157"/>
-                        <outlet property="editButton" destination="Bvy-dg-Je6" id="IaQ-3m-WBb"/>
-                        <outlet property="editPhotoButton" destination="ovk-pa-pTs" id="BTH-ou-I9U"/>
-                        <outlet property="infoLabel" destination="3q8-tL-q9h" id="JYd-Ve-vSI"/>
-                        <outlet property="nameLabel" destination="xHk-dq-ajH" id="a4u-Xa-2kp"/>
-                        <outlet property="navigationBar" destination="Q0c-Bi-gtM" id="e2t-an-Xvf"/>
-                        <outlet property="navigationBarButton" destination="kbm-hq-M2p" id="MbG-0f-Acf"/>
-                        <outlet property="navigationBarLabel" destination="MEh-Ls-Fvu" id="ksZ-DU-QiN"/>
-                        <outlet property="profileImageView" destination="406-YV-ulb" id="Vs7-ov-MWK"/>
-                        <outlet property="saveGCDButton" destination="y1l-wN-dKB" id="Ege-mA-tg5"/>
+                        <outlet property="profileView" destination="DhB-gP-nx8" id="q6P-cd-oO9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gUK-C4-qeb" sceneMemberID="firstResponder"/>

@@ -11,6 +11,13 @@ class ChatMessageCell: UITableViewCell {
     
     static let identifier = String(describing: ConversationTableViewCell.self)
     
+    private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    static var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+        }
+    }
+    
     private let messageLabel = UILabel()
     private let bubbleBackgroundView = UIView()
     private let namelabel = UILabel()
@@ -24,48 +31,52 @@ class ChatMessageCell: UITableViewCell {
     private var incomingMessageUIColor: UIColor!
     private var outcomingMessageUIColor: UIColor!
     
-    private static var currentTheme: Theme = .classic
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        addSubview(bubbleBackgroundView)
-        addSubview(messageLabel)
-        addSubview(namelabel)
-        
         self.isUserInteractionEnabled = false
-        bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
-        bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.numberOfLines = 0
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        setCurrentTheme()
+        addSubviews()
+        configureBubbleBackgroundView()
+        configureMessageLabel()
         configureConstraints()
     }
     
+    private func addSubviews() {
+        addSubview(bubbleBackgroundView)
+        addSubview(messageLabel)
+        addSubview(namelabel)
+    }
+    
+    private func configureBubbleBackgroundView() {
+        bubbleBackgroundView.layer.cornerRadius = Const.cornerRadius
+        bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func configureMessageLabel() {
+        messageLabel.numberOfLines = 0
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
     func configureCell(_ chatMessage: Message) {
-        messageLabel.text = chatMessage.content
-        namelabel.text = chatMessage.senderName.isEmpty ? "No name" : chatMessage.senderName
-        
+        configureContent(chatMessage)
+        setCurrentTheme()
         bubbleBackgroundView.backgroundColor = chatMessage.senderId == CurrentUser.user.id ?
         outcomingMessageUIColor : incomingMessageUIColor
+        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
+    }
+    
+    private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
+        leadingConstraint.isActive = !isOutcoming
+        trailingConstraint.isActive = isOutcoming
         
-        if chatMessage.senderId == CurrentUser.user.id {
-            leadingConstraint.isActive = false
-            trailingConstraint.isActive = true
-            
-            messageLabelTopConstantWithName.isActive = false
-            messageLabelTopConstantWithoutName.isActive = true
-            
-            namelabel.isHidden = true
-        } else {
-            trailingConstraint.isActive = false
-            leadingConstraint.isActive = true
-            
-            messageLabelTopConstantWithoutName.isActive = false
-            messageLabelTopConstantWithName.isActive = true
-            
-            namelabel.isHidden = false
-        }
+        messageLabelTopConstantWithName.isActive = !isOutcoming
+        messageLabelTopConstantWithoutName.isActive = isOutcoming
+        
+        namelabel.isHidden = isOutcoming
+    }
+    
+    private func configureContent(_ chatMessage: Message) {
+        messageLabel.text = chatMessage.content
+        namelabel.text = chatMessage.senderName.isEmpty ? "No name" : chatMessage.senderName
     }
     
     static func setCurrentTheme(_ theme: Theme) {
@@ -86,46 +97,26 @@ class ChatMessageCell: UITableViewCell {
         ])
         namelabel.frame.size = CGSize(width: Const.messageLabelWidth, height: Const.hightOfNameLabel)
         
+        configureNameConstants()
+        configureSenderIdentifyingConstants()
+    }
+    
+    private func configureNameConstants() {
         messageLabelTopConstantWithName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithName)
         messageLabelTopConstantWithoutName = messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: Const.topConstantWithoutName)
-        
+    }
+    
+    private func configureSenderIdentifyingConstants() {
         leadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Const.messageLabelLeadingAndTrailingConstraint)
     }
     
     private func setCurrentTheme() {
-        switch ChatMessageCell.currentTheme {
-        case .classic:
-            setClassicTheme()
-        case .day:
-            setDayTheme()
-        case .night:
-            setNightTheme()
-        }
-    }
-    
-    private func setClassicTheme() {
-        backgroundColor = .white
-        namelabel.textColor = .darkGray
-        messageLabel.textColor = .black
-        incomingMessageUIColor = UIColor(named: "IncomingMessageColor")
-        outcomingMessageUIColor = UIColor(named: "OutcomingMessageColor")
-    }
-    
-    private func setDayTheme() {
-        backgroundColor = .white
-        namelabel.textColor = .darkGray
-        messageLabel.textColor = .black
-        incomingMessageUIColor = UIColor(named: "IncomingMessageDayThemeColor")
-        outcomingMessageUIColor = UIColor(named: "OutcomingMessageDayThemeColor")
-    }
-    
-    private func setNightTheme() {
-        backgroundColor = .black
-        namelabel.textColor = .lightGray
-        messageLabel.textColor = .white
-        incomingMessageUIColor = UIColor(named: "IncomingMessageNightThemeColor")
-        outcomingMessageUIColor = UIColor(named: "OutcomingMessageNightThemeColor")
+        backgroundColor = ChatMessageCell.themeManager.themeSettings?.backgroundColor
+        namelabel.textColor = ChatMessageCell.themeManager.themeSettings?.secondaryTextColor
+        messageLabel.textColor = ChatMessageCell.themeManager.themeSettings?.primaryTextColor
+        incomingMessageUIColor = ChatMessageCell.themeManager.themeSettings?.incomingMessageColor
+        outcomingMessageUIColor = ChatMessageCell.themeManager.themeSettings?.outcomingMessageColor
     }
     
     required init?(coder: NSCoder) {

@@ -13,18 +13,11 @@ extension ConversationViewController {
     override var inputAccessoryView: UIView? {
         if entreMessageBar == nil {
             
-            entreMessageBar = Bundle.main.loadNibNamed("EntryMessageView", owner: self, options: nil)?.first as? EntryMessageView
+            entreMessageBar = Bundle.main.loadNibNamed("EnterMessageView", owner: self, options: nil)?.first as? EnterMessageView
             
             entreMessageBar?.setCurrentTheme(currentTheme)
             entreMessageBar?.setSendMessageAction { [weak self] message in
-                guard let self = self else { return }
-                
-                //                guard networkManager.isInternetConnected else {
-                //                    self.showFailToSendMessageAlert()
-                //                    return
-                //                }
-                
-                self.sendMessage(message: message)
+                self?.sendMessage(message: message)
             }
         }
         
@@ -46,8 +39,7 @@ extension ConversationViewController {
                 self?.showFailToSendMessageAlert()
                 return
             }
-            self?.entreMessageBar?.sendMessageButton.isEnabled = false
-            self?.entreMessageBar?.textView.text = ""
+            self?.entreMessageBar?.resetData()
         }
     }
     
@@ -65,13 +57,23 @@ extension ConversationViewController {
     @objc func keyboardDidShow(_ notification: NSNotification) {
         if entreMessageBar?.textView.isFirstResponder ?? false {
             guard let payload = KeyboardInfo(notification) else { return }
-            hightOfKeyboard = payload.frameEnd?.size.height
+            conversationView?.hightOfKeyboard = payload.frameEnd?.size.height
         }
-        scrollToBottom(animated: false)
+        conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        scrollToBottom(animated: false)
+        conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
+    }
+    
+    func configureTapGestureRecognizer() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                 action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        entreMessageBar?.textView.resignFirstResponder()
     }
     
     private func showFailToSendMessageAlert() {

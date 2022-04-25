@@ -10,7 +10,6 @@ import UIKit
 
 extension ProfileViewController: UITextFieldDelegate {
     
-    // Ввожу ограничение на максимальное количество символов в имени.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentCharacterCount = textField.text?.count ?? 0
         if range.length + range.location > currentCharacterCount {
@@ -43,14 +42,13 @@ extension ProfileViewController: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        infoDidChanged = (textView.text.isEmpty ? "" : textView.text) != initialInfo
+        infoDidChanged = textView.text != initialInfo
         setEnableStatusToSaveButtons()
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = Const.textViewPlaceholderText
-            setEmptyIndicatorColorToInfoLabel()
+            profileView?.setEmptyStateToInfoLabel(themeManager)
         }
     }
 }
