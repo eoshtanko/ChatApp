@@ -17,6 +17,7 @@ protocol CoreDataServiceForChannelsProtocol {
     func parseDBChannelToChannel(_ dbChannel: DBChannel) throws -> Channel
 }
 
+// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class CoreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?
