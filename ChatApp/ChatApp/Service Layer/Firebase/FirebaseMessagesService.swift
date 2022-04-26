@@ -15,6 +15,7 @@ protocol FirebaseMessagesServiceProtocol {
     func sendMessage(message: Message, failAction: @escaping (() -> Void), successAction: @escaping (() -> Void))
 }
 
+// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class FirebaseMessagesService: FirebaseMessagesServiceProtocol {
 
     private let channel: Channel?
