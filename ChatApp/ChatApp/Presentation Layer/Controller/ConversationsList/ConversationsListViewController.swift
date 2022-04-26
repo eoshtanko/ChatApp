@@ -23,6 +23,8 @@ class ConversationsListViewController: UIViewController {
         }
     }
 
+    private let userSavingService = UserSavingService()
+    
     let coreDataService = CoreDataServiceForChannels(dataModelName: Const.dataModelName)
     lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self)
     
@@ -105,18 +107,13 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func loadCurrentUser() {
-        loadWithMemoryManager(memoryManager: GCDMemoryManagerInterface<User>())
+        userSavingService.loadWithMemoryManager(complition: handleLoadProfileFromMemoryRequestResult)
     }
-    
-    private func loadWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M) {
-        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForProfileInfo) { [weak self] result in
-            if let result = result as? Result<User, Error> {
-                self?.handleLoadProfileFromMemoryRequestResult(result: result)
-            }
+
+    private func handleLoadProfileFromMemoryRequestResult(result: Result<User, Error>?) {
+        guard let result = result else {
+            return
         }
-    }
-    
-    private func handleLoadProfileFromMemoryRequestResult(result: Result<User, Error>) {
         DispatchQueue.main.async { [weak self] in
             switch result {
             case .success(let user):

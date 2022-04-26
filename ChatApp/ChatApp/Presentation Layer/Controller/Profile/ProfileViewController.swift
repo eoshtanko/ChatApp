@@ -18,7 +18,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private let gcdMemoryManager = GCDMemoryManagerInterface<User>()
+    private let userSavingService = UserSavingService()
     
     weak var conversationsListViewController: ConversationsListViewController?
     
@@ -137,15 +137,7 @@ class ProfileViewController: UIViewController {
     
     private func saveViaGCD() {
         profileView?.prepareForSaving()
-        saveWithMemoryManager(memoryManager: gcdMemoryManager)
-    }
-    
-    private func saveWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M) {
-        if let objectToWrite = getUserWithUpdatedData() as? M.MemoryObject {
-            memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForProfileInfo, objectToWrite: objectToWrite) { [weak self] result in
-                self?.handleSaveToMemoryRequestResult(result: result as? Result<User, Error>)
-            }
-        }
+        userSavingService.saveWithMemoryManager(obj: getUserWithUpdatedData(), complition: handleSaveToMemoryRequestResult)
     }
     
     private func getUserWithUpdatedData() -> User {
