@@ -16,6 +16,7 @@ protocol CoreDataServiceForMessagesProtocol {
     func parseDBMessageToMessage(_ dbMessage: DBMessage?) throws -> Message
 }
 
+// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class CoreDataServiceForMessages: CoreDataServiceForMessagesProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?
