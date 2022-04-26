@@ -15,6 +15,7 @@ protocol UserSavingServiceProtocol {
     func loadWithMemoryManager(complition: @escaping ((Result<User, Error>?) -> Void))
 }
 
+// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class UserSavingService: UserSavingServiceProtocol {
     
     private let memoryManager = GCDMemoryManagerInterface<User>()
