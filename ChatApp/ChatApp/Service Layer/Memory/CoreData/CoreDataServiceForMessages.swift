@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 
 // Разумеется, это можно обобщить до одного типа CoreDataServiceForChannels, но сейчас 4, а завтра защита
+// дублирование кода - плохо.
 protocol CoreDataServiceForMessagesProtocol {
     func fetchedResultsController(viewController: NSFetchedResultsControllerDelegate, id: String?) -> NSFetchedResultsController<DBMessage>?
     func saveMessage(message: Message, channel: Channel?, id: String)

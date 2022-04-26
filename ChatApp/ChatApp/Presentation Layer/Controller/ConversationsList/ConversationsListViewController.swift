@@ -21,7 +21,7 @@ class ConversationsListViewController: UIViewController {
         }
     }
 
-    private let userSavingService = UserSavingService()
+    private let userSavingService: UserSavingServiceProtocol = UserSavingService()
     
     let coreDataService = CoreDataServiceForChannels(dataModelName: Const.dataModelName)
     lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self)
@@ -135,6 +135,7 @@ class ConversationsListViewController: UIViewController {
                 if self?.currentTheme != theme {
                     self?.themeManager.theme = theme
                     self?.currentTheme = theme
+                    self?.themeManager.writeThemeToMemory()
                 }
             }
         })

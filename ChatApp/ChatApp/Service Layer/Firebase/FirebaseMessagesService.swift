@@ -9,6 +9,7 @@ import Foundation
 import Firebase
 
 // Разумеется, это можно обобщить до одного типа FirebaseChannelsService, но сейчас 4, а завтра защита
+// дублирование кода - плохо.
 protocol FirebaseMessagesServiceProtocol {
     func configureSnapshotListener(failAction: @escaping (() -> Void))
     func sendMessage(message: Message, failAction: @escaping (() -> Void), successAction: @escaping (() -> Void))

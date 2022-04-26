@@ -1,5 +1,5 @@
 //
-//  ProfileDataSavingService.swift
+//  UserSavingService.swift
 //  ChatApp
 //
 //  Created by Екатерина on 26.04.2022.
@@ -7,7 +7,16 @@
 
 import Foundation
 
-class UserSavingService {
+// Разумеется, это можно обобщить до одного типа ThemeSavingService, но сейчас 4, а завтра защита
+// дублирование кода - плохо.
+
+protocol UserSavingServiceProtocol {
+    func saveWithMemoryManager(obj: User, complition: @escaping ((Result<User, Error>?) -> Void))
+    func loadWithMemoryManager(complition: @escaping ((Result<User, Error>?) -> Void))
+}
+
+class UserSavingService: UserSavingServiceProtocol {
+    
     private let memoryManager = GCDMemoryManagerInterface<User>()
     
     func saveWithMemoryManager(obj: User, complition: @escaping ((Result<User, Error>?) -> Void)) {

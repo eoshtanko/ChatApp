@@ -18,7 +18,7 @@ protocol ThemeManagerProtocol {
 
 class ThemeManager: ThemeManagerProtocol {
     
-    private let memoryManager = GCDMemoryManagerInterface<ApplicationPreferences>()
+    private let themeSavingServise: ThemeSavingServiceProtocol = ThemeSavingService()
     
     // Струтура ответственная за создание тем
     private lazy var themes: ThemesProtocol = Themes()
@@ -34,7 +34,6 @@ class ThemeManager: ThemeManagerProtocol {
             case .night:
                 themeSettings = themes.nightTheme
             }
-            writeThemeToMemory()
         }
     }
     
@@ -51,14 +50,14 @@ class ThemeManager: ThemeManagerProtocol {
     
     func writeThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: theme.rawValue)
-        memoryManager.writeDataToMemory(
-            fileName: FileNames.plistFileNameForPreferences,
-            objectToWrite: preferences, completion: nil)
+        themeSavingServise.saveWithMemoryManager(obj: preferences)
     }
     
     func readThemeFromMemory(completion: ((Result<ApplicationPreferences, Error>) -> Void)?) {
-        memoryManager.readDataFromMemory(fileName: FileNames.plistFileNameForPreferences) { result in
-            completion?(result)
+        themeSavingServise.loadWithMemoryManager { result in
+            if let result = result {
+                completion?(result)
+            }
         }
     }
     

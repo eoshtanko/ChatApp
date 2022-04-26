@@ -43,9 +43,10 @@
 		34630D4F2817550F00210249 /* GCDMemoryManagerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D4E2817550F00210249 /* GCDMemoryManagerInterface.swift */; };
 		34630D5128175E0100210249 /* CoreDataServiceForChannels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5028175E0100210249 /* CoreDataServiceForChannels.swift */; };
 		34630D5328175E2300210249 /* CoreDataServiceForMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5228175E2300210249 /* CoreDataServiceForMessages.swift */; };
-		34630D55281766E100210249 /* DataSavingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D54281766E100210249 /* DataSavingService.swift */; };
+		34630D55281766E100210249 /* UserSavingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D54281766E100210249 /* UserSavingService.swift */; };
 		34630D582817714200210249 /* FirebaseChannelsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D572817714200210249 /* FirebaseChannelsService.swift */; };
 		34630D5A28177A3400210249 /* FirebaseMessagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5928177A3400210249 /* FirebaseMessagesService.swift */; };
+		34630D5C281786CB00210249 /* ThemeSavingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5B281786CB00210249 /* ThemeSavingService.swift */; };
 		346A55D22817193300349718 /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346A55D12817193300349718 /* ThemesView.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
 		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
@@ -104,9 +105,10 @@
 		34630D4E2817550F00210249 /* GCDMemoryManagerInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDMemoryManagerInterface.swift; sourceTree = "<group>"; };
 		34630D5028175E0100210249 /* CoreDataServiceForChannels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceForChannels.swift; sourceTree = "<group>"; };
 		34630D5228175E2300210249 /* CoreDataServiceForMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceForMessages.swift; sourceTree = "<group>"; };
-		34630D54281766E100210249 /* DataSavingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSavingService.swift; sourceTree = "<group>"; };
+		34630D54281766E100210249 /* UserSavingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavingService.swift; sourceTree = "<group>"; };
 		34630D572817714200210249 /* FirebaseChannelsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseChannelsService.swift; sourceTree = "<group>"; };
 		34630D5928177A3400210249 /* FirebaseMessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessagesService.swift; sourceTree = "<group>"; };
+		34630D5B281786CB00210249 /* ThemeSavingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSavingService.swift; sourceTree = "<group>"; };
 		346A55D12817193300349718 /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -385,9 +387,9 @@
 		34ACCFE427C4AAEB00535096 /* ChatApp */ = {
 			isa = PBXGroup;
 			children = (
-				34630D4B281752F300210249 /* Core Layer */,
 				346A55D328174A6D00349718 /* Presentation Layer */,
 				34630D4A281752A900210249 /* Service Layer */,
+				34630D4B281752F300210249 /* Core Layer */,
 				3427ACD727D47E8C0062F749 /* Resources */,
 				3427ACD627D47E6A0062F749 /* Supporting files */,
 			);
@@ -397,7 +399,8 @@
 		34E877A027FC3BB20018CCC7 /* GCD */ = {
 			isa = PBXGroup;
 			children = (
-				34630D54281766E100210249 /* DataSavingService.swift */,
+				34630D54281766E100210249 /* UserSavingService.swift */,
+				34630D5B281786CB00210249 /* ThemeSavingService.swift */,
 			);
 			path = GCD;
 			sourceTree = "<group>";
@@ -597,6 +600,7 @@
 				34449AE727FEFBDC002763CD /* StringConvertableProtocol.swift in Sources */,
 				34157F3A28114B5D0022EB2F /* Themes.swift in Sources */,
 				342CCCD32816B3590099B067 /* FileNames.swift in Sources */,
+				34630D5C281786CB00210249 /* ThemeSavingService.swift in Sources */,
 				34630D5128175E0100210249 /* CoreDataServiceForChannels.swift in Sources */,
 				34FC31FA27EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift in Sources */,
 				34630D5328175E2300210249 /* CoreDataServiceForMessages.swift in Sources */,
@@ -604,7 +608,7 @@
 				3427ACFC27D9C2B10062F749 /* EnterMessageView.swift in Sources */,
 				342CCCD12816A2110099B067 /* ConversationsListView.swift in Sources */,
 				34157F3C28114B8B0022EB2F /* ThemeSettings.swift in Sources */,
-				34630D55281766E100210249 /* DataSavingService.swift in Sources */,
+				34630D55281766E100210249 /* UserSavingService.swift in Sources */,
 				34630D582817714200210249 /* FirebaseChannelsService.swift in Sources */,
 				340E968E28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift in Sources */,
 				34F449C127F5F80100CC4922 /* UIImage + Extensions.swift in Sources */,
