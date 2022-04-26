@@ -7,6 +7,8 @@
 
 import UIKit
 
+// Кажется, я здесь нарушила keep it simple stupid...
+
 protocol ThemeManagerProtocol {
     var theme: Theme { get set }
     var themeSettings: ThemeSettingsProtocol? { get }
