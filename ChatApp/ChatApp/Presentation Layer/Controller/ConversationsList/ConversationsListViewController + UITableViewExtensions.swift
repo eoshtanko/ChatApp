@@ -11,14 +11,14 @@ import UIKit
 extension ConversationsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let dbChannel = fetchedResultsController?.object(at: indexPath) else { return }
+        guard let dbChannel = fetchedResultsController?.object(at: indexPath), let firebaseChannelsService = firebaseChannelsService else { return }
         do {
             let conversation = try coreDataService.parseDBChannelToChannel(dbChannel)
             
             self.navigationItem.title = ""
             let conversationViewController = ConversationViewController(theme: currentTheme,
                                                                         channel: conversation,
-                                                                        dbChannelRef: reference)
+                                                                        dbChannelRef: firebaseChannelsService.reference)
             if let conversationViewController = conversationViewController {
                 navigationController?.pushViewController(conversationViewController, animated: true)
             }
@@ -72,7 +72,7 @@ extension ConversationsListViewController: UITableViewDataSource {
         let action = UIContextualAction(style: .destructive,
                                         title: "Delete") { [weak self] (_, _, completionHandler) in
             if let id = dbChannel?.identifier {
-                self?.removeChannelFromFirebase(withID: id)
+                self?.firebaseChannelsService?.removeChannelFromFirebase(withID: id, failAction: self?.showFailToDeleteChannelAlert)
             }
             completionHandler(true)
         }

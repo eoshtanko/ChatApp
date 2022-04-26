@@ -7,9 +7,15 @@
 
 import UIKit
 import Firebase
-import CoreData
 
 class ConversationViewController: UIViewController {
+    
+    private let channel: Channel?
+    
+    var firebaseMessagesService: FirebaseMessagesServiceProtocol?
+    
+    let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
+    lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self, id: channel?.identifier)
     
     private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     var currentTheme: Theme = .classic {
@@ -23,19 +29,9 @@ class ConversationViewController: UIViewController {
         view as? ConversationView
     }
     
-    let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
-    lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self, id: channel?.identifier)
-    
-    private let channel: Channel?
-    private let dbChannelReference: CollectionReference
-    lazy var reference: CollectionReference = {
-        guard let channelIdentifier = channel?.identifier else { fatalError() }
-        return dbChannelReference.document(channelIdentifier).collection("messages")
-    }()
-    
     init?(theme: Theme, channel: Channel?, dbChannelRef: CollectionReference) {
         self.channel = channel
-        self.dbChannelReference = dbChannelRef
+        self.firebaseMessagesService = FirebaseMessagesService(coreDataService: coreDataService, dbChannelReference: dbChannelRef, channel: channel)
         self.currentTheme = theme
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,7 +44,7 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         registerKeyboardNotifications()
         themeManager.theme = currentTheme
-        configureSnapshotListener()
+        firebaseMessagesService?.configureSnapshotListener(failAction: showFailToLoadMessagesAlert) 
         configureTapGestureRecognizer()
         configureTableView()
         conversationView?.configureView(themeManager: themeManager, theme: currentTheme,
@@ -62,20 +58,7 @@ class ConversationViewController: UIViewController {
         conversationView?.tableView.delegate = self
         conversationView?.configureTableView()
     }
-    
-    private func configureSnapshotListener() {
-        reference.addSnapshotListener { [weak self] snapshot, error in
-            guard let self = self else { return }
-            guard error == nil, let snapshot = snapshot else {
-                self.showFailToLoadMessagesAlert()
-                return
-            }
-            snapshot.documentChanges.forEach { change in
-                self.handleDocumentChange(change)
-            }
-        }
-    }
-    
+
     private func showFailToLoadMessagesAlert() {
         let failureAlert = UIAlertController(title: "Ошибка",
                                              message: "Не удалось загрузить сообщения.",
@@ -84,21 +67,9 @@ class ConversationViewController: UIViewController {
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
                                              style: UIAlertAction.Style.cancel) {_ in
-            self.configureSnapshotListener()
+            self.firebaseMessagesService?.configureSnapshotListener(failAction: self.showFailToLoadMessagesAlert)
         })
         present(failureAlert, animated: true, completion: nil)
-    }
-    
-    private func handleDocumentChange(_ change: DocumentChange) {
-        guard let message = Message(document: change.document) else {
-            return
-        }
-        switch change.type {
-        case .added:
-            coreDataService.saveMessage(message: message, channel: channel, id: change.document.documentID)
-        case .removed, .modified:
-            return
-        }
     }
     
     required init?(coder: NSCoder) {

@@ -34,13 +34,11 @@ extension ConversationViewController {
     
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-        reference.addDocument(data: newMessage.toDict) { [weak self] error in
-            if error != nil {
-                self?.showFailToSendMessageAlert()
-                return
-            }
-            self?.entreMessageBar?.resetData()
-        }
+        self.firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
+    }
+    
+    private func resetData() {
+        entreMessageBar?.resetData()
     }
     
     func registerKeyboardNotifications() {

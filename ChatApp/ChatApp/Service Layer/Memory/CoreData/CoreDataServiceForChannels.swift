@@ -7,9 +7,16 @@
 
 import Foundation
 import CoreData
-import UIKit
 
-class CoreDataServiceForChannels {
+// Разумеется, это можно обобщить до одного типа CoreDataServiceForMessages, но сейчас 4, а завтра защита
+protocol CoreDataServiceForChannelsProtocol {
+    func fetchedResultsController(viewController: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<DBChannel>?
+    func saveChannel(channel: Channel)
+    func deleteChannel(channel: Channel)
+    func parseDBChannelToChannel(_ dbChannel: DBChannel) throws -> Channel
+}
+
+class CoreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?
 

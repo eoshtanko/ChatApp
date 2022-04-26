@@ -8,7 +8,14 @@
 import Foundation
 import CoreData
 
-class CoreDataServiceForMessages {
+// Разумеется, это можно обобщить до одного типа CoreDataServiceForChannels, но сейчас 4, а завтра защита
+protocol CoreDataServiceForMessagesProtocol {
+    func fetchedResultsController(viewController: NSFetchedResultsControllerDelegate, id: String?) -> NSFetchedResultsController<DBMessage>?
+    func saveMessage(message: Message, channel: Channel?, id: String)
+    func parseDBMessageToMessage(_ dbMessage: DBMessage?) throws -> Message
+}
+
+class CoreDataServiceForMessages: CoreDataServiceForMessagesProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?
 
