@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// TODO Возможно работу с фото стоит вынести в отдельную сущность (?)
-
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController,
@@ -55,6 +53,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     private func configureActions(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
         configureLibraryAction(actionSheet, imagePickerController)
         configureCameraAction(actionSheet, imagePickerController)
+        configureUploadAction(actionSheet)
         configureCancelAction(actionSheet)
     }
     
@@ -66,6 +65,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
             } else {
                 self.showAlertWith(message: "Unable to access the photo library.")
             }
+        }))
+    }
+    
+    private func configureUploadAction(_ actionSheet: UIAlertController) {
+        actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: {_ in
+            let photoSelectionViewController = PhotoSelectionViewController()
+            self.present(photoSelectionViewController, animated: true)
         }))
     }
     

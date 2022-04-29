@@ -26,7 +26,7 @@
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
-                            <rect key="frame" x="10" y="0.0" width="528" height="36"/>
+                            <rect key="frame" x="45" y="0.0" width="493" height="36"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="36" id="B2W-vx-cAi"/>
@@ -35,11 +35,21 @@
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                         </textView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z05-jh-wSm">
+                            <rect key="frame" x="10" y="8" width="30.5" height="20"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title=" " image="camera.fill" catalog="system"/>
+                            <connections>
+                                <action selector="sendMessage:" destination="H33-MO-rhl" eventType="touchUpInside" id="wnh-zB-AXt"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="uPc-W1-YHv" secondAttribute="trailing" constant="10" id="6cm-61-Kfb"/>
+                        <constraint firstItem="z05-jh-wSm" firstAttribute="centerY" secondItem="5jy-Zb-Rfo" secondAttribute="centerY" id="UdM-9G-V9F"/>
                         <constraint firstItem="5jy-Zb-Rfo" firstAttribute="top" secondItem="H95-8l-KnH" secondAttribute="top" id="Xbs-JM-9zc"/>
-                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="10" id="XpE-60-948"/>
+                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="45" id="XpE-60-948"/>
+                        <constraint firstItem="z05-jh-wSm" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="10" id="rD4-sp-vNe"/>
                         <constraint firstItem="uPc-W1-YHv" firstAttribute="centerY" secondItem="5jy-Zb-Rfo" secondAttribute="centerY" id="t6Y-qI-w3K"/>
                         <constraint firstAttribute="trailing" secondItem="5jy-Zb-Rfo" secondAttribute="trailing" constant="45" id="uPk-sf-rhr"/>
                     </constraints>
@@ -66,6 +76,7 @@
     </objects>
     <resources>
         <image name="arrow.up.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="camera.fill" catalog="system" width="128" height="94"/>
         <namedColor name="BackgroundNavigationBarColor">
             <color red="0.96899998188018799" green="0.96899998188018799" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

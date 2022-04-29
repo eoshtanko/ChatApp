@@ -5,6 +5,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>isLoggingEnable</key>
-	<true/>
+	<false/>
 </dict>
 </plist>
