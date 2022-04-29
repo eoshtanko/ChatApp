@@ -19,6 +19,9 @@ extension ConversationViewController {
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 self?.sendMessage(message: message)
             }
+//            entreMessageBar?.setSendPhotoAction { [weak self] message in
+//                self?.sendPhoto()
+//            }
         }
         
         return entreMessageBar
@@ -35,6 +38,13 @@ extension ConversationViewController {
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
         self.firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
+    }
+    
+    private func sendPhoto() {
+        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: {_ in 
+            
+        })
+        self.present(photoSelectionViewController, animated: true)
     }
     
     private func resetData() {

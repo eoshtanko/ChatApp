@@ -8,8 +8,6 @@
 import UIKit
 
 struct HitsModel: Codable {
-    let total: Int
-    let totalHits: Int
     let hits: [ImageData]
 }
 

@@ -18,6 +18,7 @@ class EnterMessageView: UIView {
     }
     
     private var sendMessageAction: ((String) -> Void)?
+    private var sendPhotoAction: ((String) -> Void)?
     
     @IBOutlet weak var sendMessageButton: UIButton!
     @IBOutlet weak var textView: UITextView!
@@ -26,6 +27,10 @@ class EnterMessageView: UIView {
     
     @IBAction func sendMessage(_ sender: Any) {
         sendMessage()
+    }
+    
+    @IBAction func sendPhoto(_ sender: Any) {
+       // sendPhotoAction?()
     }
     
     override func layoutSubviews() {

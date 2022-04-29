@@ -41,6 +41,7 @@
                             <state key="normal" title=" " image="camera.fill" catalog="system"/>
                             <connections>
                                 <action selector="sendMessage:" destination="H33-MO-rhl" eventType="touchUpInside" id="wnh-zB-AXt"/>
+                                <action selector="sendPhoto:" destination="H33-MO-rhl" eventType="touchUpInside" id="TB3-hk-TiH"/>
                             </connections>
                         </button>
                     </subviews>

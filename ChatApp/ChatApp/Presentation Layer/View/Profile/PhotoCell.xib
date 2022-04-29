@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="365" height="365"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Ln-QP-18p">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultImage" translatesAutoresizingMaskIntoConstraints="NO" id="0Ln-QP-18p">
                         <rect key="frame" x="0.0" y="0.0" width="365" height="365"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="0Ln-QP-18p" secondAttribute="height" multiplier="1:1" id="1xt-cF-DB8"/>
@@ -38,4 +38,7 @@
             <point key="canvasLocation" x="223.18840579710147" y="95.424107142857139"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="defaultImage" width="1500" height="1500"/>
+    </resources>
 </document>

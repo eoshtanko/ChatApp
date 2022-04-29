@@ -31,6 +31,27 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         }
     }
     
+    private func setPhoto(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            downloadImage(from: url)
+        }
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL) {
+        getData(from: url) { data, _, error in
+            guard let data = data, error == nil else { return }
+            DispatchQueue.main.async { [weak self] in
+                if let image = UIImage(data: data) {
+                    self?.setPhoto(image)
+                }
+            }
+        }
+    }
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
@@ -77,10 +98,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
             let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.setPhoto)
             self.present(photoSelectionViewController, animated: true)
         }))
-    }
-    
-    private func setPhoto() {
-        
     }
     
     private func configureCameraAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {

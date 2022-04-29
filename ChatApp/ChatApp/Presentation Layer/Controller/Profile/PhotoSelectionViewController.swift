@@ -15,10 +15,11 @@ class PhotoSelectionViewController: UIViewController {
     private let requestSender = RequestSender()
     
     var photoCollectionView: UICollectionView?
-    var photoes: [UIImage?] = []
+    var photoesURL: [String] = []
+    
     private var currentAPICallPage = 1
     
-    var choosePhotoAction: ((UIImage) -> Void)?
+    var choosePhotoAction: ((String) -> Void)?
     
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -31,7 +32,7 @@ class PhotoSelectionViewController: UIViewController {
         return layout
     }()
     
-    init(choosePhotoAction: ((UIImage) -> Void)?) {
+    init(choosePhotoAction: ((String) -> Void)?) {
         self.choosePhotoAction = choosePhotoAction
         super.init(nibName: nil, bundle: nil)
     }
@@ -78,15 +79,12 @@ class PhotoSelectionViewController: UIViewController {
     }
     
     private func completitionSuccessForInitialRequest(_ imageModels: [ImageData]) {
+        for imageModel in imageModels {
+            self.photoesURL.append(imageModel.largeImageURL)
+        }
         DispatchQueue.main.async {
             self.activityIndicator?.stopAnimating()
-            self.photoes = Array(repeating: UIImage(named: "defaultImage"), count: imageModels.count)
             self.photoCollectionView?.reloadData()
-        }
-        for i in 0..<imageModels.count {
-            if let url = URL(string: imageModels[i].largeImageURL) {
-                self.downloadImage(from: url, index: i)
-            }
         }
     }
     
@@ -94,21 +92,6 @@ class PhotoSelectionViewController: UIViewController {
         DispatchQueue.main.async {
             print(failure)
             self.activityIndicator?.stopAnimating()
-        }
-    }
-    
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    func downloadImage(from url: URL, index: Int) {
-        getData(from: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            DispatchQueue.main.async { [weak self] in
-                self?.photoes[index] = UIImage(data: data)
-                self?.photoCollectionView?.reloadItems(at: [IndexPath(row: index, section: 0)])
-            }
         }
     }
     
@@ -133,28 +116,25 @@ extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let photo = photoes[indexPath.row] {
-            choosePhotoAction?(photo)
+            choosePhotoAction?(photoesURL[indexPath.row])
             self.dismiss(animated: true)
-        }
     }
 }
 
 extension PhotoSelectionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoes.count
+        return photoesURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else {
             return UICollectionViewCell()
         }
+
+        cell.configure(with: photoesURL[indexPath.row])
         
-        let photo = photoes[indexPath.row]
-        cell.configure(with: photo)
-        
-        if indexPath.row == photoes.count - 1 {
+        if indexPath.row == photoesURL.count - 1 {
             currentAPICallPage += 1
             
             self.loadImages(page: currentAPICallPage, completitionSuccess: completitionSuccessForRepeatedRequest, competitionFailer: nil)
@@ -164,15 +144,11 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
     }
     
     private func completitionSuccessForRepeatedRequest(_ moreImageModels: [ImageData]) {
-        DispatchQueue.main.async {
-            let newPhotoes = Array(repeating: UIImage(named: "defaultImage"), count: moreImageModels.count)
-            self.photoes.append(contentsOf: newPhotoes)
-            self.photoCollectionView?.reloadData()
+        for model in moreImageModels {
+            photoesURL.append(model.largeImageURL)
         }
-        for i in 0..<moreImageModels.count {
-            if let url = URL(string: moreImageModels[i].largeImageURL) {
-                self.downloadImage(from: url, index: 200 * (currentAPICallPage - 1) + i)
-            }
+        DispatchQueue.main.async {
+            self.photoCollectionView?.reloadData()
         }
     }
 }
