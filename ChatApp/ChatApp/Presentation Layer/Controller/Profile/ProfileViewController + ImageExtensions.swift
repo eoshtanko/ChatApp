@@ -13,18 +13,22 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            DispatchQueue.main.async {
-                if !self.isProfileEditing {
-                    self.changeProfileEditingStatus(isEditing: true)
-                }
-                self.profileView?.setImage(image: image)
-                self.imageDidChanged = true
-                self.setEnableStatusToSaveButtons()
-            }
+            self.setPhoto(image)
         } else {
             showAlertWith(message: "No image found.")
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    private func setPhoto(_ image: UIImage) {
+        DispatchQueue.main.async {
+            if !self.isProfileEditing {
+                self.changeProfileEditingStatus(isEditing: true)
+            }
+            self.profileView?.setImage(image: image)
+            self.imageDidChanged = true
+            self.setEnableStatusToSaveButtons()
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -70,9 +74,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     private func configureUploadAction(_ actionSheet: UIAlertController) {
         actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: {_ in
-            let photoSelectionViewController = PhotoSelectionViewController()
+            let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.setPhoto)
             self.present(photoSelectionViewController, animated: true)
         }))
+    }
+    
+    private func setPhoto() {
+        
     }
     
     private func configureCameraAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {

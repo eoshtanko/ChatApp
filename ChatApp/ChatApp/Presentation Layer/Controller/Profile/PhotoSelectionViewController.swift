@@ -18,6 +18,8 @@ class PhotoSelectionViewController: UIViewController {
     var photoes: [UIImage?] = []
     private var currentAPICallPage = 1
     
+    var choosePhotoAction: ((UIImage) -> Void)?
+    
     let flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = Const.collectionViewSpacing
@@ -28,6 +30,11 @@ class PhotoSelectionViewController: UIViewController {
                                            right: Const.collectionViewSpacing)
         return layout
     }()
+    
+    init(choosePhotoAction: ((UIImage) -> Void)?) {
+        self.choosePhotoAction = choosePhotoAction
+        super.init(nibName: nil, bundle: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,13 +112,17 @@ class PhotoSelectionViewController: UIViewController {
         }
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     enum Const {
         static let collectionViewSpacing: CGFloat = 5
     }
 }
 
 extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
         let numberOfItemsPerRow: CGFloat = 3
@@ -119,6 +130,13 @@ extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = width - spacing * (numberOfItemsPerRow + 1)
         let itemDimension = floor(availableWidth / numberOfItemsPerRow)
         return CGSize(width: itemDimension, height: itemDimension)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let photo = photoes[indexPath.row] {
+            choosePhotoAction?(photo)
+            self.dismiss(animated: true)
+        }
     }
 }
 
