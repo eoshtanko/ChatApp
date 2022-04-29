@@ -22,14 +22,14 @@ class ChatMessageCell: UITableViewCell {
     private let bubbleBackgroundView = UIView()
     private let namelabel = UILabel()
     
-    private var leadingConstraint: NSLayoutConstraint!
-    private var trailingConstraint: NSLayoutConstraint!
+    private var leadingConstraint: NSLayoutConstraint?
+    private var trailingConstraint: NSLayoutConstraint?
     
-    private var messageLabelTopConstantWithName: NSLayoutConstraint!
-    private var messageLabelTopConstantWithoutName: NSLayoutConstraint!
+    private var messageLabelTopConstantWithName: NSLayoutConstraint?
+    private var messageLabelTopConstantWithoutName: NSLayoutConstraint?
     
-    private var incomingMessageUIColor: UIColor!
-    private var outcomingMessageUIColor: UIColor!
+    private var incomingMessageUIColor: UIColor?
+    private var outcomingMessageUIColor: UIColor?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -65,11 +65,19 @@ class ChatMessageCell: UITableViewCell {
     }
     
     private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
-        leadingConstraint.isActive = !isOutcoming
-        trailingConstraint.isActive = isOutcoming
-        
-        messageLabelTopConstantWithName.isActive = !isOutcoming
-        messageLabelTopConstantWithoutName.isActive = isOutcoming
+        if isOutcoming {
+            leadingConstraint?.isActive = false
+            trailingConstraint?.isActive = true
+            
+            messageLabelTopConstantWithName?.isActive = false
+            messageLabelTopConstantWithoutName?.isActive = true
+        } else {
+            trailingConstraint?.isActive = false
+            leadingConstraint?.isActive = true
+            
+            messageLabelTopConstantWithoutName?.isActive = false
+            messageLabelTopConstantWithName?.isActive = true
+        }
         
         namelabel.isHidden = isOutcoming
     }

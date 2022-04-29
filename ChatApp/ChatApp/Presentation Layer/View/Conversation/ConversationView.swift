@@ -86,6 +86,7 @@ class ConversationView: UIView {
         navigationController?.navigationBar.tintColor = themeManager.themeSettings?.navigationBarButtonColor
         tableView.reloadData()
         ChatMessageCell.setCurrentTheme(theme)
+        ChatPhotoCell.setCurrentTheme(theme)
     }
     
     enum Const {

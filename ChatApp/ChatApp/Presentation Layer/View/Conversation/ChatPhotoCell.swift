@@ -17,23 +17,15 @@ class ChatPhotoCell: UITableViewCell {
             themeManager.theme = currentTheme
         }
     }
-    
+    private var leadingConstraint: NSLayoutConstraint?
+    private var trailingConstraint: NSLayoutConstraint?
     @IBOutlet weak var topSpace: NSLayoutConstraint!
-    private var leadingConstraint: NSLayoutConstraint!
-    private var trailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var messageImageView: UIImageView!
     @IBOutlet weak var namelabel: UILabel!
     
     override func prepareForReuse() {
         super.prepareForReuse()
         messageImageView.image = UIImage(named: "defaultImage")
-    }
-    
-    func configureCell(_ chatMessage: Message) {
-        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
-        configureContent(chatMessage)
-        messageImageView.layer.cornerRadius = Const.cornerRadius
-        setCurrentTheme()
     }
     
     override func awakeFromNib() {
@@ -43,14 +35,20 @@ class ChatPhotoCell: UITableViewCell {
                constant: -Const.messageLabelLeadingAndTrailingConstraint)
     }
     
+    func configureCell(_ chatMessage: Message) {
+        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
+        configureContent(chatMessage)
+        messageImageView.layer.cornerRadius = Const.cornerRadius
+        setCurrentTheme()
+    }
+    
     private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
-        
         if isOutcoming {
-            leadingConstraint.isActive = false
-            trailingConstraint.isActive = true
+            leadingConstraint?.isActive = false
+            trailingConstraint?.isActive = true
         } else {
-            trailingConstraint.isActive = false
-            leadingConstraint.isActive = true
+            trailingConstraint?.isActive = false
+            leadingConstraint?.isActive = true
         }
         
         topSpace.constant = isOutcoming ? Const.topConstantWithoutName : Const.topConstantWithName
