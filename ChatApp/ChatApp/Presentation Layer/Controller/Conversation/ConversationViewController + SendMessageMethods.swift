@@ -19,9 +19,9 @@ extension ConversationViewController {
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 self?.sendMessage(message: message)
             }
-//            entreMessageBar?.setSendPhotoAction { [weak self] message in
-//                self?.sendPhoto()
-//            }
+            entreMessageBar?.setSendPhotoAction { [weak self] in
+                self?.sendPhoto()
+            }
         }
         
         return entreMessageBar
@@ -41,10 +41,12 @@ extension ConversationViewController {
     }
     
     private func sendPhoto() {
-        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: {_ in 
-            
-        })
+        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.sendPhoto)
         self.present(photoSelectionViewController, animated: true)
+    }
+    
+    private func sendPhoto(_ urlString: String) {
+        sendMessage(message: urlString)
     }
     
     private func resetData() {
