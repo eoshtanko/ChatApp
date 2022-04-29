@@ -1,0 +1,87 @@
+//
+//  ChatPhotoCell.swift
+//  ChatApp
+//
+//  Created by Екатерина on 29.04.2022.
+//
+
+import UIKit
+
+class ChatPhotoCell: UITableViewCell {
+    
+    static let identifier = String(describing: ChatPhotoCell.self)
+    
+    private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    static var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+        }
+    }
+    
+    @IBOutlet weak var topSpace: NSLayoutConstraint!
+    private var leadingConstraint: NSLayoutConstraint!
+    private var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var messageImageView: UIImageView!
+    @IBOutlet weak var namelabel: UILabel!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        messageImageView.image = UIImage(named: "defaultImage")
+    }
+    
+    func configureCell(_ chatMessage: Message) {
+        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
+        configureContent(chatMessage)
+        messageImageView.layer.cornerRadius = Const.cornerRadius
+        setCurrentTheme()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        leadingConstraint = messageImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
+        trailingConstraint = messageImageView.trailingAnchor.constraint(equalTo: trailingAnchor,
+               constant: -Const.messageLabelLeadingAndTrailingConstraint)
+    }
+    
+    private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
+        
+        if isOutcoming {
+            leadingConstraint.isActive = false
+            trailingConstraint.isActive = true
+        } else {
+            trailingConstraint.isActive = false
+            leadingConstraint.isActive = true
+        }
+        
+        topSpace.constant = isOutcoming ? Const.topConstantWithoutName : Const.topConstantWithName
+        
+        namelabel.isHidden = isOutcoming
+    }
+    
+    private func configureContent(_ chatMessage: Message) {
+        if let url = URL(string: chatMessage.content) {
+            messageImageView.downloaded(from: url)
+        }
+        namelabel.text = chatMessage.senderName.isEmpty ? "No name" : chatMessage.senderName
+    }
+    
+    static func setCurrentTheme(_ theme: Theme) {
+        ChatPhotoCell.currentTheme = theme
+    }
+    
+    private func setCurrentTheme() {
+        backgroundColor = ChatPhotoCell.themeManager.themeSettings?.backgroundColor
+        namelabel.textColor = ChatPhotoCell.themeManager.themeSettings?.secondaryTextColor
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private enum Const {
+        static let messageLabelLeadingAndTrailingConstraint: CGFloat = 16
+        static let cornerRadius: CGFloat = 12
+        static let topConstantWithName: CGFloat = 30
+        static let topConstantWithoutName: CGFloat = 8
+    }
+}

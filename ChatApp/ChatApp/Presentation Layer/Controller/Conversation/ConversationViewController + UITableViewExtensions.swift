@@ -28,17 +28,32 @@ extension ConversationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ChatMessageCell.identifier,
-            for: indexPath)
-        guard let messageCell = cell as? ChatMessageCell else {
-            return cell
-        }
+        
         let dbMessage = fetchedResultsController?.object(at: indexPath)
         let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
-        if let message = message {
-            messageCell.configureCell(message)
+        
+        if let mess = message, mess.content.starts(with: "https://pixabay.com/") {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ChatPhotoCell.identifier,
+                for: indexPath)
+            guard let messageCell = cell as? ChatPhotoCell else {
+                return cell
+            }
+            if let message = message {
+                messageCell.configureCell(message)
+            }
+            return messageCell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ChatMessageCell.identifier,
+                for: indexPath)
+            guard let messageCell = cell as? ChatMessageCell else {
+                return cell
+            }
+            if let message = message {
+                messageCell.configureCell(message)
+            }
+            return messageCell
         }
-        return messageCell
     }
 }

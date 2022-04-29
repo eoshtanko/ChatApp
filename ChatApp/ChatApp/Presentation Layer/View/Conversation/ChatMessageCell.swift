@@ -9,7 +9,7 @@ import UIKit
 
 class ChatMessageCell: UITableViewCell {
     
-    static let identifier = String(describing: ConversationTableViewCell.self)
+    static let identifier = String(describing: ChatMessageCell.self)
     
     private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     static var currentTheme: Theme = .classic {
@@ -59,9 +59,9 @@ class ChatMessageCell: UITableViewCell {
     func configureCell(_ chatMessage: Message) {
         configureContent(chatMessage)
         setCurrentTheme()
-        bubbleBackgroundView.backgroundColor = chatMessage.senderId == CurrentUser.user.id ?
-        outcomingMessageUIColor : incomingMessageUIColor
-        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
+        let isOutcoming = chatMessage.senderId == CurrentUser.user.id
+        bubbleBackgroundView.backgroundColor = isOutcoming ? outcomingMessageUIColor : incomingMessageUIColor
+        configureSenderIdentifyingParameter(isOutcoming: isOutcoming)
     }
     
     private func configureSenderIdentifyingParameter(isOutcoming: Bool) {

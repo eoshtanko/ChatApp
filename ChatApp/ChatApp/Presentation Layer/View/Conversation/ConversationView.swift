@@ -44,6 +44,10 @@ class ConversationView: UIView {
     
     private func registerCell() {
         tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
+        tableView.register(
+            UINib(nibName: String(describing: ChatPhotoCell.self), bundle: nil),
+            forCellReuseIdentifier: ChatPhotoCell.identifier
+        )
     }
     
     private func configureTableViewAppearance() {
