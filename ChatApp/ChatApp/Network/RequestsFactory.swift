@@ -9,8 +9,8 @@ import Foundation
 
 struct RequestsFactory {
     struct ImageRequests {
-        static func getImages() -> RequestConfig<ImageParser> {
-            return RequestConfig<ImageParser>(request: GetImagesRequest(), parser: ImageParser())
+        static func getImages(pageNumber: Int) -> RequestConfig<ImageParser> {
+            return RequestConfig<ImageParser>(request: GetImagesRequest(pageNumber: pageNumber), parser: ImageParser())
         }
     }
 }
