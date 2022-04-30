@@ -84,6 +84,6 @@ class ChatPhotoCell: UITableViewCell {
         static let messageLabelLeadingAndTrailingConstraint: CGFloat = 16
         static let cornerRadius: CGFloat = 12
         static let topConstantWithName: CGFloat = 30
-        static let topConstantWithoutName: CGFloat = 8
+        static let topConstantWithoutName: CGFloat = 0
     }
 }

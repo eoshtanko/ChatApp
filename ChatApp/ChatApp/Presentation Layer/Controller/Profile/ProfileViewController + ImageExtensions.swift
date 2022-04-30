@@ -98,6 +98,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     private func configureUploadAction(_ actionSheet: UIAlertController) {
         actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: { [weak self] _ in
             let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self?.setPhoto)
+            photoSelectionViewController.setCurrentTheme(self?.currentTheme)
             self?.present(photoSelectionViewController, animated: true)
         }))
     }

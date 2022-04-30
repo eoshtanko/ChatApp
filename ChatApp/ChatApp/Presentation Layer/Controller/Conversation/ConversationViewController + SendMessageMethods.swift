@@ -42,6 +42,7 @@ extension ConversationViewController {
     
     private func sendPhoto() {
         let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.sendPhoto)
+        photoSelectionViewController.setCurrentTheme(currentTheme)
         self.present(photoSelectionViewController, animated: true)
     }
     

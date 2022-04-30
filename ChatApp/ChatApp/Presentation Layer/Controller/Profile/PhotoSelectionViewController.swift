@@ -10,6 +10,14 @@ import UIKit
 
 class PhotoSelectionViewController: UIViewController {
     
+    private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
+    var currentTheme: Theme = .classic {
+        didSet {
+            themeManager.theme = currentTheme
+            setCurrentTheme()
+        }
+    }
+    
     private var activityIndicator: UIActivityIndicatorView?
     
     private let requestSender = RequestSender()
@@ -44,6 +52,17 @@ class PhotoSelectionViewController: UIViewController {
         configureActivityIndicator()
         activityIndicator?.startAnimating()
         loadImages(page: 1, completitionSuccess: completitionSuccessForInitialRequest(_:), competitionFailer: completitionFailerForInitialRequest(_:))
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setCurrentTheme()
+    }
+    
+    func setCurrentTheme(_ theme: Theme?) {
+        if let theme = theme {
+            currentTheme = theme
+        }
     }
     
     private func configurePhotoCollection() {
@@ -109,6 +128,11 @@ class PhotoSelectionViewController: UIViewController {
             print(failure)
             self.activityIndicator?.stopAnimating()
         }
+    }
+    
+    func setCurrentTheme() {
+        view.backgroundColor = themeManager.themeSettings?.backgroundColor
+        photoCollectionView?.backgroundColor = themeManager.themeSettings?.backgroundColor
     }
     
     required init?(coder: NSCoder) {
