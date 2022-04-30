@@ -16,7 +16,7 @@ struct ImageData: Identifiable, Codable {
     let largeImageURL: String
 }
 
-class ApiImageParser: IParser {
+class ApiImagesParser: IParser {
     
     typealias Model = [ImageData]
     

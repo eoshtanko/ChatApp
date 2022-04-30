@@ -34,7 +34,7 @@ class ChatPhotoCell: UITableViewCell {
         super.awakeFromNib()
         leadingConstraint = messageImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageImageView.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                                        constant: -Const.messageLabelLeadingAndTrailingConstraint)
+                                              constant: -Const.messageLabelLeadingAndTrailingConstraint)
     }
     
     func configureCell(_ chatMessage: Message) {

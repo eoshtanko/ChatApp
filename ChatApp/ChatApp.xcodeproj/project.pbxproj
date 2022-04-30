@@ -412,21 +412,61 @@
 		34AC5A0F281AEBA500793BF2 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */,
-				34AC5A3E281CE5CA00793BF2 /* ImageParser.swift */,
-				34AC5A0D281AC8A700793BF2 /* RequestSender.swift */,
-				34AC5A07281AC52E00793BF2 /* RequestConfig.swift */,
-				34AC5A34281B243D00793BF2 /* RequestsFactory.swift */,
-				34AC5A36281BC1BE00793BF2 /* GetImagesRequest.swift */,
-				34AC5A40281CE6BD00793BF2 /* GetImageRequest.swift */,
-				34AC5A01281ABB1500793BF2 /* IRequest.swift */,
-				34AC5A03281ABB4800793BF2 /* IParser.swift */,
-				34AC5A09281AC57400793BF2 /* IRequestSender.swift */,
-				34AC5A30281B205E00793BF2 /* KeyProvider.swift */,
-				34AC5A32281B209400793BF2 /* URLProvider.swift */,
-				34AC5A05281ABBD200793BF2 /* NetworkError.swift */,
+				34AC5A43281CEF7800793BF2 /* Request */,
+				34AC5A42281CEF2600793BF2 /* Parsing */,
+				34AC5A45281CEFF800793BF2 /* SendingRequest */,
+				34AC5A44281CEFD500793BF2 /* Providers */,
+				34AC5A46281CF02100793BF2 /* Error */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		34AC5A42281CEF2600793BF2 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				34AC5A03281ABB4800793BF2 /* IParser.swift */,
+				34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */,
+				34AC5A3E281CE5CA00793BF2 /* ImageParser.swift */,
+			);
+			path = Parsing;
+			sourceTree = "<group>";
+		};
+		34AC5A43281CEF7800793BF2 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				34AC5A01281ABB1500793BF2 /* IRequest.swift */,
+				34AC5A36281BC1BE00793BF2 /* GetImagesRequest.swift */,
+				34AC5A40281CE6BD00793BF2 /* GetImageRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		34AC5A44281CEFD500793BF2 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				34AC5A30281B205E00793BF2 /* KeyProvider.swift */,
+				34AC5A32281B209400793BF2 /* URLProvider.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		34AC5A45281CEFF800793BF2 /* SendingRequest */ = {
+			isa = PBXGroup;
+			children = (
+				34AC5A34281B243D00793BF2 /* RequestsFactory.swift */,
+				34AC5A07281AC52E00793BF2 /* RequestConfig.swift */,
+				34AC5A09281AC57400793BF2 /* IRequestSender.swift */,
+				34AC5A0D281AC8A700793BF2 /* RequestSender.swift */,
+			);
+			path = SendingRequest;
+			sourceTree = "<group>";
+		};
+		34AC5A46281CF02100793BF2 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				34AC5A05281ABBD200793BF2 /* NetworkError.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 		34ACCFD927C4AAEA00535096 = {
