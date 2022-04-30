@@ -20,6 +20,20 @@ class ConversationView: UIView {
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
+    func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
+        tableView.layoutIfNeeded()
+        if isScrollingNecessary(entreMessageBar) {
+            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard : getBottomOffsetWithoutKeyboard(entreMessageBar)
+            
+            tableView.setContentOffset(bottomOffset, animated: animated)
+        }
+    }
+    
+    private func isScrollingNecessary(_ entreMessageBar: EnterMessageView?) -> Bool {
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
+        return tableView.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
+    }
+    
     func configureView(themeManager: ThemeManagerProtocol, theme: Theme,
                        navigationItem: UINavigationItem, title: String?,
                        navigationController: UINavigationController?,
@@ -61,20 +75,7 @@ class ConversationView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-    }
-    
-    func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
-        tableView.layoutIfNeeded()
-        if isScrollingNecessary(entreMessageBar) {
-            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard : getBottomOffsetWithoutKeyboard(entreMessageBar)
-            
-            tableView.setContentOffset(bottomOffset, animated: animated)
-        }
-    }
-    
-    private func isScrollingNecessary(_ entreMessageBar: EnterMessageView?) -> Bool {
-        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
-        return tableView.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     }
     
     func setCurrentTheme(_ themeManager: ThemeManagerProtocol, _ theme: Theme,
