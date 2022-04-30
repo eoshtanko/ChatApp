@@ -16,8 +16,13 @@ struct GetImagesRequest: IRequest {
     }
     
     var urlRequest: URLRequest? {
-        // todo переделать:
-        guard let url = URL(string: URLProvider.apiStringURL + "&q=blue+nature&image_type=photo&colors=blue&page=\(pageNumber)&per_page=200") else {
+        let parametrs = ["q": "nature",
+                         "image_type": "photo",
+                         "colors": "blue",
+                         "page": "\(pageNumber)",
+                         "per_page": "200"]
+        print(paramsToString(params: parametrs))
+        guard let url = URL(string: URLProvider.apiStringURL + paramsToString(params: parametrs)) else {
             return nil
         }
         let request = URLRequest(url: url)

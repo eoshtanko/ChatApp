@@ -7,6 +7,17 @@
 
 import Foundation
 
- protocol IRequest {
+protocol IRequest {
     var urlRequest: URLRequest? { get }
- }
+}
+
+extension IRequest {
+    
+    func paramsToString(params: [String: String]) -> String {
+        let parameterArray = params.map { key, value in
+            return "\(key)=\(value)"
+        }
+        
+        return "&" + parameterArray.joined(separator: "&")
+    }
+}

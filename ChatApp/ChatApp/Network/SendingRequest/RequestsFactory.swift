@@ -8,6 +8,7 @@
 import Foundation
 
 struct RequestsFactory {
+    
     struct ImageRequests {
         static func getImages(pageNumber: Int) -> RequestConfig<ApiImagesParser> {
             return RequestConfig<ApiImagesParser>(request: GetImagesRequest(pageNumber: pageNumber), parser: ApiImagesParser())
