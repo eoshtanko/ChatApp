@@ -45,8 +45,11 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                         competition?(image)
                     }
                 }
-            case .failure(let failure):
-                print(failure)
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    self?.showAlertWith(message: "Unable to download photo from internet")
+                }
+                print(error.localizedDescription)
             }
         }
     }
