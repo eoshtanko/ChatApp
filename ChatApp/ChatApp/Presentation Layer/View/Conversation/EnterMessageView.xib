@@ -26,7 +26,7 @@
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
-                            <rect key="frame" x="45" y="0.0" width="491" height="36"/>
+                            <rect key="frame" x="50.5" y="0.0" width="485.5" height="36"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="36" id="B2W-vx-cAi"/>
@@ -49,10 +49,10 @@
                         <constraint firstAttribute="trailing" secondItem="uPc-W1-YHv" secondAttribute="trailing" constant="10" id="6cm-61-Kfb"/>
                         <constraint firstItem="z05-jh-wSm" firstAttribute="centerY" secondItem="5jy-Zb-Rfo" secondAttribute="centerY" id="UdM-9G-V9F"/>
                         <constraint firstItem="5jy-Zb-Rfo" firstAttribute="top" secondItem="H95-8l-KnH" secondAttribute="top" id="Xbs-JM-9zc"/>
-                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="45" id="XpE-60-948"/>
+                        <constraint firstItem="5jy-Zb-Rfo" firstAttribute="leading" secondItem="z05-jh-wSm" secondAttribute="trailing" constant="10" id="Zjm-H4-AUh"/>
+                        <constraint firstItem="uPc-W1-YHv" firstAttribute="leading" secondItem="5jy-Zb-Rfo" secondAttribute="trailing" constant="10" id="qiC-hk-zYE"/>
                         <constraint firstItem="z05-jh-wSm" firstAttribute="leading" secondItem="H95-8l-KnH" secondAttribute="leading" constant="10" id="rD4-sp-vNe"/>
                         <constraint firstItem="uPc-W1-YHv" firstAttribute="centerY" secondItem="5jy-Zb-Rfo" secondAttribute="centerY" id="t6Y-qI-w3K"/>
-                        <constraint firstAttribute="trailing" secondItem="5jy-Zb-Rfo" secondAttribute="trailing" constant="45" id="uPk-sf-rhr"/>
                     </constraints>
                 </view>
             </subviews>
