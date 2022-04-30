@@ -55,6 +55,22 @@ class PhotoSelectionViewController: UIViewController {
         }
     }
     
+    private func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        competition?(image)
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
     private func configureActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator?.center = photoCollectionView?.center ?? view.center
@@ -116,8 +132,8 @@ extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            choosePhotoAction?(photoesURL[indexPath.row])
-            self.dismiss(animated: true)
+        choosePhotoAction?(photoesURL[indexPath.row])
+        self.dismiss(animated: true)
     }
 }
 
@@ -131,7 +147,8 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else {
             return UICollectionViewCell()
         }
-
+        
+        cell.downloadImageAction = downloadImage
         cell.configure(with: photoesURL[indexPath.row])
         
         if indexPath.row == photoesURL.count - 1 {

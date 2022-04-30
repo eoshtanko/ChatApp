@@ -42,6 +42,7 @@ extension ConversationViewController: UITableViewDataSource {
             if let message = message {
                 messageCell.configureCell(message)
             }
+            messageCell.downloadImageAction = downloadImage
             return messageCell
         } else {
             let cell = tableView.dequeueReusableCell(

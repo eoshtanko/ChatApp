@@ -11,6 +11,8 @@ class ChatPhotoCell: UITableViewCell {
     
     static let identifier = String(describing: ChatPhotoCell.self)
     
+    var downloadImageAction: ((String, ((UIImage) -> Void)?) -> Void)?
+    
     private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     static var currentTheme: Theme = .classic {
         didSet {
@@ -32,7 +34,7 @@ class ChatPhotoCell: UITableViewCell {
         super.awakeFromNib()
         leadingConstraint = messageImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Const.messageLabelLeadingAndTrailingConstraint)
         trailingConstraint = messageImageView.trailingAnchor.constraint(equalTo: trailingAnchor,
-               constant: -Const.messageLabelLeadingAndTrailingConstraint)
+                                                                        constant: -Const.messageLabelLeadingAndTrailingConstraint)
     }
     
     func configureCell(_ chatMessage: Message) {
@@ -57,10 +59,12 @@ class ChatPhotoCell: UITableViewCell {
     }
     
     private func configureContent(_ chatMessage: Message) {
-        if let url = URL(string: chatMessage.content) {
-            messageImageView.downloaded(from: url)
-        }
+        downloadImageAction?(chatMessage.content, setImage)
         namelabel.text = chatMessage.senderName.isEmpty ? "No name" : chatMessage.senderName
+    }
+    
+    private func setImage(image: UIImage) {
+        messageImageView.image = image
     }
     
     static func setCurrentTheme(_ theme: Theme) {

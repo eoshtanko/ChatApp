@@ -131,6 +131,22 @@ class ProfileViewController: UIViewController {
         initialImage = profileView?.profileImageView.image
     }
     
+    func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        competition?(image)
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
     private func resetChangeIndicators() {
         infoDidChanged = false
         nameDidChanged = false

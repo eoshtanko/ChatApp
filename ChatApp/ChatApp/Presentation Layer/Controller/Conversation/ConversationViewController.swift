@@ -12,6 +12,8 @@ class ConversationViewController: UIViewController {
     
     private let channel: Channel?
     
+    let requestSender = RequestSender()
+    
     var firebaseMessagesService: FirebaseMessagesServiceProtocol?
     
     let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
@@ -70,6 +72,22 @@ class ConversationViewController: UIViewController {
             self.firebaseMessagesService?.configureSnapshotListener(failAction: self.showFailToLoadMessagesAlert)
         })
         present(failureAlert, animated: true, completion: nil)
+    }
+    
+    func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        competition?(image)
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
     }
     
     required init?(coder: NSCoder) {

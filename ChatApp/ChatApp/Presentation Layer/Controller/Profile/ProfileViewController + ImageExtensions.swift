@@ -21,34 +21,18 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func setPhoto(_ image: UIImage) {
-        DispatchQueue.main.async { [weak self] in
-            if self?.isProfileEditing ?? false {
-                self?.changeProfileEditingStatus(isEditing: true)
+        DispatchQueue.main.async {
+            if !self.isProfileEditing {
+                self.changeProfileEditingStatus(isEditing: true)
             }
-            self?.profileView?.setImage(image: image)
-            self?.imageDidChanged = true
-            self?.setEnableStatusToSaveButtons()
+            self.profileView?.setImage(image: image)
+            self.imageDidChanged = true
+            self.setEnableStatusToSaveButtons()
         }
     }
     
     private func setPhoto(_ urlString: String) {
-        downloadImage(from: urlString)
-    }
-    
-    func downloadImage(from url: String) {
-        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
-        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                DispatchQueue.main.async {
-                    if let image = UIImage(data: data) {
-                        self.setPhoto(image)
-                    }
-                }
-            case .failure(let failure):
-                print(failure)
-            }
-        }
+        downloadImage(from: urlString, competition: setPhoto)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
