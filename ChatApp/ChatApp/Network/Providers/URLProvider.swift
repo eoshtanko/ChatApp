@@ -8,5 +8,7 @@
 import Foundation
 
 public struct URLProvider {
-    public static let apiStringURL = "https://pixabay.com/api/?key=\(KeyProvider.apiKey)"
+    public static let netProtocol = "https://"
+    public static let host = "pixabay.com"
+    public static let apiStringURL = netProtocol + host + "/api/?key=\(KeyProvider.apiKey)"
 }

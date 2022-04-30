@@ -32,7 +32,7 @@ extension ConversationViewController: UITableViewDataSource {
         let dbMessage = fetchedResultsController?.object(at: indexPath)
         let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
         
-        if let mess = message, mess.content.starts(with: "https://pixabay.com/") {
+        if let mess = message, mess.content.starts(with: URLProvider.netProtocol + URLProvider.host) {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: ChatPhotoCell.identifier,
                 for: indexPath)
