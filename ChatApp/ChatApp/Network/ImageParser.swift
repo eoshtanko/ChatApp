@@ -2,28 +2,17 @@
 //  ImageParser.swift
 //  ChatApp
 //
-//  Created by Екатерина on 28.04.2022.
+//  Created by Екатерина on 30.04.2022.
 //
 
+import Foundation
 import UIKit
-
-struct HitsModel: Codable {
-    let hits: [ImageData]
-}
-
-struct ImageData: Identifiable, Codable {
-    let id: Int
-    let largeImageURL: String
-}
 
 class ImageParser: IParser {
     
-    typealias Model = [ImageData]
+    typealias Model = Data
     
-    func parse(data: Data) -> [ImageData]? {
-        guard let imagesModel = try? JSONDecoder().decode(HitsModel.self, from: data) else {
-            return nil
-        }
-        return imagesModel.hits
+    func parse(data: Data) -> Data? {
+        return data
     }
 }

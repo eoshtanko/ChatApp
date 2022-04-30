@@ -11,6 +11,8 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var profileView: ProfileView?
     
+    let requestSender = RequestSender()
+    
     var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     var currentTheme: Theme = .classic {
         didSet {

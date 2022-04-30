@@ -21,33 +21,32 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func setPhoto(_ image: UIImage) {
-        DispatchQueue.main.async {
-            if !self.isProfileEditing {
-                self.changeProfileEditingStatus(isEditing: true)
+        DispatchQueue.main.async { [weak self] in
+            if self?.isProfileEditing ?? false {
+                self?.changeProfileEditingStatus(isEditing: true)
             }
-            self.profileView?.setImage(image: image)
-            self.imageDidChanged = true
-            self.setEnableStatusToSaveButtons()
+            self?.profileView?.setImage(image: image)
+            self?.imageDidChanged = true
+            self?.setEnableStatusToSaveButtons()
         }
     }
     
     private func setPhoto(_ urlString: String) {
-        if let url = URL(string: urlString) {
-            downloadImage(from: url)
-        }
+        downloadImage(from: urlString)
     }
     
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    func downloadImage(from url: URL) {
-        getData(from: url) { data, _, error in
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async { [weak self] in
-                if let image = UIImage(data: data) {
-                    self?.setPhoto(image)
+    func downloadImage(from url: String) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        self.setPhoto(image)
+                    }
                 }
+            case .failure(let failure):
+                print(failure)
             }
         }
     }
@@ -94,9 +93,9 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func configureUploadAction(_ actionSheet: UIAlertController) {
-        actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: {_ in
-            let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.setPhoto)
-            self.present(photoSelectionViewController, animated: true)
+        actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: { [weak self] _ in
+            let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self?.setPhoto)
+            self?.present(photoSelectionViewController, animated: true)
         }))
     }
     

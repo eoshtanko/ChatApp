@@ -57,11 +57,27 @@ class ChatMessageCell: UITableViewCell {
     }
     
     func configureCell(_ chatMessage: Message) {
-        configureContent(chatMessage)
+        let message = getMessage(chatMessage)
+        configureContent(message)
         setCurrentTheme()
         let isOutcoming = chatMessage.senderId == CurrentUser.user.id
         bubbleBackgroundView.backgroundColor = isOutcoming ? outcomingMessageUIColor : incomingMessageUIColor
         configureSenderIdentifyingParameter(isOutcoming: isOutcoming)
+    }
+    
+    private func getMessage(_ chatMessage: Message) -> Message {
+        if chatMessage.content.starts(with: "https://") && chatMessage.content.reversed().starts(with: ".jpg".reversed()) {
+            let message = Message(content: getErrorApiMessage(chatMessage.content),
+                                  senderId: chatMessage.senderId,
+                                  senderName: chatMessage.senderName,
+                                  created: chatMessage.created)
+            return message
+        }
+        return chatMessage
+    }
+    
+    private func getErrorApiMessage(_ str: String) -> String {
+        return Const.errorApiMessage + str
     }
     
     private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
@@ -140,5 +156,6 @@ class ChatMessageCell: UITableViewCell {
         static let topConstantWithoutName: CGFloat = 16
         static let hightOfNameLabel: CGFloat = 21
         static let bottomConstant: CGFloat = -32
+        static let errorApiMessage: String = "Api не поддерживается: "
     }
 }

@@ -56,7 +56,7 @@
 		34AC5A06281ABBD200793BF2 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A05281ABBD200793BF2 /* NetworkError.swift */; };
 		34AC5A08281AC52E00793BF2 /* RequestConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A07281AC52E00793BF2 /* RequestConfig.swift */; };
 		34AC5A0A281AC57400793BF2 /* IRequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A09281AC57400793BF2 /* IRequestSender.swift */; };
-		34AC5A0C281AC7D200793BF2 /* ImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A0B281AC7D200793BF2 /* ImageParser.swift */; };
+		34AC5A0C281AC7D200793BF2 /* ApiImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */; };
 		34AC5A0E281AC8A700793BF2 /* RequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A0D281AC8A700793BF2 /* RequestSender.swift */; };
 		34AC5A31281B205E00793BF2 /* KeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A30281B205E00793BF2 /* KeyProvider.swift */; };
 		34AC5A33281B209400793BF2 /* URLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A32281B209400793BF2 /* URLProvider.swift */; };
@@ -65,6 +65,8 @@
 		34AC5A39281BFD6000793BF2 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A38281BFD6000793BF2 /* PhotoCell.swift */; };
 		34AC5A3B281C49B300793BF2 /* ChatPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A3A281C49B300793BF2 /* ChatPhotoCell.swift */; };
 		34AC5A3D281C70A900793BF2 /* ChatPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AC5A3C281C70A900793BF2 /* ChatPhotoCell.xib */; };
+		34AC5A3F281CE5CA00793BF2 /* ImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A3E281CE5CA00793BF2 /* ImageParser.swift */; };
+		34AC5A41281CE6BD00793BF2 /* GetImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A40281CE6BD00793BF2 /* GetImageRequest.swift */; };
 		34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE527C4AAEB00535096 /* AppDelegate.swift */; };
 		34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */; };
 		34ACCFED27C4AAEB00535096 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34ACCFEB27C4AAEB00535096 /* Profile.storyboard */; };
@@ -135,7 +137,7 @@
 		34AC5A05281ABBD200793BF2 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		34AC5A07281AC52E00793BF2 /* RequestConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestConfig.swift; sourceTree = "<group>"; };
 		34AC5A09281AC57400793BF2 /* IRequestSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRequestSender.swift; sourceTree = "<group>"; };
-		34AC5A0B281AC7D200793BF2 /* ImageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageParser.swift; sourceTree = "<group>"; };
+		34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiImageParser.swift; sourceTree = "<group>"; };
 		34AC5A0D281AC8A700793BF2 /* RequestSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSender.swift; sourceTree = "<group>"; };
 		34AC5A30281B205E00793BF2 /* KeyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProvider.swift; sourceTree = "<group>"; };
 		34AC5A32281B209400793BF2 /* URLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProvider.swift; sourceTree = "<group>"; };
@@ -144,6 +146,8 @@
 		34AC5A38281BFD6000793BF2 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		34AC5A3A281C49B300793BF2 /* ChatPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPhotoCell.swift; sourceTree = "<group>"; };
 		34AC5A3C281C70A900793BF2 /* ChatPhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatPhotoCell.xib; sourceTree = "<group>"; };
+		34AC5A3E281CE5CA00793BF2 /* ImageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageParser.swift; sourceTree = "<group>"; };
+		34AC5A40281CE6BD00793BF2 /* GetImageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageRequest.swift; sourceTree = "<group>"; };
 		34ACCFE227C4AAEB00535096 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34ACCFE527C4AAEB00535096 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		34ACCFE927C4AAEB00535096 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -408,11 +412,13 @@
 		34AC5A0F281AEBA500793BF2 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				34AC5A0B281AC7D200793BF2 /* ImageParser.swift */,
+				34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */,
+				34AC5A3E281CE5CA00793BF2 /* ImageParser.swift */,
 				34AC5A0D281AC8A700793BF2 /* RequestSender.swift */,
 				34AC5A07281AC52E00793BF2 /* RequestConfig.swift */,
 				34AC5A34281B243D00793BF2 /* RequestsFactory.swift */,
 				34AC5A36281BC1BE00793BF2 /* GetImagesRequest.swift */,
+				34AC5A40281CE6BD00793BF2 /* GetImageRequest.swift */,
 				34AC5A01281ABB1500793BF2 /* IRequest.swift */,
 				34AC5A03281ABB4800793BF2 /* IParser.swift */,
 				34AC5A09281AC57400793BF2 /* IRequestSender.swift */,
@@ -642,6 +648,7 @@
 				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
 				34AC5A39281BFD6000793BF2 /* PhotoCell.swift in Sources */,
 				3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */,
+				34AC5A3F281CE5CA00793BF2 /* ImageParser.swift in Sources */,
 				3427ACE827D61EBA0062F749 /* ConversationViewController.swift in Sources */,
 				3460338027EC22E500962579 /* Writer.swift in Sources */,
 				342D525127E3B21C0075C42B /* ThemesViewController.swift in Sources */,
@@ -674,7 +681,7 @@
 				34630D5C281786CB00210249 /* ThemeSavingService.swift in Sources */,
 				34630D5128175E0100210249 /* CoreDataServiceForChannels.swift in Sources */,
 				34FC31FA27EEDBE100A1D137 /* MemoryManagerInterfaceProtocol.swift in Sources */,
-				34AC5A0C281AC7D200793BF2 /* ImageParser.swift in Sources */,
+				34AC5A0C281AC7D200793BF2 /* ApiImageParser.swift in Sources */,
 				34630D5328175E2300210249 /* CoreDataServiceForMessages.swift in Sources */,
 				34AC5A08281AC52E00793BF2 /* RequestConfig.swift in Sources */,
 				34FC31F827EE2C3400A1D137 /* URL+Extensions.swift in Sources */,
@@ -691,6 +698,7 @@
 				342CCCD72816BE1B0099B067 /* ConversationView.swift in Sources */,
 				34AC5A02281ABB1500793BF2 /* IRequest.swift in Sources */,
 				34ACCFE627C4AAEB00535096 /* AppDelegate.swift in Sources */,
+				34AC5A41281CE6BD00793BF2 /* GetImageRequest.swift in Sources */,
 				34F449BD27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift in Sources */,
 				34449AEB28000C9D002763CD /* NSManagedObject + Extension.swift in Sources */,
 				3460338227EC231100962579 /* Reader.swift in Sources */,
