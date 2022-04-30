@@ -409,7 +409,7 @@
 			path = "Presentation Layer";
 			sourceTree = "<group>";
 		};
-		34AC5A0F281AEBA500793BF2 /* Network */ = {
+		34AC5A0F281AEBA500793BF2 /* Network Layer */ = {
 			isa = PBXGroup;
 			children = (
 				34AC5A43281CEF7800793BF2 /* Request */,
@@ -418,7 +418,7 @@
 				34AC5A44281CEFD500793BF2 /* Providers */,
 				34AC5A46281CF02100793BF2 /* Error */,
 			);
-			path = Network;
+			path = "Network Layer";
 			sourceTree = "<group>";
 		};
 		34AC5A42281CEF2600793BF2 /* Parsing */ = {
@@ -492,7 +492,7 @@
 			children = (
 				346A55D328174A6D00349718 /* Presentation Layer */,
 				34630D4A281752A900210249 /* Service Layer */,
-				34AC5A0F281AEBA500793BF2 /* Network */,
+				34AC5A0F281AEBA500793BF2 /* Network Layer */,
 				34630D4B281752F300210249 /* Core Layer */,
 				3427ACD727D47E8C0062F749 /* Resources */,
 				3427ACD627D47E6A0062F749 /* Supporting files */,
