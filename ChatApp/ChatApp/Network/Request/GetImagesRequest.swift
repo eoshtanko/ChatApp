@@ -21,7 +21,6 @@ struct GetImagesRequest: IRequest {
                          "colors": "blue",
                          "page": "\(pageNumber)",
                          "per_page": "200"]
-        print(paramsToString(params: parametrs))
         guard let url = URL(string: URLProvider.apiStringURL + paramsToString(params: parametrs)) else {
             return nil
         }
