@@ -90,6 +90,10 @@ class ConversationViewController: UIViewController {
         }
     }
     
+    func isDrawableImageMessage(_ mess: Message) -> Bool {
+        return mess.content.starts(with: URLProvider.netProtocol + URLProvider.host)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

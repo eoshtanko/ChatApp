@@ -12,6 +12,16 @@ extension ConversationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return Const.heightOfHeader
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let dbMessage = fetchedResultsController?.object(at: indexPath)
+        let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
+        
+        if let mess = message, let conversationView = conversationView, isDrawableImageMessage(mess) {
+            return conversationView.getHightOfImageCell(mess)
+        }
+        return tableView.estimatedRowHeight
+    }
 }
 
 extension ConversationViewController: UITableViewDataSource {
@@ -32,7 +42,7 @@ extension ConversationViewController: UITableViewDataSource {
         let dbMessage = fetchedResultsController?.object(at: indexPath)
         let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
         
-        if let mess = message, mess.content.starts(with: URLProvider.netProtocol + URLProvider.host) {
+        if let mess = message, isDrawableImageMessage(mess) {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: ChatPhotoCell.identifier,
                 for: indexPath)

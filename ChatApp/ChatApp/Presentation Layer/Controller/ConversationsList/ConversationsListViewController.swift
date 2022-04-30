@@ -147,6 +147,7 @@ class ConversationsListViewController: UIViewController {
         let alert = UIAlertController(title: "Создать новый канал", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "Имя нового канала"
+            textField.textColor = .black
             textField.enablesReturnKeyAutomatically = true
         }
         alert.addAction(UIAlertAction(title: "Создать", style: .default, handler: { [weak alert] (_) in

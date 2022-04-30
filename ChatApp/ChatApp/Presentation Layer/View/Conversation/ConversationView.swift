@@ -89,8 +89,14 @@ class ConversationView: UIView {
         ChatPhotoCell.setCurrentTheme(theme)
     }
     
+    func getHightOfImageCell(_ mess: Message) -> CGFloat {
+        return mess.senderId == CurrentUser.user.id ? Const.hightOfOutcomingMessage : Const.hightOfIncomingMessage
+    }
+    
     enum Const {
         static let estimatedRowHeight: CGFloat = 60
         static let empiricalValue: CGFloat = 70
+        static let hightOfOutcomingMessage: CGFloat = 201
+        static let hightOfIncomingMessage: CGFloat = 231
     }
 }
