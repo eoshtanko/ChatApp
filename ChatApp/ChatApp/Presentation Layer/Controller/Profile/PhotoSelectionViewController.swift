@@ -83,7 +83,16 @@ class PhotoSelectionViewController: UIViewController {
         DispatchQueue.main.async {
             print(failure)
             self.photoSelectionView?.activityIndicator?.stopAnimating()
+            self.showFailureAlert()
         }
+    }
+    
+    private func showFailureAlert() {
+        let successAlert = UIAlertController(title: "Проверьте подключение к интернету.", message: nil, preferredStyle: UIAlertController.Style.alert)
+        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
+            self.dismiss(animated: true)
+        })
+        present(successAlert, animated: true, completion: nil)
     }
     
     private func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
