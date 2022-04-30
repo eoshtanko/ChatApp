@@ -11,14 +11,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" restorationIdentifier="EnterMessageView" insetsLayoutMarginsFromSafeArea="NO" id="H33-MO-rhl" customClass="EnterMessageView" customModule="ChatApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="417" height="52"/>
+            <rect key="frame" x="0.0" y="0.0" width="581" height="75"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H95-8l-KnH">
-                    <rect key="frame" x="0.0" y="10" width="417" height="42"/>
+                    <rect key="frame" x="0.0" y="10" width="581" height="65"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uPc-W1-YHv">
-                            <rect key="frame" x="382" y="7.5" width="25" height="21"/>
+                            <rect key="frame" x="546" y="7.5" width="25" height="21"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title=" " image="arrow.up.circle.fill" catalog="system"/>
                             <connections>
@@ -26,7 +26,7 @@
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5jy-Zb-Rfo">
-                            <rect key="frame" x="45" y="0.0" width="327" height="36"/>
+                            <rect key="frame" x="45" y="0.0" width="491" height="36"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="36" id="B2W-vx-cAi"/>
@@ -72,7 +72,7 @@
                 <outlet property="textView" destination="5jy-Zb-Rfo" id="AOP-v3-DiD"/>
                 <outlet property="textViewHightConstraint" destination="B2W-vx-cAi" id="BqW-SM-Oh6"/>
             </connections>
-            <point key="canvasLocation" x="-929.71014492753625" y="-324.44196428571428"/>
+            <point key="canvasLocation" x="-810.86956521739137" y="-324.44196428571428"/>
         </view>
     </objects>
     <resources>

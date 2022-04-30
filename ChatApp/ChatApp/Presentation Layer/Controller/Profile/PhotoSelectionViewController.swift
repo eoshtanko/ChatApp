@@ -71,6 +71,7 @@ class PhotoSelectionViewController: UIViewController {
             photoCollectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: PhotoCell.identifier)
             photoCollectionView.delegate = self
             photoCollectionView.dataSource = self
+            photoCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         }
     }
     
