@@ -38,7 +38,6 @@ extension ConversationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let dbMessage = fetchedResultsController?.object(at: indexPath)
         let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
         

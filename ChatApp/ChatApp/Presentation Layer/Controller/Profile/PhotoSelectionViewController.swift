@@ -150,6 +150,8 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         }
         DispatchQueue.main.async {
             self.photoSelectionView?.photoCollectionView?.reloadData()
+//            self.photoSelectionView?.photoCollectionView?.reloadItems(at:
+//            self.photoSelectionView?.photoCollectionView?.indexPathsForVisibleItems ?? [])
         }
     }
 }
