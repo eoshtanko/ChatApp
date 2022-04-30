@@ -66,7 +66,7 @@ class ChatMessageCell: UITableViewCell {
     }
     
     private func getMessage(_ chatMessage: Message) -> Message {
-        if chatMessage.content.starts(with: "https://") && chatMessage.content.reversed().starts(with: ".jpg".reversed()) {
+        if isURL(chatMessage.content) {
             let message = Message(content: getErrorApiMessage(chatMessage.content),
                                   senderId: chatMessage.senderId,
                                   senderName: chatMessage.senderName,
@@ -74,6 +74,10 @@ class ChatMessageCell: UITableViewCell {
             return message
         }
         return chatMessage
+    }
+    
+    private func isURL(_ str: String) -> Bool {
+        return str.starts(with: "https://") && str.reversed().starts(with: ".jpg".reversed())
     }
     
     private func getErrorApiMessage(_ str: String) -> String {
