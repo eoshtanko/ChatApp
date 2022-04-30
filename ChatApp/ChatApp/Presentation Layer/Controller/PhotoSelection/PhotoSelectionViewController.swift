@@ -22,7 +22,7 @@ class PhotoSelectionViewController: UIViewController {
         }
     }
     
-    private var currentAPICallPage = 1
+    var currentAPICallPage = 1
     private let requestSender = RequestSender()
     
     var photoesURL: [String] = []
@@ -57,7 +57,7 @@ class PhotoSelectionViewController: UIViewController {
         photoSelectionView?.photoCollectionView?.dataSource = self
     }
     
-    private func downloadImages(page: Int, completitionSuccess: (([ImageData]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
+    func downloadImages(page: Int, completitionSuccess: (([ImageData]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
         let requestConfig = RequestsFactory.ImageRequests.getImages(pageNumber: page)
         requestSender.send(config: requestConfig) { (result: Result<[ImageData], Error>) in
             switch result {
@@ -95,7 +95,7 @@ class PhotoSelectionViewController: UIViewController {
         present(successAlert, animated: true, completion: nil)
     }
     
-    private func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+    func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
         let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
         requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
             switch result {
@@ -113,54 +113,5 @@ class PhotoSelectionViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let photoSelectionView = photoSelectionView else {
-            return CGSize(width: 0, height: 0)
-        }
-        return photoSelectionView.getSizeForItemAt()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        choosePhotoAction?(photoesURL[indexPath.row])
-        self.dismiss(animated: true)
-    }
-}
-
-extension PhotoSelectionViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoesURL.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else {
-            return UICollectionViewCell()
-        }
-        
-        cell.downloadImageAction = downloadImage
-        cell.configure(with: photoesURL[indexPath.row])
-        
-        if indexPath.row == photoesURL.count - 1 {
-            currentAPICallPage += 1
-            self.downloadImages(page: currentAPICallPage, completitionSuccess: completitionSuccessForRepeatedRequest, competitionFailer: nil)
-        }
-        
-        return cell
-    }
-    
-    private func completitionSuccessForRepeatedRequest(_ moreImageModels: [ImageData]) {
-        for model in moreImageModels {
-            photoesURL.append(model.largeImageURL)
-        }
-        DispatchQueue.main.async {
-            self.photoSelectionView?.photoCollectionView?.reloadData()
-//            self.photoSelectionView?.photoCollectionView?.reloadItems(at:
-//            self.photoSelectionView?.photoCollectionView?.indexPathsForVisibleItems ?? [])
-        }
     }
 }
