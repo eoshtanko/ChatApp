@@ -38,9 +38,7 @@ class ChatPhotoCell: UITableViewCell {
     }
     
     func configureCell(_ chatMessage: Message) {
-        if messageImageView.image == UIImage(named: "defaultImage") {
-            configureContent(chatMessage)
-        }
+        configureContent(chatMessage)
         configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
         messageImageView.layer.cornerRadius = Const.cornerRadius
         setCurrentTheme()

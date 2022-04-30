@@ -48,10 +48,10 @@ extension ConversationViewController: UITableViewDataSource {
             guard let messageCell = cell as? ChatPhotoCell else {
                 return cell
             }
+            messageCell.downloadImageAction = downloadImage
             if let message = message {
                 messageCell.configureCell(message)
             }
-            messageCell.downloadImageAction = downloadImage
             return messageCell
         } else {
             let cell = tableView.dequeueReusableCell(
