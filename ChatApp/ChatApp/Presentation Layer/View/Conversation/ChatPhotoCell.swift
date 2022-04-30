@@ -65,7 +65,6 @@ class ChatPhotoCell: UITableViewCell {
     
     private func setImage(image: UIImage) {
         messageImageView.image = image
-        self.layoutIfNeeded()
     }
     
     static func setCurrentTheme(_ theme: Theme) {

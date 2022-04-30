@@ -95,7 +95,7 @@ class EnterMessageView: UIView {
     private enum Const {
         static let textViewBorderWidth = 0.1
         static let textViewCornerRadius: CGFloat = 10
-        static let textViewMaxHight: CGFloat = 71
+        static let textViewMaxHight: CGFloat = 36
     }
 }
 
