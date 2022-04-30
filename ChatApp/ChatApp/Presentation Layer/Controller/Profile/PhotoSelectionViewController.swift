@@ -88,7 +88,7 @@ class PhotoSelectionViewController: UIViewController {
     }
     
     private func showFailureAlert() {
-        let successAlert = UIAlertController(title: "Проверьте подключение к интернету.", message: nil, preferredStyle: UIAlertController.Style.alert)
+        let successAlert = UIAlertController(title: "Ошибка", message: "Проверьте подключение к интернету.", preferredStyle: UIAlertController.Style.alert)
         successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
             self.dismiss(animated: true)
         })
