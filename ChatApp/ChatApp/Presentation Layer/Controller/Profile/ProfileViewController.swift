@@ -183,7 +183,6 @@ class ProfileViewController: UIViewController {
     }
     
     private func handleFailureSaveToMemoryRequestResult() {
-        returnToInitialData()
         showFailureAlert()
     }
     
@@ -198,6 +197,7 @@ class ProfileViewController: UIViewController {
     private func showFailureAlert() {
         let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные.", preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.returnToInitialData()
             self?.changeProfileEditingStatus(isEditing: false)
         })
         failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) { [weak self] _ in

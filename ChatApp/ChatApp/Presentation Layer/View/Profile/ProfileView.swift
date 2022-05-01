@@ -169,7 +169,7 @@ class ProfileView: UIView {
         nameLabel.textColor = nameLabel.text?.isEmpty ?? false ? .lightGray : themeManager.themeSettings?.primaryTextColor
     }
     
-    private func setEmptyIndicatorColorToInfoLabel(_ themeManager: ThemeManagerProtocol) {
+    func setEmptyIndicatorColorToInfoLabel(_ themeManager: ThemeManagerProtocol) {
         infoLabel.textColor = infoLabel.text == Const.textViewPlaceholderText ? .lightGray : themeManager.themeSettings?.primaryTextColor
     }
     
