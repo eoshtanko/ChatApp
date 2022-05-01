@@ -13,7 +13,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            self.setPhoto(image)
+            setPhoto(image)
         } else {
             showAlertWith(message: "No image found.")
         }
@@ -21,7 +21,8 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func setPhoto(_ image: UIImage) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             if !self.isProfileEditing {
                 self.changeProfileEditingStatus(isEditing: true)
             }
@@ -62,7 +63,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         let imagePickerController = configureImagePickerController()
         let actionSheet = configureActionSheet()
         configureActions(actionSheet, imagePickerController)
-        self.present(actionSheet, animated: true, completion: nil)
+        present(actionSheet, animated: true, completion: nil)
     }
     
     private func configureImagePickerController() -> UIImagePickerController {
@@ -85,12 +86,12 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func configureLibraryAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {_ in
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
                 imagePickerController.sourceType = .photoLibrary
-                self.present(imagePickerController, animated: true)
+                self?.present(imagePickerController, animated: true)
             } else {
-                self.showAlertWith(message: "Unable to access the photo library.")
+                self?.showAlertWith(message: "Unable to access the photo library.")
             }
         }))
     }
@@ -104,13 +105,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     }
     
     private func configureCameraAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
             actionSheet.dismiss(animated: true) {
                 if UIImagePickerController.isSourceTypeAvailable(.camera) {
                     imagePickerController.sourceType = .camera
-                    self.present(imagePickerController, animated: true)
+                    self?.present(imagePickerController, animated: true)
                 } else {
-                    self.showAlertWith(message: "Unable to access the camera.")
+                    self?.showAlertWith(message: "Unable to access the camera.")
                 }
             }
         }))

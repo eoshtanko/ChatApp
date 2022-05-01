@@ -71,26 +71,26 @@ class PhotoSelectionViewController: UIViewController {
     
     private func completitionSuccessForInitialRequest(_ imageModels: [ImageData]) {
         for imageModel in imageModels {
-            self.photoesURL.append(imageModel.largeImageURL)
+            photoesURL.append(imageModel.largeImageURL)
         }
-        DispatchQueue.main.async {
-            self.photoSelectionView?.activityIndicator?.stopAnimating()
-            self.photoSelectionView?.photoCollectionView?.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.photoSelectionView?.activityIndicator?.stopAnimating()
+            self?.photoSelectionView?.photoCollectionView?.reloadData()
         }
     }
     
     private func completitionFailerForInitialRequest(_ failure: Error) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             print(failure)
-            self.photoSelectionView?.activityIndicator?.stopAnimating()
-            self.showFailureAlert()
+            self?.photoSelectionView?.activityIndicator?.stopAnimating()
+            self?.showFailureAlert()
         }
     }
     
     private func showFailureAlert() {
         let successAlert = UIAlertController(title: "Ошибка", message: "Проверьте подключение к интернету.", preferredStyle: UIAlertController.Style.alert)
-        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
-            self.dismiss(animated: true)
+        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.dismiss(animated: true)
         })
         present(successAlert, animated: true, completion: nil)
     }

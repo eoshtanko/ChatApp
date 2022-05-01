@@ -37,13 +37,13 @@ extension ConversationViewController {
     
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-        self.firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
+        firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
     }
     
     private func sendPhoto() {
-        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self.sendPhoto)
+        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: sendPhoto)
         photoSelectionViewController.setCurrentTheme(currentTheme)
-        self.present(photoSelectionViewController, animated: true)
+        present(photoSelectionViewController, animated: true)
     }
     
     private func sendPhoto(_ urlString: String) {
@@ -94,8 +94,8 @@ extension ConversationViewController {
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
-            self.entreMessageBar?.sendMessage()
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            self?.entreMessageBar?.sendMessage()
         })
         present(failureAlert, animated: true, completion: nil)
     }

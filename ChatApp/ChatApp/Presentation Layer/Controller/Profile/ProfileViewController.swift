@@ -37,7 +37,7 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func closeButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     @IBAction func editButtonPressed(_ sender: Any) {
@@ -189,19 +189,19 @@ class ProfileViewController: UIViewController {
     
     private func showSuccessAlert() {
         let successAlert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: UIAlertController.Style.alert)
-        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
-            self.changeProfileEditingStatus(isEditing: false)
+        successAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.changeProfileEditingStatus(isEditing: false)
         })
         present(successAlert, animated: true, completion: nil)
     }
     
     private func showFailureAlert() {
         let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные.", preferredStyle: UIAlertController.Style.alert)
-        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {_ in
-            self.changeProfileEditingStatus(isEditing: false)
+        failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.changeProfileEditingStatus(isEditing: false)
         })
-        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
-            self.saveViaGCD()
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) { [weak self] _ in
+            self?.saveViaGCD()
         })
         present(failureAlert, animated: true, completion: nil)
     }

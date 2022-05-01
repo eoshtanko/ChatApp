@@ -18,7 +18,7 @@ extension PhotoSelectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         choosePhotoAction?(photoesURL[indexPath.row])
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
 }
 
@@ -38,7 +38,7 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         
         if indexPath.row == photoesURL.count - 1 {
             currentAPICallPage += 1
-            self.downloadImages(page: currentAPICallPage, completitionSuccess: completitionSuccessForRepeatedRequest, competitionFailer: nil)
+            downloadImages(page: currentAPICallPage, completitionSuccess: completitionSuccessForRepeatedRequest, competitionFailer: nil)
         }
         
         return cell
@@ -48,8 +48,8 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         for model in moreImageModels {
             photoesURL.append(model.largeImageURL)
         }
-        DispatchQueue.main.async {
-            self.photoSelectionView?.photoCollectionView?.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.photoSelectionView?.photoCollectionView?.reloadData()
             //            self.photoSelectionView?.photoCollectionView?.reloadItems(at:
             //            self.photoSelectionView?.photoCollectionView?.indexPathsForVisibleItems ?? [])
         }

@@ -68,7 +68,8 @@ class ConversationViewController: UIViewController {
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            guard let self = self else { return }
             self.firebaseMessagesService?.configureSnapshotListener(failAction: self.showFailToLoadMessagesAlert)
         })
         present(failureAlert, animated: true, completion: nil)
