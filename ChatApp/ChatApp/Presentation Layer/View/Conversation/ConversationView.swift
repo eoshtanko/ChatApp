@@ -12,18 +12,22 @@ class ConversationView: UIView {
     let tableView = UITableView(frame: .zero, style: .grouped)
     var hightOfKeyboard: CGFloat?
     
-    private lazy var bottomOffsetWithKeyboard: CGPoint = {
+    private func getBottomOffsetWithKeyboard() -> CGPoint {
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: hightOfKeyboard ?? 0, right: 0)
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (hightOfKeyboard ?? 0))
-    }()
+    }
     
     private func getBottomOffsetWithoutKeyboard(_ entreMessageBar: EnterMessageView?) -> CGPoint {
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
     func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
         tableView.layoutIfNeeded()
         if isScrollingNecessary(entreMessageBar) {
-            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard : getBottomOffsetWithoutKeyboard(entreMessageBar)
+            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ?
+            getBottomOffsetWithKeyboard() :
+            getBottomOffsetWithoutKeyboard(entreMessageBar)
             
             tableView.setContentOffset(bottomOffset, animated: animated)
         }
