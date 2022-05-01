@@ -20,7 +20,7 @@ class ConversationsListViewController: UIViewController {
             conversationsListView?.setCurrentTheme(theme: currentTheme, themeManager: themeManager, navigationItem: navigationItem)
         }
     }
-
+    
     private let userSavingService: UserSavingServiceProtocol = UserSavingService()
     
     let coreDataService = CoreDataServiceForChannels(dataModelName: Const.dataModelName)
@@ -54,7 +54,8 @@ class ConversationsListViewController: UIViewController {
     private func showFailToLoadChannelsAlert() {
         let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось загрузить каналы.", preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
-        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) { [weak self] _ in
+            guard let self = self else { return }
             self.firebaseChannelsService?.configureSnapshotListener(failAction: self.showFailToLoadChannelsAlert)
         })
         present(failureAlert, animated: true, completion: nil)
@@ -63,7 +64,8 @@ class ConversationsListViewController: UIViewController {
     func showFailToDeleteChannelAlert(id: String) {
         let failureAlert = UIAlertController(title: "Ошибка", message: "Не удалось удалить каналы.", preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
-        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) {_ in
+        failureAlert.addAction(UIAlertAction(title: "Повторить", style: UIAlertAction.Style.cancel) { [weak self] _ in
+            guard let self = self else { return }
             self.firebaseChannelsService?.removeChannelFromFirebase(withID: id, failAction: self.showFailToDeleteChannelAlert)
         })
         present(failureAlert, animated: true, completion: nil)
@@ -78,7 +80,7 @@ class ConversationsListViewController: UIViewController {
     private func loadCurrentUser() {
         userSavingService.loadWithMemoryManager(complition: handleLoadProfileFromMemoryRequestResult)
     }
-
+    
     private func handleLoadProfileFromMemoryRequestResult(result: Result<User, Error>?) {
         guard let result = result else {
             return
@@ -108,7 +110,7 @@ class ConversationsListViewController: UIViewController {
         let settingsBarButtonItem = getSettingsBarButtonItem()
         let addNewChannelBarButtonItem = getAddNewChannelBarButtonItem()
         if let settingsButton = settingsBarButtonItem, let addButton = addNewChannelBarButtonItem {
-            self.navigationItem.leftBarButtonItems = [settingsButton, addButton]
+            navigationItem.leftBarButtonItems = [settingsButton, addButton]
         }
     }
     
@@ -147,9 +149,11 @@ class ConversationsListViewController: UIViewController {
         let alert = UIAlertController(title: "Создать новый канал", message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "Имя нового канала"
+            textField.textColor = .black
             textField.enablesReturnKeyAutomatically = true
         }
-        alert.addAction(UIAlertAction(title: "Создать", style: .default, handler: { [weak alert] (_) in
+        alert.addAction(UIAlertAction(title: "Создать", style: .default, handler: { [weak alert, weak self] (_) in
+            guard let self = self else { return }
             if let textFieldText = alert?.textFields?[0].text, !textFieldText.isEmpty {
                 self.firebaseChannelsService?.createNewChannel(name: textFieldText, failAction: self.showFailToCreateChannelAlert)
             } else {
@@ -157,7 +161,7 @@ class ConversationsListViewController: UIViewController {
             }
         }))
         alert.addAction(UIAlertAction(title: "Отмена", style: .default))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
     private func showFailToCreateChannelAlert(_ name: String) {
@@ -167,7 +171,8 @@ class ConversationsListViewController: UIViewController {
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            guard let self = self else { return }
             self.firebaseChannelsService?.createNewChannel(name: name, failAction: self.showFailToCreateChannelAlert)
         })
         present(failureAlert, animated: true, completion: nil)
@@ -178,8 +183,8 @@ class ConversationsListViewController: UIViewController {
                                              message: nil,
                                              preferredStyle: UIAlertController.Style.alert)
         failureAlert.addAction(UIAlertAction(title: "OK",
-                                             style: UIAlertAction.Style.cancel) {_ in
-            self.showAddNewChannelAlert()
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            self?.showAddNewChannelAlert()
         })
         present(failureAlert, animated: true, completion: nil)
     }

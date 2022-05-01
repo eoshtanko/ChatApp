@@ -19,8 +19,10 @@ extension ConversationViewController {
             entreMessageBar?.setSendMessageAction { [weak self] message in
                 self?.sendMessage(message: message)
             }
+            entreMessageBar?.setSendPhotoAction { [weak self] in
+                self?.sendPhoto()
+            }
         }
-        
         return entreMessageBar
     }
     
@@ -34,7 +36,17 @@ extension ConversationViewController {
     
     private func sendMessage(message: String) {
         let newMessage = Message(content: message, senderId: CurrentUser.user.id, senderName: CurrentUser.user.name ?? "No name", created: Date())
-        self.firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
+        firebaseMessagesService?.sendMessage(message: newMessage, failAction: showFailToSendMessageAlert, successAction: resetData)
+    }
+    
+    private func sendPhoto() {
+        let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: sendPhoto)
+        photoSelectionViewController.setCurrentTheme(currentTheme)
+        present(photoSelectionViewController, animated: true)
+    }
+    
+    private func sendPhoto(_ urlString: String) {
+        sendMessage(message: urlString)
     }
     
     private func resetData() {
@@ -43,16 +55,20 @@ extension ConversationViewController {
     
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardDidShow(_:)),
+                                               selector: #selector(prepareScreenToOpenOfKeyboard(_:)),
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide(_:)),
+                                               selector: #selector(prepareScreenToOpenOfKeyboard(_:)),
+                                               name: UIResponder.keyboardDidShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(prepareScreenToCloseOfKeyboard(_:)),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
     
-    @objc func keyboardDidShow(_ notification: NSNotification) {
+    @objc func prepareScreenToOpenOfKeyboard(_ notification: NSNotification) {
         if entreMessageBar?.textView.isFirstResponder ?? false {
             guard let payload = KeyboardInfo(notification) else { return }
             conversationView?.hightOfKeyboard = payload.frameEnd?.size.height
@@ -60,7 +76,7 @@ extension ConversationViewController {
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
-    @objc func keyboardWillHide(_ notification: NSNotification) {
+    @objc func prepareScreenToCloseOfKeyboard(_ notification: NSNotification) {
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
@@ -81,8 +97,8 @@ extension ConversationViewController {
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
-            self.entreMessageBar?.sendMessage()
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            self?.entreMessageBar?.sendMessage()
         })
         present(failureAlert, animated: true, completion: nil)
     }

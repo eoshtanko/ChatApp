@@ -12,6 +12,16 @@ extension ConversationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return Const.heightOfHeader
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let dbMessage = fetchedResultsController?.object(at: indexPath)
+        let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
+        
+        if let mess = message, let conversationView = conversationView, isDrawableImageMessage(mess) {
+            return conversationView.getHightOfImageCell(mess)
+        }
+        return tableView.estimatedRowHeight
+    }
 }
 
 extension ConversationViewController: UITableViewDataSource {
@@ -28,17 +38,32 @@ extension ConversationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: ChatMessageCell.identifier,
-            for: indexPath)
-        guard let messageCell = cell as? ChatMessageCell else {
-            return cell
-        }
         let dbMessage = fetchedResultsController?.object(at: indexPath)
         let message = try? coreDataService.parseDBMessageToMessage(dbMessage)
-        if let message = message {
-            messageCell.configureCell(message)
+        
+        if let mess = message, isDrawableImageMessage(mess) {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ChatPhotoCell.identifier,
+                for: indexPath)
+            guard let messageCell = cell as? ChatPhotoCell else {
+                return cell
+            }
+            messageCell.downloadImageAction = downloadImage
+            if let message = message {
+                messageCell.configureCell(message)
+            }
+            return messageCell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ChatMessageCell.identifier,
+                for: indexPath)
+            guard let messageCell = cell as? ChatMessageCell else {
+                return cell
+            }
+            if let message = message {
+                messageCell.configureCell(message)
+            }
+            return messageCell
         }
-        return messageCell
     }
 }

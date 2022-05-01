@@ -8,25 +8,51 @@
 import Foundation
 import UIKit
 
-// TODO Возможно работу с фото стоит вынести в отдельную сущность (?)
-
 extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            DispatchQueue.main.async {
-                if !self.isProfileEditing {
-                    self.changeProfileEditingStatus(isEditing: true)
-                }
-                self.profileView?.setImage(image: image)
-                self.imageDidChanged = true
-                self.setEnableStatusToSaveButtons()
-            }
+            setPhoto(image)
         } else {
             showAlertWith(message: "No image found.")
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    private func setPhoto(_ image: UIImage) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if !self.isProfileEditing {
+                self.changeProfileEditingStatus(isEditing: true)
+            }
+            self.profileView?.setImage(image: image)
+            self.imageDidChanged = true
+            self.setEnableStatusToSaveButtons()
+        }
+    }
+    
+    private func setPhoto(_ urlString: String) {
+        downloadImage(from: urlString, competition: setPhoto)
+    }
+    
+    private func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        competition?(image)
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    self?.showAlertWith(message: "Unable to download photo from internet")
+                }
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -37,7 +63,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         let imagePickerController = configureImagePickerController()
         let actionSheet = configureActionSheet()
         configureActions(actionSheet, imagePickerController)
-        self.present(actionSheet, animated: true, completion: nil)
+        present(actionSheet, animated: true, completion: nil)
     }
     
     private func configureImagePickerController() -> UIImagePickerController {
@@ -55,28 +81,37 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     private func configureActions(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
         configureLibraryAction(actionSheet, imagePickerController)
         configureCameraAction(actionSheet, imagePickerController)
+        configureUploadAction(actionSheet)
         configureCancelAction(actionSheet)
     }
     
     private func configureLibraryAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {_ in
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { [weak self] _ in
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
                 imagePickerController.sourceType = .photoLibrary
-                self.present(imagePickerController, animated: true)
+                self?.present(imagePickerController, animated: true)
             } else {
-                self.showAlertWith(message: "Unable to access the photo library.")
+                self?.showAlertWith(message: "Unable to access the photo library.")
             }
         }))
     }
     
+    private func configureUploadAction(_ actionSheet: UIAlertController) {
+        actionSheet.addAction(UIAlertAction(title: "Upload", style: .default, handler: { [weak self] _ in
+            let photoSelectionViewController = PhotoSelectionViewController(choosePhotoAction: self?.setPhoto)
+            photoSelectionViewController.setCurrentTheme(self?.currentTheme)
+            self?.present(photoSelectionViewController, animated: true)
+        }))
+    }
+    
     private func configureCameraAction(_ actionSheet: UIAlertController, _ imagePickerController: UIImagePickerController) {
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { [weak self] _ in
             actionSheet.dismiss(animated: true) {
                 if UIImagePickerController.isSourceTypeAvailable(.camera) {
                     imagePickerController.sourceType = .camera
-                    self.present(imagePickerController, animated: true)
+                    self?.present(imagePickerController, animated: true)
                 } else {
-                    self.showAlertWith(message: "Unable to access the camera.")
+                    self?.showAlertWith(message: "Unable to access the camera.")
                 }
             }
         }))

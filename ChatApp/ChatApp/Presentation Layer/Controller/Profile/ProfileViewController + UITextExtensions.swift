@@ -43,6 +43,7 @@ extension ProfileViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         infoDidChanged = textView.text != initialInfo
+        profileView?.setEmptyIndicatorColorToInfoLabel(themeManager)
         setEnableStatusToSaveButtons()
     }
     

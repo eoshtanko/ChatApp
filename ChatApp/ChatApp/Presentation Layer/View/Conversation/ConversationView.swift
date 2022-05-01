@@ -12,12 +12,30 @@ class ConversationView: UIView {
     let tableView = UITableView(frame: .zero, style: .grouped)
     var hightOfKeyboard: CGFloat?
     
-    private lazy var bottomOffsetWithKeyboard: CGPoint = {
+    private func getBottomOffsetWithKeyboard() -> CGPoint {
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: hightOfKeyboard ?? 0, right: 0)
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (hightOfKeyboard ?? 0))
-    }()
+    }
     
     private func getBottomOffsetWithoutKeyboard(_ entreMessageBar: EnterMessageView?) -> CGPoint {
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Const.bottomContentInset, right: 0)
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
+    }
+    
+    func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
+        tableView.layoutIfNeeded()
+        if isScrollingNecessary(entreMessageBar) {
+            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ?
+            getBottomOffsetWithKeyboard() :
+            getBottomOffsetWithoutKeyboard(entreMessageBar)
+            
+            tableView.setContentOffset(bottomOffset, animated: animated)
+        }
+    }
+    
+    private func isScrollingNecessary(_ entreMessageBar: EnterMessageView?) -> Bool {
+        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
+        return tableView.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
     }
     
     func configureView(themeManager: ThemeManagerProtocol, theme: Theme,
@@ -44,6 +62,10 @@ class ConversationView: UIView {
     
     private func registerCell() {
         tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
+        tableView.register(
+            UINib(nibName: String(describing: ChatPhotoCell.self), bundle: nil),
+            forCellReuseIdentifier: ChatPhotoCell.identifier
+        )
     }
     
     private func configureTableViewAppearance() {
@@ -57,20 +79,7 @@ class ConversationView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-    }
-    
-    func scrollToBottom(animated: Bool, entreMessageBar: EnterMessageView?) {
-        tableView.layoutIfNeeded()
-        if isScrollingNecessary(entreMessageBar) {
-            let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? bottomOffsetWithKeyboard : getBottomOffsetWithoutKeyboard(entreMessageBar)
-            
-            tableView.setContentOffset(bottomOffset, animated: animated)
-        }
-    }
-    
-    private func isScrollingNecessary(_ entreMessageBar: EnterMessageView?) -> Bool {
-        let bottomOffset = entreMessageBar?.textView.isFirstResponder ?? false ? hightOfKeyboard : entreMessageBar?.bounds.size.height
-        return tableView.contentSize.height > self.bounds.size.height - (bottomOffset ?? 0) - Const.empiricalValue
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Const.bottomContentInset, right: 0)
     }
     
     func setCurrentTheme(_ themeManager: ThemeManagerProtocol, _ theme: Theme,
@@ -82,10 +91,18 @@ class ConversationView: UIView {
         navigationController?.navigationBar.tintColor = themeManager.themeSettings?.navigationBarButtonColor
         tableView.reloadData()
         ChatMessageCell.setCurrentTheme(theme)
+        ChatPhotoCell.setCurrentTheme(theme)
+    }
+    
+    func getHightOfImageCell(_ mess: Message) -> CGFloat {
+        return mess.senderId == CurrentUser.user.id ? Const.hightOfOutcomingMessage : Const.hightOfIncomingMessage
     }
     
     enum Const {
+        static let bottomContentInset: CGFloat = 30
         static let estimatedRowHeight: CGFloat = 60
         static let empiricalValue: CGFloat = 70
+        static let hightOfOutcomingMessage: CGFloat = 201
+        static let hightOfIncomingMessage: CGFloat = 231
     }
 }

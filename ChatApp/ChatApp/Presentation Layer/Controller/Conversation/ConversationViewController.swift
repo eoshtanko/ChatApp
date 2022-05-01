@@ -12,6 +12,8 @@ class ConversationViewController: UIViewController {
     
     private let channel: Channel?
     
+    let requestSender = RequestSender()
+    
     var firebaseMessagesService: FirebaseMessagesServiceProtocol?
     
     let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
@@ -66,10 +68,31 @@ class ConversationViewController: UIViewController {
         failureAlert.addAction(UIAlertAction(title: "OK",
                                              style: UIAlertAction.Style.default))
         failureAlert.addAction(UIAlertAction(title: "Повторить",
-                                             style: UIAlertAction.Style.cancel) {_ in
+                                             style: UIAlertAction.Style.cancel) { [weak self] _ in
+            guard let self = self else { return }
             self.firebaseMessagesService?.configureSnapshotListener(failAction: self.showFailToLoadMessagesAlert)
         })
         present(failureAlert, animated: true, completion: nil)
+    }
+    
+    func downloadImage(from url: String, competition: ((UIImage) -> Void)?) {
+        let requestConfig = RequestsFactory.ImageRequests.getImage(urlString: url)
+        requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    if let image = UIImage(data: data) {
+                        competition?(image)
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    func isDrawableImageMessage(_ mess: Message) -> Bool {
+        return mess.content.starts(with: URLProvider.netProtocol + URLProvider.host)
     }
     
     required init?(coder: NSCoder) {

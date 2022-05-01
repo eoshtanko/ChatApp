@@ -9,7 +9,7 @@ import UIKit
 
 class ChatMessageCell: UITableViewCell {
     
-    static let identifier = String(describing: ConversationTableViewCell.self)
+    static let identifier = String(describing: ChatMessageCell.self)
     
     private static var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
     static var currentTheme: Theme = .classic {
@@ -22,14 +22,14 @@ class ChatMessageCell: UITableViewCell {
     private let bubbleBackgroundView = UIView()
     private let namelabel = UILabel()
     
-    private var leadingConstraint: NSLayoutConstraint!
-    private var trailingConstraint: NSLayoutConstraint!
+    private var leadingConstraint: NSLayoutConstraint?
+    private var trailingConstraint: NSLayoutConstraint?
     
-    private var messageLabelTopConstantWithName: NSLayoutConstraint!
-    private var messageLabelTopConstantWithoutName: NSLayoutConstraint!
+    private var messageLabelTopConstantWithName: NSLayoutConstraint?
+    private var messageLabelTopConstantWithoutName: NSLayoutConstraint?
     
-    private var incomingMessageUIColor: UIColor!
-    private var outcomingMessageUIColor: UIColor!
+    private var incomingMessageUIColor: UIColor?
+    private var outcomingMessageUIColor: UIColor?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -57,19 +57,47 @@ class ChatMessageCell: UITableViewCell {
     }
     
     func configureCell(_ chatMessage: Message) {
-        configureContent(chatMessage)
+        let message = getMessage(chatMessage)
+        configureContent(message)
         setCurrentTheme()
-        bubbleBackgroundView.backgroundColor = chatMessage.senderId == CurrentUser.user.id ?
-        outcomingMessageUIColor : incomingMessageUIColor
-        configureSenderIdentifyingParameter(isOutcoming: chatMessage.senderId == CurrentUser.user.id)
+        let isOutcoming = chatMessage.senderId == CurrentUser.user.id
+        bubbleBackgroundView.backgroundColor = isOutcoming ? outcomingMessageUIColor : incomingMessageUIColor
+        configureSenderIdentifyingParameter(isOutcoming: isOutcoming)
+    }
+    
+    private func getMessage(_ chatMessage: Message) -> Message {
+        if isURL(chatMessage.content) {
+            let message = Message(content: getErrorApiMessage(chatMessage.content),
+                                  senderId: chatMessage.senderId,
+                                  senderName: chatMessage.senderName,
+                                  created: chatMessage.created)
+            return message
+        }
+        return chatMessage
+    }
+    
+    private func isURL(_ str: String) -> Bool {
+        return str.starts(with: "https://") && str.reversed().starts(with: ".jpg".reversed())
+    }
+    
+    private func getErrorApiMessage(_ str: String) -> String {
+        return Const.errorApiMessage + str
     }
     
     private func configureSenderIdentifyingParameter(isOutcoming: Bool) {
-        leadingConstraint.isActive = !isOutcoming
-        trailingConstraint.isActive = isOutcoming
-        
-        messageLabelTopConstantWithName.isActive = !isOutcoming
-        messageLabelTopConstantWithoutName.isActive = isOutcoming
+        if isOutcoming {
+            leadingConstraint?.isActive = false
+            trailingConstraint?.isActive = true
+            
+            messageLabelTopConstantWithName?.isActive = false
+            messageLabelTopConstantWithoutName?.isActive = true
+        } else {
+            trailingConstraint?.isActive = false
+            leadingConstraint?.isActive = true
+            
+            messageLabelTopConstantWithoutName?.isActive = false
+            messageLabelTopConstantWithName?.isActive = true
+        }
         
         namelabel.isHidden = isOutcoming
     }
@@ -132,5 +160,6 @@ class ChatMessageCell: UITableViewCell {
         static let topConstantWithoutName: CGFloat = 16
         static let hightOfNameLabel: CGFloat = 21
         static let bottomConstant: CGFloat = -32
+        static let errorApiMessage: String = "Api не поддерживается: "
     }
 }
