@@ -23,7 +23,6 @@ extension ConversationViewController {
                 self?.sendPhoto()
             }
         }
-        
         return entreMessageBar
     }
     
@@ -56,8 +55,12 @@ extension ConversationViewController {
     
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardDidShow(_:)),
+                                               selector: #selector(keyboardShow(_:)),
                                                name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardShow(_:)),
+                                               name: UIResponder.keyboardDidShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(_:)),
@@ -65,7 +68,7 @@ extension ConversationViewController {
                                                object: nil)
     }
     
-    @objc func keyboardDidShow(_ notification: NSNotification) {
+    @objc func keyboardShow(_ notification: NSNotification) {
         if entreMessageBar?.textView.isFirstResponder ?? false {
             guard let payload = KeyboardInfo(notification) else { return }
             conversationView?.hightOfKeyboard = payload.frameEnd?.size.height
