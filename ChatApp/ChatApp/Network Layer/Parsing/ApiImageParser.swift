@@ -8,19 +8,19 @@
 import UIKit
 
 struct HitsModel: Codable {
-    let hits: [ImageData]
+    let hits: [ImageModel]
 }
 
-struct ImageData: Identifiable, Codable {
+struct ImageModel: Identifiable, Codable {
     let id: Int
     let largeImageURL: String
 }
 
 class ApiImagesParser: IParser {
     
-    typealias Model = [ImageData]
+    typealias Model = [ImageModel]
     
-    func parse(data: Data) -> [ImageData]? {
+    func parse(data: Data) -> [ImageModel]? {
         guard let imagesModel = try? JSONDecoder().decode(HitsModel.self, from: data) else {
             return nil
         }

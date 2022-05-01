@@ -57,9 +57,9 @@ class PhotoSelectionViewController: UIViewController {
         photoSelectionView?.photoCollectionView?.dataSource = self
     }
     
-    func downloadImages(page: Int, completitionSuccess: (([ImageData]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
+    func downloadImages(page: Int, completitionSuccess: (([ImageModel]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
         let requestConfig = RequestsFactory.ImageRequests.getImages(pageNumber: page)
-        requestSender.send(config: requestConfig) { (result: Result<[ImageData], Error>) in
+        requestSender.send(config: requestConfig) { (result: Result<[ImageModel], Error>) in
             switch result {
             case .success(let imageModels):
                 completitionSuccess?(imageModels)
@@ -69,7 +69,7 @@ class PhotoSelectionViewController: UIViewController {
         }
     }
     
-    private func completitionSuccessForInitialRequest(_ imageModels: [ImageData]) {
+    private func completitionSuccessForInitialRequest(_ imageModels: [ImageModel]) {
         for imageModel in imageModels {
             photoesURL.append(imageModel.largeImageURL)
         }

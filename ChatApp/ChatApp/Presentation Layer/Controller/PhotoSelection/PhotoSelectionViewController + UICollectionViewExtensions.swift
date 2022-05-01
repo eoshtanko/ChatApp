@@ -44,7 +44,7 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         return cell
     }
     
-    private func completitionSuccessForRepeatedRequest(_ moreImageModels: [ImageData]) {
+    private func completitionSuccessForRepeatedRequest(_ moreImageModels: [ImageModel]) {
         for model in moreImageModels {
             photoesURL.append(model.largeImageURL)
         }
