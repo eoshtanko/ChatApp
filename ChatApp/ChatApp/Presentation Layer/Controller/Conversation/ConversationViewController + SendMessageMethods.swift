@@ -55,20 +55,20 @@ extension ConversationViewController {
     
     func registerKeyboardNotifications() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardShow(_:)),
+                                               selector: #selector(prepareScreenToOpenOfKeyboard(_:)),
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardShow(_:)),
+                                               selector: #selector(prepareScreenToOpenOfKeyboard(_:)),
                                                name: UIResponder.keyboardDidShowNotification,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide(_:)),
+                                               selector: #selector(prepareScreenToCloseOfKeyboard(_:)),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
     
-    @objc func keyboardShow(_ notification: NSNotification) {
+    @objc func prepareScreenToOpenOfKeyboard(_ notification: NSNotification) {
         if entreMessageBar?.textView.isFirstResponder ?? false {
             guard let payload = KeyboardInfo(notification) else { return }
             conversationView?.hightOfKeyboard = payload.frameEnd?.size.height
@@ -76,7 +76,7 @@ extension ConversationViewController {
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
-    @objc func keyboardWillHide(_ notification: NSNotification) {
+    @objc func prepareScreenToCloseOfKeyboard(_ notification: NSNotification) {
         conversationView?.scrollToBottom(animated: false, entreMessageBar: entreMessageBar)
     }
     
