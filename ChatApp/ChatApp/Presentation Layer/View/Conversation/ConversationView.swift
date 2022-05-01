@@ -18,7 +18,7 @@ class ConversationView: UIView {
     }
     
     private func getBottomOffsetWithoutKeyboard(_ entreMessageBar: EnterMessageView?) -> CGPoint {
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Const.bottomContentInset, right: 0)
         return CGPoint(x: 0, y: tableView.contentSize.height - self.bounds.size.height + (entreMessageBar?.bounds.size.height ?? 0))
     }
     
@@ -79,7 +79,7 @@ class ConversationView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Const.bottomContentInset, right: 0)
     }
     
     func setCurrentTheme(_ themeManager: ThemeManagerProtocol, _ theme: Theme,
@@ -99,6 +99,7 @@ class ConversationView: UIView {
     }
     
     enum Const {
+        static let bottomContentInset: CGFloat = 30
         static let estimatedRowHeight: CGFloat = 60
         static let empiricalValue: CGFloat = 70
         static let hightOfOutcomingMessage: CGFloat = 201
