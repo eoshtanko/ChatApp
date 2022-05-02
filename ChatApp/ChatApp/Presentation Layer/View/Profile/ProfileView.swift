@@ -53,7 +53,13 @@ class ProfileView: UIView {
     }
     
     func setSaveButtonIsEnabled(_ isEnabled: Bool) {
-        saveGCDButton.isEnabled = isEnabled
+        if !saveGCDButton.isEnabled && isEnabled {
+            saveGCDButton.isEnabled = isEnabled
+            saveGCDButton.animateShaking(xOffset: 5, yOffset: 5, rotationAngleDegrees: 18, duration: 0.3)
+        } else if saveGCDButton.isEnabled && !isEnabled {
+            saveGCDButton.isEnabled = isEnabled
+            saveGCDButton.animateStopShaking()
+        }
     }
     
     func finalizeSaving() {

@@ -49,6 +49,7 @@
 		34630D5A28177A3400210249 /* FirebaseMessagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5928177A3400210249 /* FirebaseMessagesService.swift */; };
 		34630D5C281786CB00210249 /* ThemeSavingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34630D5B281786CB00210249 /* ThemeSavingService.swift */; };
 		346A55D22817193300349718 /* ThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346A55D12817193300349718 /* ThemesView.swift */; };
+		3475454A281FA291003BD875 /* UIView + Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34754549281FA291003BD875 /* UIView + Animation.swift */; };
 		34AC59FA281A6EAB00793BF2 /* PhotoSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC59F9281A6EAB00793BF2 /* PhotoSelectionViewController.swift */; };
 		34AC59FC281A6EBC00793BF2 /* PhotoSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC59FB281A6EBC00793BF2 /* PhotoSelectionView.swift */; };
 		34AC5A00281AA2A400793BF2 /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AC59FF281AA2A400793BF2 /* PhotoCell.xib */; };
@@ -131,6 +132,7 @@
 		34630D5928177A3400210249 /* FirebaseMessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessagesService.swift; sourceTree = "<group>"; };
 		34630D5B281786CB00210249 /* ThemeSavingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSavingService.swift; sourceTree = "<group>"; };
 		346A55D12817193300349718 /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
+		34754549281FA291003BD875 /* UIView + Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Animation.swift"; sourceTree = "<group>"; };
 		34AC59F9281A6EAB00793BF2 /* PhotoSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewController.swift; sourceTree = "<group>"; };
 		34AC59FB281A6EBC00793BF2 /* PhotoSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionView.swift; sourceTree = "<group>"; };
 		34AC59FF281AA2A400793BF2 /* PhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCell.xib; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 			children = (
 				34ACCFEB27C4AAEB00535096 /* Profile.storyboard */,
 				342CCCCA281676A30099B067 /* ProfileView.swift */,
+				34754549281FA291003BD875 /* UIView + Animation.swift */,
 				34E049A827D088E9009BA6AB /* CustomNavigationBar.swift */,
 			);
 			path = Profile;
@@ -736,6 +739,7 @@
 				34449AE727FEFBDC002763CD /* StringConvertableProtocol.swift in Sources */,
 				34157F3A28114B5D0022EB2F /* Themes.swift in Sources */,
 				342CCCD32816B3590099B067 /* FileNames.swift in Sources */,
+				3475454A281FA291003BD875 /* UIView + Animation.swift in Sources */,
 				34AC5A0E281AC8A700793BF2 /* RequestSender.swift in Sources */,
 				34630D5C281786CB00210249 /* ThemeSavingService.swift in Sources */,
 				34630D5128175E0100210249 /* CoreDataServiceForChannels.swift in Sources */,
