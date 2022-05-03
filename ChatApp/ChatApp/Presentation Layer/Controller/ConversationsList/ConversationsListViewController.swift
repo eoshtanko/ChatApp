@@ -9,6 +9,8 @@ import UIKit
 
 class ConversationsListViewController: UIViewController {
     
+    let customTransition = CustomTransitionViewController()
+    
     var conversationsListView: ConversationsListView? {
         view as? ConversationsListView
     }
@@ -97,6 +99,7 @@ class ConversationsListViewController: UIViewController {
     }
     
     private func configureNavigationBar() {
+        navigationController?.delegate = self
         conversationsListView?.configureNavigationTitle(navigationItem: navigationItem, navigationController: navigationController)
         configureNavigationButtons()
     }

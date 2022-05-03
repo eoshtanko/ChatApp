@@ -30,13 +30,17 @@ extension AppDelegate: UIApplicationDelegate {
         let longTap = UILongPressGestureRecognizer(target: self, action: #selector(panAction(_:)))
         longTap.cancelsTouchesInView = false
         
+//        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+//        pan.cancelsTouchesInView = false
+        
         window?.addGestureRecognizer(tap)
         window?.addGestureRecognizer(longTap)
+//        window?.addGestureRecognizer(pan)
         
         return true
     }
     
-    @objc func tapAction(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func tapAction(_ gestureRecognizer: UIGestureRecognizer) {
         if let window = window {
             let layerIcons = BrandParticleAnimation()
                             .createLayer(position: gestureRecognizer

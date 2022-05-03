@@ -53,6 +53,8 @@
 		3475454D281FA8B7003BD875 /* BrandParticleAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3475454C281FA8B7003BD875 /* BrandParticleAnimation.swift */; };
 		3475454F281FE45D003BD875 /* ConversationViewController + UIGestureRecognizerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3475454E281FE45D003BD875 /* ConversationViewController + UIGestureRecognizerDelegate.swift */; };
 		34754551281FF231003BD875 /* ThemesViewController + UIGestureRecognizerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34754550281FF231003BD875 /* ThemesViewController + UIGestureRecognizerDelegate.swift */; };
+		3475455E282199D2003BD875 /* ConversationsListViewController + UINavigationControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3475455D282199D2003BD875 /* ConversationsListViewController + UINavigationControllerDelegate.swift */; };
+		3475456028219A7C003BD875 /* CustomTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3475455F28219A7C003BD875 /* CustomTransitionViewController.swift */; };
 		34AC59FA281A6EAB00793BF2 /* PhotoSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC59F9281A6EAB00793BF2 /* PhotoSelectionViewController.swift */; };
 		34AC59FC281A6EBC00793BF2 /* PhotoSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC59FB281A6EBC00793BF2 /* PhotoSelectionView.swift */; };
 		34AC5A00281AA2A400793BF2 /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AC59FF281AA2A400793BF2 /* PhotoCell.xib */; };
@@ -139,6 +141,8 @@
 		3475454C281FA8B7003BD875 /* BrandParticleAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandParticleAnimation.swift; sourceTree = "<group>"; };
 		3475454E281FE45D003BD875 /* ConversationViewController + UIGestureRecognizerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController + UIGestureRecognizerDelegate.swift"; sourceTree = "<group>"; };
 		34754550281FF231003BD875 /* ThemesViewController + UIGestureRecognizerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemesViewController + UIGestureRecognizerDelegate.swift"; sourceTree = "<group>"; };
+		3475455D282199D2003BD875 /* ConversationsListViewController + UINavigationControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationsListViewController + UINavigationControllerDelegate.swift"; sourceTree = "<group>"; };
+		3475455F28219A7C003BD875 /* CustomTransitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransitionViewController.swift; sourceTree = "<group>"; };
 		34AC59F9281A6EAB00793BF2 /* PhotoSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionViewController.swift; sourceTree = "<group>"; };
 		34AC59FB281A6EBC00793BF2 /* PhotoSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionView.swift; sourceTree = "<group>"; };
 		34AC59FF281AA2A400793BF2 /* PhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCell.xib; sourceTree = "<group>"; };
@@ -445,6 +449,7 @@
 			children = (
 				34754549281FA291003BD875 /* UIView + ShakingAnimation.swift */,
 				3475454C281FA8B7003BD875 /* BrandParticleAnimation.swift */,
+				3475455F28219A7C003BD875 /* CustomTransitionViewController.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -572,6 +577,7 @@
 			isa = PBXGroup;
 			children = (
 				3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */,
+				3475455D282199D2003BD875 /* ConversationsListViewController + UINavigationControllerDelegate.swift */,
 				34F449BC27F5F77A00CC4922 /* ConversationsListViewController + UITableViewExtensions.swift */,
 				340E968D28083331008A1F9B /* ConversationsListViewController + NSFetchedResultsControllerDelegate.swift */,
 				340E968B2808323D008A1F9B /* ConversationsListViewController + UITextFieldDelegate.swift */,
@@ -750,12 +756,14 @@
 				340E969028086752008A1F9B /* ConversationViewController + NSFetchedResultsControllerDelegate.swift in Sources */,
 				346A55D22817193300349718 /* ThemesView.swift in Sources */,
 				34E049A927D088E9009BA6AB /* CustomNavigationBar.swift in Sources */,
+				3475455E282199D2003BD875 /* ConversationsListViewController + UINavigationControllerDelegate.swift in Sources */,
 				3427ACE627D610970062F749 /* User.swift in Sources */,
 				34E8779F27FC3B720018CCC7 /* Chat.xcdatamodeld in Sources */,
 				3427ACEE27D88CA80062F749 /* ChatMessageCell.swift in Sources */,
 				34449AE527FEA41F002763CD /* Logger.swift in Sources */,
 				3460337B27EC14BF00962579 /* ApplicationPreferences.swift in Sources */,
 				3475454D281FA8B7003BD875 /* BrandParticleAnimation.swift in Sources */,
+				3475456028219A7C003BD875 /* CustomTransitionViewController.swift in Sources */,
 				34449AE727FEFBDC002763CD /* StringConvertableProtocol.swift in Sources */,
 				34157F3A28114B5D0022EB2F /* Themes.swift in Sources */,
 				342CCCD32816B3590099B067 /* FileNames.swift in Sources */,
