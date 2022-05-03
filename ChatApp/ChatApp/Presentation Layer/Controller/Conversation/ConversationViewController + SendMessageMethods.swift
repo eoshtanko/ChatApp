@@ -83,6 +83,7 @@ extension ConversationViewController {
     func configureTapGestureRecognizer() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                                  action: #selector(dismissKeyboard))
+        tap.delegate = self
         view.addGestureRecognizer(tap)
     }
     

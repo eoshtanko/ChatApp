@@ -57,6 +57,7 @@ class ThemesViewController: UIViewController {
     
     private func configureNavigationBarButton() {
         if let cancelButton = themesView?.getNavigationButton(themeManager) {
+            cancelButton.addTarget(self, action: #selector(changeToInitialTheme(_:)), for: .touchUpInside)
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cancelButton)
         }
     }
@@ -84,7 +85,9 @@ class ThemesViewController: UIViewController {
             selector = #selector(self.changeToNightTheme(_:))
         }
         let labelTap = UITapGestureRecognizer(target: self, action: selector)
+        labelTap.delegate = self
         let viewTap = UITapGestureRecognizer(target: self, action: selector)
+        viewTap.delegate = self
         label.addGestureRecognizer(labelTap)
         view.addGestureRecognizer(viewTap)
     }
