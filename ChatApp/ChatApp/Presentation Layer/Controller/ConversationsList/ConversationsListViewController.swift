@@ -224,15 +224,18 @@ class ConversationsListViewController: UIViewController {
         let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
         let profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
         if let profileViewController = profileViewController {
-            profileViewController.transitioningDelegate = self
-            profileViewController.modalPresentationStyle = .custom
-            profileViewController.interactiveTransition = interactiveTransition
-            interactiveTransition.attach(to: profileViewController)
-            
+            configureTransitionSettings(profileViewController)
             profileViewController.setCurrentTheme(currentTheme)
             profileViewController.conversationsListViewController = self
             present(profileViewController, animated: true)
         }
+    }
+    
+    private func configureTransitionSettings(_ profileViewController: ProfileViewController) {
+        profileViewController.transitioningDelegate = self
+        profileViewController.modalPresentationStyle = .custom
+        profileViewController.interactiveTransition = interactiveTransition
+        interactiveTransition.attach(to: profileViewController)
     }
     
     enum Const {
