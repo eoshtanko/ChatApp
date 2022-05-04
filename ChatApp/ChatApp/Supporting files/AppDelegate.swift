@@ -30,12 +30,12 @@ extension AppDelegate: UIApplicationDelegate {
         let longTap = UILongPressGestureRecognizer(target: self, action: #selector(panAction(_:)))
         longTap.cancelsTouchesInView = false
         
-//        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
-//        pan.cancelsTouchesInView = false
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+        pan.cancelsTouchesInView = false
         
         window?.addGestureRecognizer(tap)
         window?.addGestureRecognizer(longTap)
-//        window?.addGestureRecognizer(pan)
+        window?.addGestureRecognizer(pan)
         
         return true
     }
@@ -43,8 +43,8 @@ extension AppDelegate: UIApplicationDelegate {
     @objc func tapAction(_ gestureRecognizer: UIGestureRecognizer) {
         if let window = window {
             let layerIcons = BrandParticleAnimation()
-                            .createLayer(position: gestureRecognizer
-                            .location(in: gestureRecognizer.view?.window), size: window.bounds.size)
+                .createLayer(position: gestureRecognizer
+                                .location(in: gestureRecognizer.view?.window), size: window.bounds.size)
             
             window.layer.addSublayer(layerIcons)
             
@@ -57,7 +57,7 @@ extension AppDelegate: UIApplicationDelegate {
     @objc func panAction(_ gestureRecognizer: UIGestureRecognizer) {
         if let window = window {
             
-            let position = gestureRecognizer.location(in: gestureRecognizer.view?.window)
+            let position = gestureRecognizer.location(in: gestureRecognizer.view)
             
             switch gestureRecognizer.state {
             case .began:
