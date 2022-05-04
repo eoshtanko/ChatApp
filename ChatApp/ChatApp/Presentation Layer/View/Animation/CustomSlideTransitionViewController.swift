@@ -1,5 +1,5 @@
 //
-//  CustomTransitionViewController.swift
+//  CustomSlideTransitionViewController.swift
 //  ChatApp
 //
 //  Created by Екатерина on 03.05.2022.
@@ -9,9 +9,9 @@ import UIKit
 
 // Реализация такого CustomTransition не требовалась, но я столкнулась с проблемой,
 // описание которой (если вдруг Вам интересно. Читать необязательно) под классом...
-class CustomTransitionViewController: NSObject, UIViewControllerAnimatedTransitioning {
+class CustomSlideTransitionViewController: NSObject, UIViewControllerAnimatedTransitioning {
     
-    var isPushing: Bool = false
+    var transitionMode: UINavigationController.Operation = .push
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return Const.transitionDuration
@@ -26,7 +26,7 @@ class CustomTransitionViewController: NSObject, UIViewControllerAnimatedTransiti
             return
         }
         
-        if isPushing {
+        if transitionMode == .push {
             animatePush(using: transitionContext, fromVC: fromVC, toVC: toVC)
         } else {
             animatePop(using: transitionContext, fromVC: fromVC, toVC: toVC)
@@ -56,7 +56,7 @@ class CustomTransitionViewController: NSObject, UIViewControllerAnimatedTransiti
     }
     
     private enum Const {
-        static let transitionDuration = 0.25
+        static let transitionDuration = 0.35
         static let offsetValueForY: CGFloat = 55
     }
 }

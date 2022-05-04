@@ -13,7 +13,7 @@ extension ConversationsListViewController: UINavigationControllerDelegate {
                               animationControllerFor operation: UINavigationController.Operation,
                               from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        customTransition.isPushing = (operation == .push)
+        customTransition.transitionMode = operation
         return customTransition
     }
 }

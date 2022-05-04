@@ -11,6 +11,8 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var profileView: ProfileView?
     
+    weak var interactiveTransition: CircleInteractiveTransition?
+    
     let requestSender = RequestSender()
     
     var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
@@ -38,6 +40,7 @@ class ProfileViewController: UIViewController {
     
     @IBAction func closeButtonPressed(_ sender: Any) {
         dismiss(animated: true)
+        interactiveTransition?.finish()
     }
     
     @IBAction func editButtonPressed(_ sender: Any) {
@@ -63,16 +66,6 @@ class ProfileViewController: UIViewController {
         super.viewDidLayoutSubviews()
         profileView?.configureSubviews()
         profileView?.setCurrentTheme(themeManager: themeManager)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        profileView?.configureStatusBar(.lightContent, currentTheme: currentTheme)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        profileView?.configureStatusBar(.darkContent, currentTheme: currentTheme)
     }
     
     func setCurrentTheme(_ theme: Theme) {

@@ -125,8 +125,9 @@ class ProfileView: UIView {
     }
     
     func configureNameLabel() {
-        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText,
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        nameLabel.attributedPlaceholder = NSAttributedString(
+            string: Const.textFieldPlaceholderText,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     }
     
     private func configureButtons() {
@@ -185,16 +186,25 @@ class ProfileView: UIView {
         imageView.image = UIImage(systemName: "person.fill")
     }
     
-    func configureStatusBar(_ style: UIStatusBarStyle, currentTheme: Theme) {
-        if currentTheme != .night {
-            UIApplication.shared.statusBarStyle = style
-        }
-    }
-    
     private enum Const {
         static let buttonBorderRadius: CGFloat = 14
         static let maxNumOfCharsInName = 40
         static let textFieldPlaceholderText = "ФИО"
         static let textViewPlaceholderText = "Расскажите о себе :)"
+    }
+}
+
+extension UINavigationController {
+    
+    func setStatusBarColor(_ backgroundColor: UIColor) {
+        let statusBarFrame: CGRect
+        if #available(iOS 13.0, *) {
+            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        } else {
+            statusBarFrame = UIApplication.shared.statusBarFrame
+        }
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = backgroundColor
+        view.addSubview(statusBarView)
     }
 }

@@ -9,7 +9,10 @@ import UIKit
 
 class ConversationsListViewController: UIViewController {
     
-    let customTransition = CustomTransitionViewController()
+    let customTransition = CustomSlideTransitionViewController()
+    
+    let transition = CircleTransitionViewController()
+    let interactiveTransition = CircleInteractiveTransition()
     
     var conversationsListView: ConversationsListView? {
         view as? ConversationsListView
@@ -221,6 +224,11 @@ class ConversationsListViewController: UIViewController {
         let profileStoryboard = UIStoryboard(name: "Profile", bundle: nil)
         let profileViewController = profileStoryboard.instantiateViewController(withIdentifier: "Profile") as? ProfileViewController
         if let profileViewController = profileViewController {
+            profileViewController.transitioningDelegate = self
+            profileViewController.modalPresentationStyle = .custom
+            profileViewController.interactiveTransition = interactiveTransition
+            interactiveTransition.attach(to: profileViewController)
+            
             profileViewController.setCurrentTheme(currentTheme)
             profileViewController.conversationsListViewController = self
             present(profileViewController, animated: true)
@@ -231,5 +239,6 @@ class ConversationsListViewController: UIViewController {
         static let dataModelName = "Chat"
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
+        static let circleTransitionOffset: CGFloat = 40
     }
 }
