@@ -52,7 +52,7 @@ extension AppDelegate: UIApplicationDelegate {
             
             window.layer.addSublayer(layerIcons)
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Const.particleAnimationDuration) {
                 layerIcons.removeFromSuperlayer()
             }
         }
@@ -79,5 +79,9 @@ extension AppDelegate: UIApplicationDelegate {
                 fatalError()
             }
         }
+    }
+    
+    private enum Const {
+        static let particleAnimationDuration = 0.4
     }
 }

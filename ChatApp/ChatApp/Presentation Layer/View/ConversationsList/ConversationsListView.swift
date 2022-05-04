@@ -52,8 +52,9 @@ class ConversationsListView: UIView {
     }
     
     func getProfileNavigationButton() -> UIButton {
-        profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfProfileNavigationButton,
-                                                   height: Const.sizeOfProfileNavigationButton))
+        profileButton = UIButton(frame: CGRect(x: 0, y: 0,
+                                               width: Const.sizeOfProfileNavigationButton,
+                                               height: Const.sizeOfProfileNavigationButton))
         setImageToProfileNavigationButton(profileButton ?? UIButton())
         return profileButton ?? UIButton()
     }
