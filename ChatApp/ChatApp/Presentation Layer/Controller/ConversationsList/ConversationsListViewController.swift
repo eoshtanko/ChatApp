@@ -242,6 +242,5 @@ class ConversationsListViewController: UIViewController {
         static let dataModelName = "Chat"
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
-        static let circleTransitionOffset: CGFloat = 40
     }
 }
