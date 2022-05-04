@@ -12,21 +12,21 @@ extension ConversationsListViewController: UIViewControllerTransitioningDelegate
     func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.transitionMode = .present
-        transition.startingPoint = getRightBarButtonLocation()
-        transition.circleColor = .systemYellow
-        return transition
+        circleTransition.transitionMode = .present
+        circleTransition.startingPoint = getRightBarButtonLocation()
+        circleTransition.circleColor = .systemYellow
+        return circleTransition
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.transitionMode = .dismiss
-        transition.startingPoint = getRightBarButtonLocation()
-        transition.circleColor = .systemYellow
-        return transition
+        circleTransition.transitionMode = .dismiss
+        circleTransition.startingPoint = getRightBarButtonLocation()
+        circleTransition.circleColor = .systemYellow
+        return circleTransition
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactiveTransition
+        return interactiveCircleTransition
     }
     
     private func getRightBarButtonLocation() -> CGPoint {

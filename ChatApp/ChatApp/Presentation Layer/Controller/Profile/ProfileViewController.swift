@@ -11,7 +11,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet var profileView: ProfileView?
     
-    weak var interactiveTransition: CircleInteractiveTransition?
+    weak var interactiveCircleTransition: CircleInteractiveTransition?
     
     let requestSender = RequestSender()
     
@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
     
     @IBAction func closeButtonPressed(_ sender: Any) {
         dismiss(animated: true)
-        interactiveTransition?.finish()
+        interactiveCircleTransition?.finish()
     }
     
     @IBAction func editButtonPressed(_ sender: Any) {

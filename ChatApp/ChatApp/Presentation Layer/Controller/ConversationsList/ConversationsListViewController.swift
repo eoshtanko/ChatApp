@@ -9,10 +9,9 @@ import UIKit
 
 class ConversationsListViewController: UIViewController {
     
-    let customTransition = CustomSlideTransitionViewController()
-    
-    let transition = CircleTransitionViewController()
-    let interactiveTransition = CircleInteractiveTransition()
+    let slideTransition = CustomSlideTransitionViewController()
+    let circleTransition = CircleTransitionViewController()
+    let interactiveCircleTransition = CircleInteractiveTransition()
     
     var conversationsListView: ConversationsListView? {
         view as? ConversationsListView
@@ -234,8 +233,8 @@ class ConversationsListViewController: UIViewController {
     private func configureTransitionSettings(_ profileViewController: ProfileViewController) {
         profileViewController.transitioningDelegate = self
         profileViewController.modalPresentationStyle = .custom
-        profileViewController.interactiveTransition = interactiveTransition
-        interactiveTransition.attach(to: profileViewController)
+        profileViewController.interactiveCircleTransition = interactiveCircleTransition
+        interactiveCircleTransition.attach(to: profileViewController)
     }
     
     enum Const {
