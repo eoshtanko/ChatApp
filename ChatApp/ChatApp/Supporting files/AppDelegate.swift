@@ -24,6 +24,12 @@ extension AppDelegate: UIApplicationDelegate {
         )
         window?.makeKeyAndVisible()
         
+        configureGestureRecognizers()
+        
+        return true
+    }
+    
+    private func configureGestureRecognizers() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
         tap.cancelsTouchesInView = false
         
@@ -36,8 +42,6 @@ extension AppDelegate: UIApplicationDelegate {
         window?.addGestureRecognizer(tap)
         window?.addGestureRecognizer(longTap)
         window?.addGestureRecognizer(pan)
-        
-        return true
     }
     
     @objc func tapAction(_ gestureRecognizer: UIGestureRecognizer) {
