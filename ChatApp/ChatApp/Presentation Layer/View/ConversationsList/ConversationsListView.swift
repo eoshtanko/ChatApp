@@ -12,6 +12,7 @@ class ConversationsListView: UIView {
     private var activityIndicator: UIActivityIndicatorView?
     
     let tableView = UITableView(frame: .zero, style: .grouped)
+    var profileButton: UIButton?
     
     func configureTableView() {
         self.addSubview(tableView)
@@ -51,10 +52,11 @@ class ConversationsListView: UIView {
     }
     
     func getProfileNavigationButton() -> UIButton {
-        let profileButton = UIButton(frame: CGRect(x: 0, y: 0, width: Const.sizeOfProfileNavigationButton,
-                                                   height: Const.sizeOfProfileNavigationButton))
-        setImageToProfileNavigationButton(profileButton)
-        return profileButton
+        profileButton = UIButton(frame: CGRect(x: 0, y: 0,
+                                               width: Const.sizeOfProfileNavigationButton,
+                                               height: Const.sizeOfProfileNavigationButton))
+        setImageToProfileNavigationButton(profileButton ?? UIButton())
+        return profileButton ?? UIButton()
     }
     
     private func setImageToProfileNavigationButton(_ profileButton: UIButton) {

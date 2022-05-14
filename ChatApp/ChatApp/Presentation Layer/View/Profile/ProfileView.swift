@@ -53,7 +53,13 @@ class ProfileView: UIView {
     }
     
     func setSaveButtonIsEnabled(_ isEnabled: Bool) {
-        saveGCDButton.isEnabled = isEnabled
+        if !saveGCDButton.isEnabled && isEnabled {
+            saveGCDButton.isEnabled = isEnabled
+            saveGCDButton.animateShaking(xOffset: 5, yOffset: 5, rotationAngleDegrees: 18, duration: 0.3)
+        } else if saveGCDButton.isEnabled && !isEnabled {
+            saveGCDButton.isEnabled = isEnabled
+            saveGCDButton.animateStopShaking()
+        }
     }
     
     func finalizeSaving() {
@@ -119,8 +125,9 @@ class ProfileView: UIView {
     }
     
     func configureNameLabel() {
-        nameLabel.attributedPlaceholder = NSAttributedString(string: Const.textFieldPlaceholderText,
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        nameLabel.attributedPlaceholder = NSAttributedString(
+            string: Const.textFieldPlaceholderText,
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     }
     
     private func configureButtons() {
@@ -136,28 +143,32 @@ class ProfileView: UIView {
     }
     
     func setCurrentTheme(themeManager: ThemeManagerProtocol) {
-        self.backgroundColor = themeManager.themeSettings?.backgroundColor
-        setThemeToButtons(themeManager)
-        setThemeToNavigationBar(themeManager)
+        guard let theme = themeManager.themeSettings else {
+            return
+        }
+        self.backgroundColor = theme.backgroundColor
+        infoLabel.keyboardAppearance = theme.keyboardAppearance
+        setThemeToButtons(theme)
+        setThemeToNavigationBar(theme)
         setEmptyIndicatorColorToInfoLabel(themeManager)
         setEmptyIndicatorColorToNameLabel(themeManager)
     }
     
-    private func setThemeToButtons(_ themeManager: ThemeManagerProtocol) {
-        editPhotoButton.backgroundColor = themeManager.themeSettings?.photoButtonBackgroundColor
-        setThemeToBottomButtons(themeManager, editButton, cancelButton, saveGCDButton)
+    private func setThemeToButtons(_ theme: ThemeSettingsProtocol) {
+        editPhotoButton.backgroundColor = theme.photoButtonBackgroundColor
+        setThemeToBottomButtons(theme, editButton, cancelButton, saveGCDButton)
     }
     
-    private func setThemeToBottomButtons(_ themeManager: ThemeManagerProtocol, _ buttons: UIButton...) {
+    private func setThemeToBottomButtons(_ theme: ThemeSettingsProtocol, _ buttons: UIButton...) {
         for button in buttons {
-            button.setTitleColor(themeManager.themeSettings?.buttonTextColor, for: .normal)
-            button.backgroundColor = themeManager.themeSettings?.textButtonBackgroundColor
+            button.setTitleColor(theme.buttonTextColor, for: .normal)
+            button.backgroundColor = theme.textButtonBackgroundColor
         }
     }
     
-    private func setThemeToNavigationBar(_ themeManager: ThemeManagerProtocol) {
-        navigationBarLabel.textColor = themeManager.themeSettings?.primaryTextColor
-        navigationBarButton.setTitleColor(themeManager.themeSettings?.navigationBarButtonColor, for: .normal)
+    private func setThemeToNavigationBar(_ theme: ThemeSettingsProtocol) {
+        navigationBarLabel.textColor = theme.primaryTextColor
+        navigationBarButton.setTitleColor(theme.navigationBarButtonColor, for: .normal)
     }
     
     func setEmptyStateToInfoLabel(_ themeManager: ThemeManagerProtocol) {
@@ -179,16 +190,25 @@ class ProfileView: UIView {
         imageView.image = UIImage(systemName: "person.fill")
     }
     
-    func configureStatusBar(_ style: UIStatusBarStyle, currentTheme: Theme) {
-        if currentTheme != .night {
-            UIApplication.shared.statusBarStyle = style
-        }
-    }
-    
     private enum Const {
         static let buttonBorderRadius: CGFloat = 14
         static let maxNumOfCharsInName = 40
         static let textFieldPlaceholderText = "ФИО"
         static let textViewPlaceholderText = "Расскажите о себе :)"
+    }
+}
+
+extension UINavigationController {
+    
+    func setStatusBarColor(_ backgroundColor: UIColor) {
+        let statusBarFrame: CGRect
+        if #available(iOS 13.0, *) {
+            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        } else {
+            statusBarFrame = UIApplication.shared.statusBarFrame
+        }
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = backgroundColor
+        view.addSubview(statusBarView)
     }
 }

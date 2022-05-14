@@ -14,12 +14,12 @@
         <scene sceneID="Ouu-RY-Pp2">
             <objects>
                 <viewController storyboardIdentifier="Profile" id="L8r-NT-LYG" customClass="ProfileViewController" customModule="ChatApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="DhB-gP-nx8" customClass="ProfileView" customModule="ChatApp" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DhB-gP-nx8" customClass="ProfileView" customModule="ChatApp" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="406-YV-ulb">
-                                <rect key="frame" x="67" y="106.33333333333334" width="280" height="273.66666666666669"/>
+                                <rect key="frame" x="67" y="126.33333333333334" width="280" height="273.66666666666663"/>
                                 <color key="backgroundColor" name="BackgroundImageColor"/>
                                 <color key="tintColor" name="DefaultImageColor"/>
                                 <constraints>
@@ -28,7 +28,7 @@
                                 <imageReference key="image" image="person.fill" catalog="system" symbolScale="small"/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3q8-tL-q9h">
-                                <rect key="frame" x="78" y="477.33333333333331" width="258" height="173.66666666666669"/>
+                                <rect key="frame" x="78" y="497.33333333333331" width="258" height="153.66666666666669"/>
                                 <color key="backgroundColor" name="BackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -36,7 +36,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
                             <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ФИО" textAlignment="center" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="xHk-dq-ajH">
-                                <rect key="frame" x="0.0" y="415" width="414" height="30.333333333333314"/>
+                                <rect key="frame" x="0.0" y="435" width="414" height="30.333333333333314"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
@@ -46,7 +46,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ovk-pa-pTs">
-                                <rect key="frame" x="265.33333333333331" y="301.33333333333331" width="81.666666666666686" height="81.666666666666686"/>
+                                <rect key="frame" x="265.33333333333331" y="321.33333333333331" width="81.666666666666686" height="81.666666666666686"/>
                                 <color key="backgroundColor" name="CameraButtonColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ovk-pa-pTs" secondAttribute="height" multiplier="1:1" id="fk9-zw-JrX"/>
@@ -59,22 +59,22 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="C07-cE-rXC">
-                                <rect key="frame" x="280.66666666666669" y="317.66666666666669" width="51.333333333333314" height="49"/>
+                                <rect key="frame" x="280.66666666666669" y="337.66666666666669" width="51.333333333333314" height="49"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="C07-cE-rXC" secondAttribute="height" multiplier="1:1" id="Bav-w7-jsW"/>
                                 </constraints>
                             </imageView>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q0c-Bi-gtM" customClass="CustomNavigationBar" customModule="ChatApp" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="116"/>
                                 <color key="backgroundColor" name="BackgroundNavigationBarColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="96" id="sW3-Ud-ZQq"/>
+                                    <constraint firstAttribute="height" constant="116" id="sW3-Ud-ZQq"/>
                                 </constraints>
                                 <color key="tintColor" name="BlueTextColor"/>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbm-hq-M2p">
-                                <rect key="frame" x="352" y="31.666666666666671" width="45" height="33"/>
+                                <rect key="frame" x="352" y="61.666666666666657" width="45" height="33"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="tintColor" name="BlueTextColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -86,7 +86,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEh-Ls-Fvu">
-                                <rect key="frame" x="15.999999999999993" y="32.333333333333336" width="121.33333333333331" height="31.333333333333336"/>
+                                <rect key="frame" x="15.999999999999993" y="62.333333333333336" width="121.33333333333331" height="31.333333333333336"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -145,16 +145,16 @@
                             <constraint firstItem="iBc-Zk-3dl" firstAttribute="trailing" secondItem="xHk-dq-ajH" secondAttribute="trailing" id="3Kn-69-8vZ"/>
                             <constraint firstItem="iBc-Zk-3dl" firstAttribute="trailing" secondItem="ovk-pa-pTs" secondAttribute="trailing" constant="67" id="6NK-zr-b7C"/>
                             <constraint firstItem="C07-cE-rXC" firstAttribute="centerX" secondItem="ovk-pa-pTs" secondAttribute="centerX" id="9LP-Ce-LnN"/>
+                            <constraint firstItem="kbm-hq-M2p" firstAttribute="centerY" secondItem="MEh-Ls-Fvu" secondAttribute="centerY" id="BQA-uZ-GtK"/>
                             <constraint firstItem="iBc-Zk-3dl" firstAttribute="trailing" secondItem="kbm-hq-M2p" secondAttribute="trailing" constant="17" id="Cqo-pd-cKT"/>
                             <constraint firstItem="3q8-tL-q9h" firstAttribute="top" secondItem="xHk-dq-ajH" secondAttribute="bottom" constant="32" id="GS1-NM-kZY"/>
                             <constraint firstItem="ovk-pa-pTs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iBc-Zk-3dl" secondAttribute="leading" symbolic="YES" id="IEq-45-8QC"/>
                             <constraint firstItem="ovk-pa-pTs" firstAttribute="width" secondItem="406-YV-ulb" secondAttribute="height" multiplier="188:645" id="IMZ-N4-x18"/>
                             <constraint firstItem="MEh-Ls-Fvu" firstAttribute="leading" secondItem="iBc-Zk-3dl" secondAttribute="leading" constant="16" id="Iiz-1P-Yhh"/>
-                            <constraint firstItem="Q0c-Bi-gtM" firstAttribute="top" secondItem="iBc-Zk-3dl" secondAttribute="top" id="KMZ-Ch-rzz"/>
+                            <constraint firstItem="Q0c-Bi-gtM" firstAttribute="top" secondItem="DhB-gP-nx8" secondAttribute="top" id="KMZ-Ch-rzz"/>
                             <constraint firstItem="C07-cE-rXC" firstAttribute="width" secondItem="ovk-pa-pTs" secondAttribute="height" multiplier="17:27" id="NCS-Zd-Ae3"/>
-                            <constraint firstItem="kbm-hq-M2p" firstAttribute="centerY" secondItem="Q0c-Bi-gtM" secondAttribute="centerY" id="Rzy-KO-cqT"/>
                             <constraint firstItem="c83-rb-4jY" firstAttribute="leading" secondItem="iBc-Zk-3dl" secondAttribute="leading" constant="56" id="Ugj-PZ-VJk"/>
-                            <constraint firstItem="MEh-Ls-Fvu" firstAttribute="centerY" secondItem="Q0c-Bi-gtM" secondAttribute="centerY" id="WX6-cW-25B"/>
+                            <constraint firstItem="MEh-Ls-Fvu" firstAttribute="centerY" secondItem="Q0c-Bi-gtM" secondAttribute="centerY" constant="20" id="WX6-cW-25B"/>
                             <constraint firstItem="Q0c-Bi-gtM" firstAttribute="trailing" secondItem="iBc-Zk-3dl" secondAttribute="trailing" id="Z7Y-WF-LHU"/>
                             <constraint firstItem="406-YV-ulb" firstAttribute="leading" secondItem="iBc-Zk-3dl" secondAttribute="leading" constant="67" id="ZEc-WM-Eja"/>
                             <constraint firstItem="406-YV-ulb" firstAttribute="top" secondItem="Q0c-Bi-gtM" secondAttribute="bottom" constant="7.0000000000000142" id="cJU-M1-8sa"/>
