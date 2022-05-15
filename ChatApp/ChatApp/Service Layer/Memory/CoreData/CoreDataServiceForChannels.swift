@@ -22,8 +22,8 @@ class CoreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?
 
-    init(dataModelName: String) {
-        coreDataStack = NewCoreDataService(dataModelName: dataModelName)
+    init(coreDataStack: CoreDataServiceProtocol) {
+        self.coreDataStack = coreDataStack
     }
     
     func fetchedResultsController(viewController: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<DBChannel>? {
@@ -66,12 +66,16 @@ class CoreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
     func deleteChannel(channel: Channel) {
         if let dbChannelArr = coreDataStack?.fetchDBChannelById(id: channel.identifier), !dbChannelArr.isEmpty {
             let objectID = dbChannelArr[0].objectID
-            coreDataStack?.performTaskOnMainQueueContextAndSave { context in
-                if let dbChannel = context.object(with: objectID) as? DBChannel {
-                    context.delete(dbChannel)
-                } else {
-                    Logger.log("В БД находятся ошибочные данные.", .failure)
-                }
+            deleteChannel(objectID)
+        }
+    }
+    
+    private func deleteChannel(_ objectID: NSManagedObjectID) {
+        coreDataStack?.performTaskOnMainQueueContextAndSave { context in
+            if let dbChannel = context.object(with: objectID) as? DBChannel {
+                context.delete(dbChannel)
+            } else {
+                Logger.log("В БД находятся ошибочные данные.", .failure)
             }
         }
     }

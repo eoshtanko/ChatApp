@@ -7,8 +7,6 @@
 
 import UIKit
 
-// Кажется, я здесь нарушила keep it simple stupid...
-
 protocol ThemeManagerProtocol {
     var theme: Theme { get set }
     var themeSettings: ThemeSettingsProtocol? { get }
@@ -18,7 +16,7 @@ protocol ThemeManagerProtocol {
 
 class ThemeManager: ThemeManagerProtocol {
     
-    private let themeSavingServise: ThemeSavingServiceProtocol = ThemeSavingService()
+    private let themeSavingServise = SavingServiceAssembly().themeSavingService
     
     // Струтура ответственная за создание тем
     private lazy var themes: ThemesProtocol = Themes()
@@ -50,7 +48,7 @@ class ThemeManager: ThemeManagerProtocol {
     
     func writeThemeToMemory() {
         let preferences = ApplicationPreferences(themeId: theme.rawValue)
-        themeSavingServise.saveWithMemoryManager(obj: preferences)
+        themeSavingServise.saveWithMemoryManager(obj: preferences, complition: nil)
     }
     
     func readThemeFromMemory(completion: ((Result<ApplicationPreferences, Error>) -> Void)?) {

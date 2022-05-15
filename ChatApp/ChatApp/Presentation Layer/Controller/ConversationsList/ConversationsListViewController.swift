@@ -25,9 +25,9 @@ class ConversationsListViewController: UIViewController {
         }
     }
     
-    private let userSavingService: UserSavingServiceProtocol = UserSavingService()
+    private let userSavingService = SavingServiceAssembly().userSavingService
     
-    let coreDataService = CoreDataServiceForChannels(dataModelName: Const.dataModelName)
+    let coreDataService = CoreDataServiceAssembly().coreDataServiceForChannels
     lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self)
     
     var firebaseChannelsService: FirebaseChannelsServiceProtocol?
@@ -238,7 +238,6 @@ class ConversationsListViewController: UIViewController {
     }
     
     enum Const {
-        static let dataModelName = "Chat"
         static let numberOfSections = 1
         static let hightOfCell: CGFloat = 100
     }
