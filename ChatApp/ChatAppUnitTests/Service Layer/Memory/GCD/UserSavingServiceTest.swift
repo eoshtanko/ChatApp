@@ -37,7 +37,7 @@ class UserSavingServiceTest: XCTestCase {
         // Arrange
         let service = buildUserSavingService()
         let user = User(id: "")
-        let expectedParameters = (user, Const.fileName)
+        let expectedParameters = (Const.fileName, user)
         
         // Act
         service.saveWithMemoryManager(obj: user, complition: nil)
@@ -45,7 +45,13 @@ class UserSavingServiceTest: XCTestCase {
         // Assert
         XCTAssertTrue(gcdMemoryManagerMock.invokedWriteDataToMemory)
         XCTAssertEqual(gcdMemoryManagerMock.invokedWriteDataToMemoryCount, 1)
-      //  XCTAssertEqual(expectedParameters.self, expectedParameters.self)
+        
+        XCTAssertNotNil(gcdMemoryManagerMock.invokedWriteDataToMemoryParameters)
+        if let params = gcdMemoryManagerMock.invokedWriteDataToMemoryParameters {
+        XCTAssertEqual(params.fileName, Const.fileName)
+        XCTAssertEqual(params.objectToWrite, user)
+            XCTAssertTrue(params == expectedParameters, "Параметры не совпадают: \(params) и \(expectedParameters)")
+        }
         XCTAssertEqual(gcdMemoryManagerMock.invokedWriteDataToMemoryParametersList.count, 1)
     }
     

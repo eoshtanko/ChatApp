@@ -29,7 +29,7 @@ class SavingService<T: Codable>: SavingServiceProtocol {
     
     private func saveWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M, obj: T) {
         if let objectToWrite = obj as? M.MemoryObject {
-            memoryManager.writeDataToMemory(fileName: FileNames.plistFileNameForPreferences, objectToWrite: objectToWrite, completion: nil)
+            memoryManager.writeDataToMemory(fileName: fileName, objectToWrite: objectToWrite, completion: nil)
         }
     }
     
