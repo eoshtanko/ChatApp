@@ -18,7 +18,7 @@ class UserSavingServiceTests: XCTestCase {
         gcdMemoryManagerMock = GCDMemoryManagerInterfaceMock<User>()
     }
 
-    func testReadUser() {
+    func testInvocationOfCoreMethodsWhileReadingUser() {
         // Arrange
         let service = buildUserSavingService()
         let expectedParameters = Const.fileName
@@ -33,7 +33,7 @@ class UserSavingServiceTests: XCTestCase {
         XCTAssertEqual(gcdMemoryManagerMock.invokedReadDataFromMemoryParametersList.count, 1)
     }
     
-    func testWriteUser() {
+    func testInvocationOfCoreMethodsWhileWritingUser() {
         // Arrange
         let service = buildUserSavingService()
         let user = User(id: "")

@@ -18,7 +18,7 @@ class CoreDataServiceForChannelsTests: XCTestCase {
         coreDataStackMock = CoreDataStackMock(dataModelName: "")
     }
 
-    func testSaveChannel() {
+    func testInvocationOfCoreMethodsWhileSavingChannel() {
         // Arrange
         let service = buildCoreDataService()
         let channel = Channel(identifier: "", name: "", lastMessage: nil, lastActivity: nil)
