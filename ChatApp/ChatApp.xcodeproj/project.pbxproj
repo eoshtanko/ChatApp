@@ -361,6 +361,14 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
+		34254A4D283261A100AC18B9 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				34EA6E45283213DE006F664A /* ChatAppProfileUITests.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		3427ACD327D47DC20062F749 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,7 +686,7 @@
 		34EA6E44283213DE006F664A /* ChatAppUITests */ = {
 			isa = PBXGroup;
 			children = (
-				34EA6E45283213DE006F664A /* ChatAppProfileUITests.swift */,
+				34254A4D283261A100AC18B9 /* Profile */,
 			);
 			path = ChatAppUITests;
 			sourceTree = "<group>";
