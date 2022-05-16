@@ -9,7 +9,7 @@ import XCTest
 @testable import ChatApp
 
 // Протестируем вызовы методов readDataFromMemory и writeDataToMemory core слоя
-class UserSavingServiceTest: XCTestCase {
+class UserSavingServiceTests: XCTestCase {
     
     private var gcdMemoryManagerMock: GCDMemoryManagerInterfaceMock<User>!
     

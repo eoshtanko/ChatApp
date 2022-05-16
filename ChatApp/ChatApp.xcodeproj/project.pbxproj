@@ -17,7 +17,7 @@
 		34157F38281120670022EB2F /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34157F37281120670022EB2F /* ThemeManager.swift */; };
 		34157F3A28114B5D0022EB2F /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34157F3928114B5C0022EB2F /* Themes.swift */; };
 		34157F3C28114B8B0022EB2F /* ThemeSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34157F3B28114B8B0022EB2F /* ThemeSettings.swift */; };
-		34187FEE2830E40700650377 /* CoreDataServiceForChannelsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34187FED2830E40700650377 /* CoreDataServiceForChannelsTest.swift */; };
+		34187FEE2830E40700650377 /* CoreDataServiceForChannelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34187FED2830E40700650377 /* CoreDataServiceForChannelsTests.swift */; };
 		34187FF82830E48900650377 /* CoreDataServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34187FF72830E48900650377 /* CoreDataServiceAssembly.swift */; };
 		34187FFB2830E59100650377 /* CoreDataStackMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34187FFA2830E59100650377 /* CoreDataStackMock.swift */; };
 		3427ACD227D478DF0062F749 /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */; };
@@ -86,7 +86,7 @@
 		34E8779F27FC3B720018CCC7 /* Chat.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 34E8779D27FC3B720018CCC7 /* Chat.xcdatamodeld */; };
 		34E877A527FC7EB40018CCC7 /* NewCoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */; };
 		34E877A727FCB17C0018CCC7 /* CoreDataServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */; };
-		34EA6E38283108AE006F664A /* UserSavingServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA6E37283108AE006F664A /* UserSavingServiceTest.swift */; };
+		34EA6E38283108AE006F664A /* UserSavingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA6E37283108AE006F664A /* UserSavingServiceTests.swift */; };
 		34EA6E3A283115CE006F664A /* GCDMemoryManagerInterfaceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA6E39283115CE006F664A /* GCDMemoryManagerInterfaceMock.swift */; };
 		34EA6E3C28312591006F664A /* SavingServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA6E3B28312590006F664A /* SavingServiceAssembly.swift */; };
 		34EA6E3E28314DB1006F664A /* SavingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34EA6E3D28314DB1006F664A /* SavingServiceProtocol.swift */; };
@@ -132,12 +132,13 @@
 		34157F37281120670022EB2F /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		34157F3928114B5C0022EB2F /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		34157F3B28114B8B0022EB2F /* ThemeSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettings.swift; sourceTree = "<group>"; };
+		34159E71283283AD00A5B707 /* AllTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AllTests.xctestplan; sourceTree = "<group>"; };
 		34187FEB2830E40700650377 /* ChatAppUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChatAppUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		34187FED2830E40700650377 /* CoreDataServiceForChannelsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceForChannelsTest.swift; sourceTree = "<group>"; };
+		34187FED2830E40700650377 /* CoreDataServiceForChannelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceForChannelsTests.swift; sourceTree = "<group>"; };
 		34187FF72830E48900650377 /* CoreDataServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceAssembly.swift; sourceTree = "<group>"; };
 		34187FFA2830E59100650377 /* CoreDataStackMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackMock.swift; sourceTree = "<group>"; };
 		34254A5028326FD200AC18B9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
-		34254A5128326FE100AC18B9 /* UITestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITestsPlan.xctestplan; sourceTree = "<group>"; };
+		34254A5128326FE100AC18B9 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
 		3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		3427ACD827D47ED40062F749 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
@@ -206,7 +207,7 @@
 		34E8779E27FC3B720018CCC7 /* Chat.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Chat.xcdatamodel; sourceTree = "<group>"; };
 		34E877A427FC7EB40018CCC7 /* NewCoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCoreDataService.swift; sourceTree = "<group>"; };
 		34E877A627FCB17C0018CCC7 /* CoreDataServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceProtocol.swift; sourceTree = "<group>"; };
-		34EA6E37283108AE006F664A /* UserSavingServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavingServiceTest.swift; sourceTree = "<group>"; };
+		34EA6E37283108AE006F664A /* UserSavingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSavingServiceTests.swift; sourceTree = "<group>"; };
 		34EA6E39283115CE006F664A /* GCDMemoryManagerInterfaceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDMemoryManagerInterfaceMock.swift; sourceTree = "<group>"; };
 		34EA6E3B28312590006F664A /* SavingServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingServiceAssembly.swift; sourceTree = "<group>"; };
 		34EA6E3D28314DB1006F664A /* SavingServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingServiceProtocol.swift; sourceTree = "<group>"; };
@@ -349,7 +350,7 @@
 		34187FF62830E45E00650377 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				34187FED2830E40700650377 /* CoreDataServiceForChannelsTest.swift */,
+				34187FED2830E40700650377 /* CoreDataServiceForChannelsTests.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -375,7 +376,8 @@
 			isa = PBXGroup;
 			children = (
 				34254A5028326FD200AC18B9 /* UnitTests.xctestplan */,
-				34254A5128326FE100AC18B9 /* UITestsPlan.xctestplan */,
+				34254A5128326FE100AC18B9 /* UITests.xctestplan */,
+				34159E71283283AD00A5B707 /* AllTests.xctestplan */,
 			);
 			path = TestPlans;
 			sourceTree = "<group>";
@@ -690,7 +692,7 @@
 		34EA6E3628310896006F664A /* GCD */ = {
 			isa = PBXGroup;
 			children = (
-				34EA6E37283108AE006F664A /* UserSavingServiceTest.swift */,
+				34EA6E37283108AE006F664A /* UserSavingServiceTests.swift */,
 			);
 			path = GCD;
 			sourceTree = "<group>";
@@ -926,8 +928,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34187FEE2830E40700650377 /* CoreDataServiceForChannelsTest.swift in Sources */,
-				34EA6E38283108AE006F664A /* UserSavingServiceTest.swift in Sources */,
+				34187FEE2830E40700650377 /* CoreDataServiceForChannelsTests.swift in Sources */,
+				34EA6E38283108AE006F664A /* UserSavingServiceTests.swift in Sources */,
 				34187FFB2830E59100650377 /* CoreDataStackMock.swift in Sources */,
 				34EA6E3A283115CE006F664A /* GCDMemoryManagerInterfaceMock.swift in Sources */,
 			);

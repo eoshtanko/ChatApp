@@ -33,7 +33,10 @@
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:TestPlans/UITestsPlan.xctestplan">
+            reference = "container:TestPlans/UITests.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:TestPlans/AllTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

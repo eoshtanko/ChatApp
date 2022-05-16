@@ -9,7 +9,7 @@ import XCTest
 @testable import ChatApp
 
 // Протестируем вызов метода performTaskOnMainQueueContextAndSave core слоя
-class CoreDataServiceForChannelsTest: XCTestCase {
+class CoreDataServiceForChannelsTests: XCTestCase {
     
     private var coreDataStackMock: CoreDataStackMock!
     private var channel: Channel!

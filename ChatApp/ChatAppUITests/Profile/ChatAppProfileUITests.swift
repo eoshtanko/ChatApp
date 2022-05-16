@@ -14,9 +14,8 @@ import XCTest
  и сравнивают с актуальным скриншотом, который делается во время прогона тестов.
  Делать Snapshot тесты на все возможные проверки кажется плохой практикой, так как если будет редизайн,
  наши тесты моментально станут красными, и придется в срочном порядке менять эталонные скриншоты.
- Наверное использование Snapshot тестов хорошо для проверки верстки, элементов,
- с которыми тяжело взаимодействовать по accessibilityidentifier (график цен, календарь и прочие),
- но это не наш случай.
+ Наверное, использование Snapshot тестов хорошо для проверки верстки, элементов,
+ с которыми тяжело взаимодействовать по accessibilityidentifier, но это не наш случай.
  */
 class ChatAppProfileUITests: XCTestCase {
     
@@ -53,7 +52,7 @@ class ChatAppProfileUITests: XCTestCase {
         let editProfileInfoButton = app.buttons["editButton"]
         
         // Act
-        _ = title.waitForExistence(timeout: 5)
+        _ = title.waitForExistence(timeout: 10)
         
         // Assert
         XCTAssertTrue(title.exists)
@@ -72,9 +71,9 @@ class ChatAppProfileUITests: XCTestCase {
         let cancelEditingProfileInfoButton = app.buttons["cancelButton"]
         
         // Act
-        _ = editProfileInfoButton.waitForExistence(timeout: 5)
+        _ = editProfileInfoButton.waitForExistence(timeout: 10)
         editProfileInfoButton.tap()
-        _ = saveProfileInfoButton.waitForExistence(timeout: 5)
+        _ = saveProfileInfoButton.waitForExistence(timeout: 10)
         
         // Assert
         XCTAssertTrue(saveProfileInfoButton.exists)
@@ -88,9 +87,9 @@ class ChatAppProfileUITests: XCTestCase {
         let imageSources = app.sheets["Image Source"].scrollViews.otherElements
         
         // Act
-        _ = editPhotoButton.waitForExistence(timeout: 5)
+        _ = editPhotoButton.waitForExistence(timeout: 10)
         editPhotoButton.tap()
-        _ = imageSources.buttons["Cancel"].waitForExistence(timeout: 5)
+        _ = imageSources.buttons["Cancel"].waitForExistence(timeout: 10)
         
         // Assert
         XCTAssertTrue(imageSources.buttons["Photo Library"].exists)
