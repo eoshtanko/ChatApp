@@ -37,7 +37,7 @@ class UserSavingServiceTest: XCTestCase {
         // Arrange
         let service = buildUserSavingService()
         let user = User(id: "")
-        let expectedParameters = (Const.fileName, user)
+        let expectedParameters = (fileName: Const.fileName, objectToWrite: user)
         
         // Act
         service.saveWithMemoryManager(obj: user, complition: nil)
@@ -47,9 +47,17 @@ class UserSavingServiceTest: XCTestCase {
         XCTAssertEqual(gcdMemoryManagerMock.invokedWriteDataToMemoryCount, 1)
         
         XCTAssertNotNil(gcdMemoryManagerMock.invokedWriteDataToMemoryParameters)
+        // Знаю, что здесь можно !, но linter мешает
         if let params = gcdMemoryManagerMock.invokedWriteDataToMemoryParameters {
-        XCTAssertEqual(params.fileName, Const.fileName)
-        XCTAssertEqual(params.objectToWrite, user)
+            // Так как мы далее осуществляем проверку всего tuple, следующее две строки
+            // избыточны, но они позволяют в случае падения получить отчет, в котором
+            // можно разобраться быстрее
+            XCTAssertEqual(params.fileName, expectedParameters.fileName)
+            XCTAssertEqual(params.objectToWrite, expectedParameters.objectToWrite)
+            
+            // Знаю, что нужно применять специфицированные ассерты, но!
+            // tuples нельзя сравнивать в XCTAssertEqual, поэтому сделала через
+            // XCTAssertTrue с описанием.
             XCTAssertTrue(params == expectedParameters, "Параметры не совпадают: \(params) и \(expectedParameters)")
         }
         XCTAssertEqual(gcdMemoryManagerMock.invokedWriteDataToMemoryParametersList.count, 1)
