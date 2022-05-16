@@ -16,7 +16,7 @@ class CoreDataServiceForChannelsTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        coreDataStackMock = CoreDataStackMock(dataModelName: "Test")
+        coreDataStackMock = CoreDataStackMock(dataModelName: "")
         channel = Channel(identifier: "", name: "", lastMessage: nil, lastActivity: nil)
     }
 
