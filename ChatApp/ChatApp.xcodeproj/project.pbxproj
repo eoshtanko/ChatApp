@@ -136,6 +136,8 @@
 		34187FED2830E40700650377 /* CoreDataServiceForChannelsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceForChannelsTest.swift; sourceTree = "<group>"; };
 		34187FF72830E48900650377 /* CoreDataServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceAssembly.swift; sourceTree = "<group>"; };
 		34187FFA2830E59100650377 /* CoreDataStackMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackMock.swift; sourceTree = "<group>"; };
+		34254A5028326FD200AC18B9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
+		34254A5128326FE100AC18B9 /* UITestsPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITestsPlan.xctestplan; sourceTree = "<group>"; };
 		3427ACD127D478DF0062F749 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		3427ACD827D47ED40062F749 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		3427ACDC27D48A980062F749 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
@@ -367,6 +369,15 @@
 				34EA6E45283213DE006F664A /* ChatAppProfileUITests.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		34254A4F28326F4000AC18B9 /* TestPlans */ = {
+			isa = PBXGroup;
+			children = (
+				34254A5028326FD200AC18B9 /* UnitTests.xctestplan */,
+				34254A5128326FE100AC18B9 /* UITestsPlan.xctestplan */,
+			);
+			path = TestPlans;
 			sourceTree = "<group>";
 		};
 		3427ACD327D47DC20062F749 /* Model */ = {
@@ -623,6 +634,7 @@
 		34ACCFD927C4AAEA00535096 = {
 			isa = PBXGroup;
 			children = (
+				34254A4F28326F4000AC18B9 /* TestPlans */,
 				34ACCFE427C4AAEB00535096 /* ChatApp */,
 				34187FEC2830E40700650377 /* ChatAppUnitTests */,
 				34EA6E44283213DE006F664A /* ChatAppUITests */,

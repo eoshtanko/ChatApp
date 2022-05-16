@@ -52,6 +52,9 @@ class ChatAppProfileUITests: XCTestCase {
         let editPhotoButton = app.buttons["editPhotoButton"]
         let editProfileInfoButton = app.buttons["editButton"]
         
+        // Act
+        _ = title.waitForExistence(timeout: 5)
+        
         // Assert
         XCTAssertTrue(title.exists)
         XCTAssertTrue(closeProfileButton.exists)
@@ -69,8 +72,9 @@ class ChatAppProfileUITests: XCTestCase {
         let cancelEditingProfileInfoButton = app.buttons["cancelButton"]
         
         // Act
+        _ = editProfileInfoButton.waitForExistence(timeout: 5)
         editProfileInfoButton.tap()
-        _ = saveProfileInfoButton.waitForExistence(timeout: 20)
+        _ = saveProfileInfoButton.waitForExistence(timeout: 5)
         
         // Assert
         XCTAssertTrue(saveProfileInfoButton.exists)
@@ -84,8 +88,9 @@ class ChatAppProfileUITests: XCTestCase {
         let imageSources = app.sheets["Image Source"].scrollViews.otherElements
         
         // Act
+        _ = editPhotoButton.waitForExistence(timeout: 5)
         editPhotoButton.tap()
-        _ = imageSources.buttons["Cancel"].waitForExistence(timeout: 20)
+        _ = imageSources.buttons["Cancel"].waitForExistence(timeout: 5)
         
         // Assert
         XCTAssertTrue(imageSources.buttons["Photo Library"].exists)
