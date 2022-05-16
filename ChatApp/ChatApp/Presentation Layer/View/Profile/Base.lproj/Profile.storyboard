@@ -22,6 +22,7 @@
                                 <rect key="frame" x="67" y="126.33333333333334" width="280" height="273.66666666666663"/>
                                 <color key="backgroundColor" name="BackgroundImageColor"/>
                                 <color key="tintColor" name="DefaultImageColor"/>
+                                <accessibility key="accessibilityConfiguration" identifier="profileImage"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="406-YV-ulb" secondAttribute="height" multiplier="1:1" id="H3p-my-4rc"/>
                                 </constraints>
@@ -30,6 +31,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3q8-tL-q9h">
                                 <rect key="frame" x="78" y="497.33333333333331" width="258" height="153.66666666666669"/>
                                 <color key="backgroundColor" name="BackgroundColor"/>
+                                <accessibility key="accessibilityConfiguration" identifier="aboutMeTextField"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -38,6 +40,7 @@
                             <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ФИО" textAlignment="center" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="xHk-dq-ajH">
                                 <rect key="frame" x="0.0" y="435" width="414" height="30.333333333333314"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <accessibility key="accessibilityConfiguration" identifier="nameTextField"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartQuotesType="no" textContentType="name"/>
@@ -48,6 +51,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ovk-pa-pTs">
                                 <rect key="frame" x="265.33333333333331" y="321.33333333333331" width="81.666666666666686" height="81.666666666666686"/>
                                 <color key="backgroundColor" name="CameraButtonColor"/>
+                                <accessibility key="accessibilityConfiguration" identifier="editPhotoButton"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ovk-pa-pTs" secondAttribute="height" multiplier="1:1" id="fk9-zw-JrX"/>
                                 </constraints>
@@ -75,6 +79,7 @@
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbm-hq-M2p">
                                 <rect key="frame" x="352" y="61.666666666666657" width="45" height="33"/>
+                                <accessibility key="accessibilityConfiguration" identifier="closeProfileButton"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="tintColor" name="BlueTextColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -87,6 +92,7 @@
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MEh-Ls-Fvu">
                                 <rect key="frame" x="15.999999999999993" y="62.333333333333336" width="121.33333333333331" height="31.333333333333336"/>
+                                <accessibility key="accessibilityConfiguration" identifier="profileTitle"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -97,6 +103,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvy-dg-Je6">
                                         <rect key="frame" x="0.0" y="0.0" width="302" height="40"/>
                                         <color key="backgroundColor" name="BackgroundButtonColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="editButton"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="lxn-oY-16c"/>
                                         </constraints>
@@ -110,6 +117,7 @@
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l5y-lJ-hJJ">
                                         <rect key="frame" x="0.0" y="0.0" width="302" height="40"/>
                                         <color key="backgroundColor" name="BackgroundButtonColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="cancelButton"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="hYZ-PV-YfT"/>
                                         </constraints>
@@ -123,6 +131,7 @@
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1l-wN-dKB">
                                         <rect key="frame" x="0.0" y="0.0" width="302" height="40"/>
                                         <color key="backgroundColor" name="BackgroundButtonColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="saveButton"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="6sj-gc-VWE"/>
                                         </constraints>

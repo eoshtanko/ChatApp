@@ -78,6 +78,7 @@ class ConversationsListView: UIView {
     }
     
     private func setDefaultImage(_ profileButton: UIButton) {
+        profileButton.accessibilityIdentifier = "goToProfileNavBarButton"
         profileButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
         profileButton.imageView?.tintColor = UIColor(named: "DefaultImageColor")
         profileButton.backgroundColor = UIColor(named: "BackgroundImageColor")
