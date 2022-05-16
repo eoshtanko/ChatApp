@@ -12,17 +12,16 @@ import XCTest
 class CoreDataServiceForChannelsTests: XCTestCase {
     
     private var coreDataStackMock: CoreDataStackMock!
-    private var channel: Channel!
     
     override func setUp() {
         super.setUp()
         coreDataStackMock = CoreDataStackMock(dataModelName: "")
-        channel = Channel(identifier: "", name: "", lastMessage: nil, lastActivity: nil)
     }
 
     func testSaveChannel() {
         // Arrange
         let service = buildCoreDataService()
+        let channel = Channel(identifier: "", name: "", lastMessage: nil, lastActivity: nil)
         
         // Act
         service.saveChannel(channel: channel)
