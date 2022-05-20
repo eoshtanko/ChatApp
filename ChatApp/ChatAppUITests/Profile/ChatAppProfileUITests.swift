@@ -31,7 +31,7 @@ class ChatAppProfileUITests: XCTestCase {
         app = XCUIApplication()
         app.launch()
         // Переходим на экран профиля
-        app.navigationBars["Channels"].buttons["goToProfileNavBarButton"].tap()
+        app.navigationBars["Channels"].children(matching: .button).element(boundBy: 2).tap()
     }
     
     override func tearDown() {
