@@ -16,7 +16,7 @@ class ConversationViewController: UIViewController {
     
     var firebaseMessagesService: FirebaseMessagesServiceProtocol?
     
-    let coreDataService = CoreDataServiceForMessages(dataModelName: Const.dataModelName)
+    let coreDataService = CoreDataServiceAssembly().coreDataServiceForMessages
     lazy var fetchedResultsController = coreDataService.fetchedResultsController(viewController: self, id: channel?.identifier)
     
     private var themeManager: ThemeManagerProtocol = ThemeManager(theme: .classic)
@@ -100,7 +100,6 @@ class ConversationViewController: UIViewController {
     }
     
     enum Const {
-        static let dataModelName = "Chat"
         static let heightOfHeader: CGFloat = 50
         static let numberOfSections = 1
     }

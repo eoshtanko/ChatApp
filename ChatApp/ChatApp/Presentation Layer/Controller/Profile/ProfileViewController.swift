@@ -22,7 +22,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private let userSavingService: UserSavingServiceProtocol = UserSavingService()
+    private let userSavingService = SavingServiceAssembly().userSavingService
     
     weak var conversationsListViewController: ConversationsListViewController?
     
