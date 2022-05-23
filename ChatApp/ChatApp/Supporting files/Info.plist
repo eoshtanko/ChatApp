@@ -6,5 +6,9 @@
 	<false/>
 	<key>isLoggingEnable</key>
 	<false/>
+	<key>imagesApiNetProtocolAndHost</key>
+	<string>$(IMAGES_API_NET_PROTOCOL_AND_HOST)</string>
+	<key>imagesApiUrl</key>
+	<string>$(IMAGES_API_URL)</string>
 </dict>
 </plist>

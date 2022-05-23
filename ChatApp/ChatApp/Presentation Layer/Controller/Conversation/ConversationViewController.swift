@@ -92,7 +92,10 @@ class ConversationViewController: UIViewController {
     }
     
     func isDrawableImageMessage(_ mess: Message) -> Bool {
-        return mess.content.starts(with: URLProvider.netProtocol + URLProvider.host)
+        guard let imagesApiNetProtocolAndHost = URLProvider.imagesApiNetProtocolAndHost else {
+            return false
+        }
+        return mess.content.starts(with: imagesApiNetProtocolAndHost)
     }
     
     required init?(coder: NSCoder) {

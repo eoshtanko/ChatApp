@@ -68,7 +68,6 @@
 		34AC5A0A281AC57400793BF2 /* IRequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A09281AC57400793BF2 /* IRequestSender.swift */; };
 		34AC5A0C281AC7D200793BF2 /* ApiImageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */; };
 		34AC5A0E281AC8A700793BF2 /* RequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A0D281AC8A700793BF2 /* RequestSender.swift */; };
-		34AC5A31281B205E00793BF2 /* KeyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A30281B205E00793BF2 /* KeyProvider.swift */; };
 		34AC5A33281B209400793BF2 /* URLProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A32281B209400793BF2 /* URLProvider.swift */; };
 		34AC5A35281B243D00793BF2 /* RequestsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A34281B243D00793BF2 /* RequestsFactory.swift */; };
 		34AC5A37281BC1BE00793BF2 /* GetImagesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34AC5A36281BC1BE00793BF2 /* GetImagesRequest.swift */; };
@@ -170,6 +169,7 @@
 		34630D5928177A3400210249 /* FirebaseMessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseMessagesService.swift; sourceTree = "<group>"; };
 		34630D5B281786CB00210249 /* SavingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingService.swift; sourceTree = "<group>"; };
 		346A55D12817193300349718 /* ThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesView.swift; sourceTree = "<group>"; };
+		3471068C2838B858001EE998 /* ChatAppConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ChatAppConfig.xcconfig; sourceTree = "<group>"; };
 		34754549281FA291003BD875 /* UIView + ShakingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + ShakingAnimation.swift"; sourceTree = "<group>"; };
 		3475454C281FA8B7003BD875 /* BrandParticleAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandParticleAnimation.swift; sourceTree = "<group>"; };
 		3475454E281FE45D003BD875 /* ConversationViewController + UIGestureRecognizerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController + UIGestureRecognizerDelegate.swift"; sourceTree = "<group>"; };
@@ -187,7 +187,6 @@
 		34AC5A09281AC57400793BF2 /* IRequestSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRequestSender.swift; sourceTree = "<group>"; };
 		34AC5A0B281AC7D200793BF2 /* ApiImageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiImageParser.swift; sourceTree = "<group>"; };
 		34AC5A0D281AC8A700793BF2 /* RequestSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSender.swift; sourceTree = "<group>"; };
-		34AC5A30281B205E00793BF2 /* KeyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProvider.swift; sourceTree = "<group>"; };
 		34AC5A32281B209400793BF2 /* URLProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProvider.swift; sourceTree = "<group>"; };
 		34AC5A34281B243D00793BF2 /* RequestsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsFactory.swift; sourceTree = "<group>"; };
 		34AC5A36281BC1BE00793BF2 /* GetImagesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImagesRequest.swift; sourceTree = "<group>"; };
@@ -608,7 +607,6 @@
 		34AC5A44281CEFD500793BF2 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				34AC5A30281B205E00793BF2 /* KeyProvider.swift */,
 				34AC5A32281B209400793BF2 /* URLProvider.swift */,
 			);
 			path = Providers;
@@ -636,6 +634,7 @@
 		34ACCFD927C4AAEA00535096 = {
 			isa = PBXGroup;
 			children = (
+				3471068C2838B858001EE998 /* ChatAppConfig.xcconfig */,
 				34254A4F28326F4000AC18B9 /* TestPlans */,
 				34ACCFE427C4AAEB00535096 /* ChatApp */,
 				34187FEC2830E40700650377 /* ChatAppUnitTests */,
@@ -945,7 +944,6 @@
 				34AC5A06281ABBD200793BF2 /* NetworkError.swift in Sources */,
 				342CCCCB281676A30099B067 /* ProfileView.swift in Sources */,
 				34157F38281120670022EB2F /* ThemeManager.swift in Sources */,
-				34AC5A31281B205E00793BF2 /* KeyProvider.swift in Sources */,
 				34ACCFEA27C4AAEB00535096 /* ProfileViewController.swift in Sources */,
 				34AC5A39281BFD6000793BF2 /* PhotoCell.swift in Sources */,
 				3460337527EB6A0F00962579 /* GCDMemoryManager.swift in Sources */,
@@ -1106,6 +1104,7 @@
 		};
 		34ACCFF427C4AAEC00535096 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3471068C2838B858001EE998 /* ChatAppConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

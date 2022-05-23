@@ -8,7 +8,8 @@
 import Foundation
 
 public struct URLProvider {
-    public static let netProtocol = "https://"
-    public static let host = "pixabay.com"
-    public static let apiStringURL = netProtocol + host + "/api/?key=\(KeyProvider.apiKey)"
+    
+    public static let imagesApiNetProtocolAndHost = Bundle.main.object(
+        forInfoDictionaryKey: "imagesApiNetProtocolAndHost") as? String
+    public static let imagesApiStringURL = Bundle.main.object(forInfoDictionaryKey: "imagesApiUrl") as? String
 }

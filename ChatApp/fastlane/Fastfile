@@ -1,0 +1,62 @@
+#---------------------------------------------------------------
+# Testing
+
+desc "Install dependencies and build application."
+lane :build_for_testing do |options|
+  scan(
+    clean: true, 
+    build_for_testing: true
+    )
+  puts "Dependencies were installed and the application was built."
+end
+
+desc "Run tests on the already compiled application."
+desc "But if the application has not been compiled yet, compils it before running the tests."
+lane :run_chat_tests do |options|
+  scan( 
+    skip_build: true
+    )
+  puts "The tests were completed on the already compiled application."
+end
+
+desc "Firstly, install dependencies and build application." 
+desc "Secondly, run tests on the already compiled application."
+lane :build_and_test do |options|
+  build_for_testing
+  run_chat_tests
+  puts "Done! Firstly, the dependencies were installed and the application was built. Secondly, the tests were executed on the already compiled application."
+end
+
+#---------------------------------------------------------------
+# Discord notification (Стирать жалко... :)
+
+# tinkoff_image_url="https://acdn.tinkoff.ru/static/documents/0f0aa9f1-0b06-4fe5-960c-5ca04de7904a.png"
+# git_url="https://github.com/TFS-iOS/chat-app-eoshtanko"
+
+# desc "Send notification via discord: build succeeded"
+# lane :discord_notify_success do 
+#   puts ENV["DISCORD_KEY"]
+#   discord_notifier(
+#     webhook_url: ENV["DISCORD_WEBHOOK_URL"],
+#     title: "Tinkoff Chat",
+#     description: "Tinkoff Chat Build Success",
+#     url: git_url,
+#     success: true,
+#     color: 16312092,
+#     image_url: tinkoff_image_url
+#   )
+# end
+
+# desc "Send notification via discord: build failed"
+# lane :discord_notify_failure do 
+#   puts ENV["DISCORD_KEY"]
+#   discord_notifier(
+#     webhook_url: ENV["DISCORD_WEBHOOK_URL"],
+#     title: "Tinkoff Chat",
+#     description: "Tinkoff Chat Build Failure",
+#     url: git_url,
+#     success: false,
+#     color: 13632027,
+#     image_url: tinkoff_image_url
+#   )
+# end

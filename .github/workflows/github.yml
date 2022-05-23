@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ruby-version: 2.6
+          bundler-cache: true
+      - name: Build and run tests
+      - run: bundle exec fastlane build_for_testing
+      
+# notify:
+#  needs: build
+#    runs-on: self-hosted
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ruby-version: 2.6
+#          bundler-cache: true
+#      - name: Notify via discord
+#        run:
+#          bundle exec fastlane discord_notify_success

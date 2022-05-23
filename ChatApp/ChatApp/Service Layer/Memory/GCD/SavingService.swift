@@ -20,16 +20,20 @@ class SavingService<T: Codable>: SavingServiceProtocol {
     }
     
     func saveWithMemoryManager(obj: T, complition: ((Result<T, Error>?) -> Void)?) {
-        saveWithMemoryManager(memoryManager: memoryManager, obj: obj)
+        saveWithMemoryManager(memoryManager: memoryManager, obj: obj, complition: complition)
     }
     
     func loadWithMemoryManager(complition: ((Result<T, Error>?) -> Void)?) {
         loadWithMemoryManager(memoryManager: memoryManager, complition: complition)
     }
     
-    private func saveWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M, obj: T) {
+    private func saveWithMemoryManager<M: MemoryManagerProtocol>(memoryManager: M, obj: T, complition: ((Result<T, Error>?) -> Void)?) {
         if let objectToWrite = obj as? M.MemoryObject {
-            memoryManager.writeDataToMemory(fileName: fileName, objectToWrite: objectToWrite, completion: nil)
+            memoryManager.writeDataToMemory(fileName: fileName, objectToWrite: objectToWrite) { result in
+                if let result = result as? Result<T, Error> {
+                    complition?(result)
+                }
+            }
         }
     }
     
