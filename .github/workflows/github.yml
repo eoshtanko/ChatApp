@@ -5,10 +5,11 @@ jobs:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
           bundler-cache: true
-      - name: Build and run tests
+      - name: Build
         run: cd ChatApp; gem install bundler; bundle install; bundle exec fastlane build_for_testing
       
 # notify:
