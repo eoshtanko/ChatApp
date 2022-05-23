@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [push]
 jobs:
   build:
     runs-on: macOS-latest
@@ -10,7 +10,7 @@ jobs:
           ruby-version: 2.6
           bundler-cache: true
       - name: Build and run tests
-      - run: bundle exec fastlane build_for_testing
+        run: bundle exec fastlane build_for_testing
       
 # notify:
 #  needs: build
