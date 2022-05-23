@@ -1068,7 +1068,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/Firebase/CoreOnly/Sources";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1088,7 +1088,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "${SRCROOT}/Pods/Firebase/CoreOnly/Sources";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1227,7 +1227,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";
@@ -1259,7 +1259,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LNN66QAR2T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ChatApp/Supporting files/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires access to your camera so that you can take a picture as your profile picture.";

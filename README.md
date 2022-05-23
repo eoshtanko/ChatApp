@@ -1,6 +1,4 @@
-╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ
-
-[![CI](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml/badge.svg)](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml)
+╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ[![CI](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml/badge.svg)](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml)
 
 # Комментарий к текущему ДЗ
 
