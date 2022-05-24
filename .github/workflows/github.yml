@@ -9,7 +9,7 @@ jobs:
           ruby-version: 2.6
           bundler-cache: true
       - name: Build
-        run: cd ChatApp; gem install bundler; bundle install; bundle exec fastlane build_for_testing
+        run: bundle exec fastlane build_for_testing
       
 # notify:
 #  needs: build
@@ -20,5 +20,4 @@ jobs:
 #          ruby-version: 2.6
 #          bundler-cache: true
 #      - name: Notify via discord
-#        run:
-#          cd ChatApp; gem install bundler; bundle install; bundle exec fastlane discord_notify_success
+#        run: bundle exec fastlane discord_notify_success
