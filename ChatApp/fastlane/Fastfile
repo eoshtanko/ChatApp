@@ -6,7 +6,6 @@ default_platform(:ios)
 desc "Install dependencies and build application."
 lane :build_for_testing do |options|
   scan(
-    clean: true, 
     build_for_testing: true
     )
   puts "Dependencies were installed and the application was built."
