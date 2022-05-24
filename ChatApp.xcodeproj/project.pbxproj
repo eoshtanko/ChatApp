@@ -753,8 +753,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 34ACCFF627C4AAEC00535096 /* Build configuration list for PBXNativeTarget "ChatApp" */;
 			buildPhases = (
-				34F449B427F5DF4200CC4922 /* ShellScript */,
 				BA40B830A29C6EBD63A1827A /* [CP] Check Pods Manifest.lock */,
+				34F449B427F5DF4200CC4922 /* ShellScript */,
 				34ACCFDE27C4AAEA00535096 /* Sources */,
 				34ACCFDF27C4AAEA00535096 /* Frameworks */,
 				34ACCFE027C4AAEA00535096 /* Resources */,

@@ -5,6 +5,7 @@ default_platform(:ios)
 
 desc "Install dependencies and build application."
 lane :build_for_testing do |options|
+  cocoapods
   scan(
     clean: true,
     build_for_testing: true
@@ -13,7 +14,6 @@ lane :build_for_testing do |options|
 end
 
 desc "Run tests on the already compiled application."
-desc "If the application has not been compiled yet, compile it before running the tests."
 lane :run_chat_tests do |options|
   scan( 
     skip_build: true

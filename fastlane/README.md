@@ -29,8 +29,6 @@ Install dependencies and build application.
 
 Run tests on the already compiled application.
 
-If the application has not been compiled yet, compile it before running the tests.
-
 ### build_and_test
 
 ```sh
