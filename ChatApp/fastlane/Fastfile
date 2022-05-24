@@ -7,8 +7,7 @@ desc "Install dependencies and build application."
 lane :build_for_testing do |options|
   cocoapods
   scan(
-    build_for_testing: true,
-    clean: true
+    build_for_testing: true
     )
   puts "Dependencies were installed and the application was built."
 end
