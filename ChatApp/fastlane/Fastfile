@@ -4,7 +4,7 @@
 default_platform(:ios)
 
 desc "Install dependencies and build application."
-lane :build_for_testing do
+lane :build_for_testing do |options|
   cocoapods
   scan(
     build_for_testing: true,
