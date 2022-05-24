@@ -6,7 +6,7 @@
 
 Так что, run_tests => run_chat_tests
 
-Почти...
+Почти... 🥲
 
 <p float="left">
   <img src="https://github.com/TFS-iOS/chat-app-eoshtanko/blob/7d9b44ca8acd310551629ab7bb0f63a17fd0dacd/Illustrations/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202022-05-23%20%D0%B2%2011.06.14.png" width="405" />
