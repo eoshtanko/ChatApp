@@ -21,4 +21,4 @@ jobs:
 #          bundler-cache: true
 #      - name: Notify via discord
 #        run:
-#          bundle exec fastlane discord_notify_success
+#          cd ChatApp; gem install bundler; bundle install; bundle exec fastlane discord_notify_success
