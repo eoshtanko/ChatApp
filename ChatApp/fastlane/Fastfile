@@ -4,9 +4,11 @@
 default_platform(:ios)
 
 desc "Install dependencies and build application."
-lane :build_for_testing do |options|
+lane :build_for_testing do
+  cocoapods
   scan(
-    build_for_testing: true
+    build_for_testing: true,
+    clean: true
     )
   puts "Dependencies were installed and the application was built."
 end
