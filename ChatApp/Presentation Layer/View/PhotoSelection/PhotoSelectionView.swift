@@ -59,14 +59,15 @@ class PhotoSelectionView: UIView {
     
     private func configureTableViewAppearance() {
         if let photoCollectionView = photoCollectionView {
+            
+            photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
+            
             NSLayoutConstraint.activate([
                 photoCollectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 photoCollectionView.topAnchor.constraint(equalTo: self.topAnchor),
                 photoCollectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
                 photoCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
             ])
-            
-            photoCollectionView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     

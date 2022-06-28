@@ -55,6 +55,10 @@ class ConversationViewController: UIViewController {
                                         entreMessageBar: entreMessageBar)
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     private func configureTableView() {
         conversationView?.tableView.dataSource = self
         conversationView?.tableView.delegate = self

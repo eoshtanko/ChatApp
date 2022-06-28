@@ -13,8 +13,6 @@ protocol MemoryManagerProtocol {
     func writeDataToMemory(fileName: String, objectToWrite: MemoryObject, completion: ((Result<MemoryObject, Error>) -> Void)?)
 }
 
-// Лучше поздно, чем никогда...
-// Protocol can only be used as a generic constraint because it has Self or associated type requirements - бе
 class AnyTypeMemoryManager<MemoryObject: Codable>: MemoryManagerProtocol {
     
     typealias MemoryObject = MemoryObject

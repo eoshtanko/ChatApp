@@ -7,7 +7,6 @@
 
 import UIKit
 
-// Избавляемся от Massive View Controller
 class ProfileView: UIView {
     
     private var activityIndicator: UIActivityIndicatorView?
@@ -195,20 +194,5 @@ class ProfileView: UIView {
         static let maxNumOfCharsInName = 40
         static let textFieldPlaceholderText = "ФИО"
         static let textViewPlaceholderText = "Расскажите о себе :)"
-    }
-}
-
-extension UINavigationController {
-    
-    func setStatusBarColor(_ backgroundColor: UIColor) {
-        let statusBarFrame: CGRect
-        if #available(iOS 13.0, *) {
-            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
-        } else {
-            statusBarFrame = UIApplication.shared.statusBarFrame
-        }
-        let statusBarView = UIView(frame: statusBarFrame)
-        statusBarView.backgroundColor = backgroundColor
-        view.addSubview(statusBarView)
     }
 }

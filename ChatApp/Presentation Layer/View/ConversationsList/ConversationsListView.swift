@@ -51,19 +51,20 @@ class ConversationsListView: UIView {
         return settingsButton
     }
     
-    func getProfileNavigationButton() -> UIButton {
+    func getProfileNavigationButton() -> UIButton? {
         profileButton = UIButton(frame: CGRect(x: 0, y: 0,
                                                width: Const.sizeOfProfileNavigationButton,
                                                height: Const.sizeOfProfileNavigationButton))
-        setImageToProfileNavigationButton(profileButton ?? UIButton())
-        return profileButton ?? UIButton()
+        
+        setImageToProfileNavigationButton(profileButton)
+        return profileButton
     }
     
-    private func setImageToProfileNavigationButton(_ profileButton: UIButton) {
+    private func setImageToProfileNavigationButton(_ profileButton: UIButton?) {
         if let imageData = CurrentUser.user.imageData, var image = UIImage(data: imageData) {
             image = image.resized(to: CGSize(width: Const.sizeOfProfileNavigationButton,
                                              height: Const.sizeOfProfileNavigationButton))
-            profileButton.setImage(image, for: .normal)
+            profileButton?.setImage(image, for: .normal)
         } else {
             setDefaultImage(profileButton)
         }
@@ -77,14 +78,16 @@ class ConversationsListView: UIView {
         settingsButton.contentVerticalAlignment = .fill
     }
     
-    private func setDefaultImage(_ profileButton: UIButton) {
+    private func setDefaultImage(_ profileButton: UIButton?) {
+        guard let profileButton = profileButton else { return }
         profileButton.accessibilityIdentifier = "goToProfileNavBarButton"
         profileButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
         profileButton.imageView?.tintColor = UIColor(named: "DefaultImageColor")
         profileButton.backgroundColor = UIColor(named: "BackgroundImageColor")
     }
     
-    private func configureImage(_ profileButton: UIButton) {
+    private func configureImage(_ profileButton: UIButton?) {
+        guard let profileButton = profileButton else { return }
         profileButton.imageView?.layer.cornerRadius = profileButton.frame.size.width / 2
         profileButton.layer.cornerRadius = profileButton.frame.size.width / 2
         profileButton.contentHorizontalAlignment = .fill

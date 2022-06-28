@@ -22,9 +22,6 @@ extension UIView {
         layer.add(group, forKey: "shake")
     }
     
-    // На самом деле, view и без этих ухищрений (с использованием одного лишь
-    // layer.removeAnimation(forKey: "shake")) вернется в изначальное положение достаточно плавно.
-    // Но так красивше :)
     func animateStopShaking() {
         guard let presentationLayer = layer.presentation() else { return }
         

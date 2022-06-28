@@ -41,8 +41,8 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         requestSender.send(config: requestConfig) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
-                DispatchQueue.main.async {
-                    if let image = UIImage(data: data) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
                         competition?(image)
                     }
                 }
