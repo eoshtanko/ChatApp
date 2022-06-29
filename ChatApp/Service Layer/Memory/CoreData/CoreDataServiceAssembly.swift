@@ -7,7 +7,6 @@
 
 import Foundation
 
-// Правлю недочеты из дз по архитектуре...
 class CoreDataServiceAssembly {
     var coreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
         return CoreDataServiceForChannels(coreDataStack: NewCoreDataService(dataModelName: Const.dataModelName))

@@ -8,8 +8,6 @@
 
 import UIKit
 
-// Я заморочилась.
-// Будет краисво :)
 class CircleTransitionViewController: NSObject, UIViewControllerAnimatedTransitioning {
     
     var circleColor: UIColor = .white

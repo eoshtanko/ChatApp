@@ -17,8 +17,9 @@ import Foundation
             competionHandler(.failure(NetworkError.badURL))
             return
         }
-        let task = session.dataTask(with: urlRequest) { (data: Data?, _: URLResponse?, error: Error?) in
+        let task = session.dataTask(with: urlRequest) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
+                print(response.debugDescription)
                 competionHandler(.failure(error))
                 return
             }

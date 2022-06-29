@@ -8,8 +8,6 @@
 import Foundation
 import Firebase
 
-// Разумеется, это можно обобщить до одного типа FirebaseMessagesService, но сейчас 4, а завтра защита
-// дублирование кода - плохо.
 protocol FirebaseChannelsServiceProtocol {
     func configureSnapshotListener(failAction: @escaping (() -> Void))
     func createNewChannel(name: String, failAction: @escaping ((String) -> Void))
@@ -17,7 +15,6 @@ protocol FirebaseChannelsServiceProtocol {
     var reference: CollectionReference { get }
 }
 
-// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class FirebaseChannelsService: FirebaseChannelsServiceProtocol {
     lazy var db = Firestore.firestore()
     lazy var reference = db.collection("channels")

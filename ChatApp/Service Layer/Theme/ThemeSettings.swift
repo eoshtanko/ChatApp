@@ -7,9 +7,6 @@
 
 import UIKit
 
-// c помощью такого разделения будет легко удалить более не нужны раздел
-// или добавить новый
-
 // Все, что необходимо для учтановки темы приложения. Общее.
 protocol ThemeSettingsProtocol: ProfileThemeProtocol, ThemePickerThemeProtocol, ChatMessageCellThemeProtocol, EnterMessageViewThemeProtocol {
     var backgroundColor: UIColor { get }

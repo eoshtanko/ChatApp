@@ -122,9 +122,8 @@ class ConversationsListViewController: UIViewController {
     private func getSettingsBarButtonItem() -> UIBarButtonItem? {
         let settingsButton = conversationsListView?.getNavigationButton(name: "gear")
         settingsButton?.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
-        if let settingsButton = settingsButton {
-            return UIBarButtonItem(customView: settingsButton)
-        } else { return nil }
+        guard let settingsButton = settingsButton else { return nil }
+        return UIBarButtonItem(customView: settingsButton)
     }
     
     private func getAddNewChannelBarButtonItem() -> UIBarButtonItem? {

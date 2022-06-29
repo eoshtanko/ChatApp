@@ -13,8 +13,6 @@ protocol SavingServiceProtocol {
     func loadWithMemoryManager(complition: ((Result<SavingObject, Error>?) -> Void)?)
 }
 
-// Лучше поздно, чем никогда...
-// Protocol can only be used as a generic constraint because it has Self or associated type requirements - бе
 class AnyTypeSavingService<SavingObject: Codable>: SavingServiceProtocol {
 
     typealias SavingObject = SavingObject

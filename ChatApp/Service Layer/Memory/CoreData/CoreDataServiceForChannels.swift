@@ -8,8 +8,6 @@
 import Foundation
 import CoreData
 
-// Разумеется, это можно обобщить до одного типа CoreDataServiceForMessages, но сейчас 4, а завтра защита
-// дублирование кода - плохо.
 protocol CoreDataServiceForChannelsProtocol {
     func fetchedResultsController(viewController: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<DBChannel>?
     func saveChannel(channel: Channel)
@@ -17,7 +15,6 @@ protocol CoreDataServiceForChannelsProtocol {
     func parseDBChannelToChannel(_ dbChannel: DBChannel) throws -> Channel
 }
 
-// Это неправильно. Service Layer не должен знать о модели (Presentation Layer), Нужно сделать все на дженериках
 class CoreDataServiceForChannels: CoreDataServiceForChannelsProtocol {
     
     let coreDataStack: CoreDataServiceProtocol?

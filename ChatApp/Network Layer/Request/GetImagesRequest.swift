@@ -16,15 +16,19 @@ struct GetImagesRequest: IRequest {
     }
     
     var urlRequest: URLRequest? {
-        let parametrs = ["q": "nature",
-                         "image_type": "photo",
-                         "colors": "blue",
-                         "page": "\(pageNumber)",
-                         "per_page": "200"]
-        guard let stringUrl = URLProvider.imagesApiStringURL,
-              let url = URL(string: stringUrl + paramsToString(params: parametrs)) else {
-            return nil
-        }
+        guard let stringUrl = URLProvider.imagesApiStringURL else { return nil }
+        
+        var urlComponents = URLComponents(string: stringUrl)
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "q", value: "nature"),
+            URLQueryItem(name: "image_type", value: "photo"),
+            URLQueryItem(name: "colors", value: "blue"),
+            URLQueryItem(name: "page", value: "\(pageNumber)"),
+            URLQueryItem(name: "per_page", value: "200")
+        ]
+        
+        guard let url = urlComponents?.url else { return nil }
+        
         let request = URLRequest(url: url)
         return request
     }
