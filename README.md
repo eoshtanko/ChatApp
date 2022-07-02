@@ -29,6 +29,7 @@
 
 <p float="left">
   <img src="https://github.com/TFS-iOS/chat-app-eoshtanko/blob/7d9b44ca8acd310551629ab7bb0f63a17fd0dacd/Illustrations/Simulator%20Screen%20Shot%20-%20iPhone%2011%20-%202022-05-21%20at%2013.31.56.png" width="270" />
+   <img src="https://github.com/TFS-iOS/chat-app-eoshtanko/blob/0b8eb32f024370adad81350eaff40e0559e27974/Illustrations/Simulator%20Screen%20Shot%20-%20iPhone%2011%20-%202022-07-02%20at%2019.02.03.png" width="270" />
 </p>
 
 # Как сделано?
