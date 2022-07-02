@@ -10,5 +10,7 @@
 	<string>$(IMAGES_API_NET_PROTOCOL_AND_HOST)</string>
 	<key>imagesApiUrl</key>
 	<string>$(IMAGES_API_URL)</string>
+	<key>imagesHost</key>
+	<string>$(IMAGES_API_IMAGES_HOST)</string>
 </dict>
 </plist>

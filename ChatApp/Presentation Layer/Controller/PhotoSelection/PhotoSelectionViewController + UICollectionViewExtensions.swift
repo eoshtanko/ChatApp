@@ -44,9 +44,11 @@ extension PhotoSelectionViewController: UICollectionViewDataSource {
         return cell
     }
     
-    private func completitionSuccessForRepeatedRequest(_ moreImageModels: [ImageModel]) {
+    private func completitionSuccessForRepeatedRequest(_ moreImageModels: [UnsplashPhoto]) {
         for model in moreImageModels {
-            photoesURL.append(model.largeImageURL)
+            if let url = model.urls[ImageSize.small.rawValue] {
+                photoesURL.append(url)
+            }
         }
         DispatchQueue.main.async { [weak self] in
             self?.photoSelectionView?.photoCollectionView?.reloadData()

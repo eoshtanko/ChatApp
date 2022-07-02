@@ -9,6 +9,7 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 // Работа с изображениями
-IMAGES_API_KEY=27072373-7f17e812b8489bd72b0185e4d
-IMAGES_API_NET_PROTOCOL_AND_HOST=https:/$()/pixabay.com
-IMAGES_API_URL=$(IMAGES_API_NET_PROTOCOL_AND_HOST)/api/?key=$(IMAGES_API_KEY)
+IMAGES_API_KEY=OItl8zcwmrtYnIG85FaQU5v1kvqmxLeyAcmsavO6zuw
+IMAGES_API_NET_PROTOCOL_AND_HOST=https:/$()/api.unsplash.com
+IMAGES_API_URL=$(IMAGES_API_NET_PROTOCOL_AND_HOST)/photos/?client_id=$(IMAGES_API_KEY)
+IMAGES_API_IMAGES_HOST=https:/$()/images.unsplash.com

@@ -57,9 +57,9 @@ class PhotoSelectionViewController: UIViewController {
         photoSelectionView?.photoCollectionView?.dataSource = self
     }
     
-    func downloadImages(page: Int, completitionSuccess: (([ImageModel]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
+    func downloadImages(page: Int, completitionSuccess: (([UnsplashPhoto]) -> Void)?, competitionFailer: ((Error) -> Void)?) {
         let requestConfig = RequestsFactory.ImageRequests.getImages(pageNumber: page)
-        requestSender.send(config: requestConfig) { (result: Result<[ImageModel], Error>) in
+        requestSender.send(config: requestConfig) { (result: Result<[UnsplashPhoto], Error>) in
             switch result {
             case .success(let imageModels):
                 completitionSuccess?(imageModels)
@@ -69,9 +69,11 @@ class PhotoSelectionViewController: UIViewController {
         }
     }
     
-    private func completitionSuccessForInitialRequest(_ imageModels: [ImageModel]) {
+    private func completitionSuccessForInitialRequest(_ imageModels: [UnsplashPhoto]) {
         for imageModel in imageModels {
-            photoesURL.append(imageModel.largeImageURL)
+            if let url = imageModel.urls[ImageSize.small.rawValue] {
+                photoesURL.append(url)
+            }
         }
         DispatchQueue.main.async { [weak self] in
             self?.photoSelectionView?.activityIndicator?.stopAnimating()

@@ -9,7 +9,6 @@ import Foundation
 
 public struct URLProvider {
     
-    public static let imagesApiNetProtocolAndHost = Bundle.main.object(
-        forInfoDictionaryKey: "imagesApiNetProtocolAndHost") as? String
+    public static let imagesHost = Bundle.main.object(forInfoDictionaryKey: "imagesHost") as? String
     public static let imagesApiStringURL = Bundle.main.object(forInfoDictionaryKey: "imagesApiUrl") as? String
 }

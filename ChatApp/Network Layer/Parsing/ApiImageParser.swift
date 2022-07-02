@@ -7,23 +7,26 @@
 
 import UIKit
 
-struct HitsModel: Codable {
-    let hits: [ImageModel]
-}
-
-struct ImageModel: Identifiable, Codable {
-    let id: Int
-    let largeImageURL: String
+struct UnsplashPhoto: Codable {
+    public let urls: [String: String]
 }
 
 class ApiImagesParser: IParser {
     
-    typealias Model = [ImageModel]
+    typealias Model = [UnsplashPhoto]
     
-    func parse(data: Data) -> [ImageModel]? {
-        guard let imagesModel = try? JSONDecoder().decode(HitsModel.self, from: data) else {
+    func parse(data: Data) -> [UnsplashPhoto]? {
+        guard let imagesModel = try? JSONDecoder().decode([UnsplashPhoto].self, from: data) else {
             return nil
         }
-        return imagesModel.hits
+        return imagesModel
     }
+}
+
+public enum ImageSize: String {
+    case raw
+    case full
+    case regular
+    case small
+    case thumb
 }
