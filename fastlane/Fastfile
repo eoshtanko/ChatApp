@@ -30,7 +30,7 @@ lane :build_and_test do |options|
 end
 
 #---------------------------------------------------------------
-# Discord notification (Стирать жалко... :)
+# Discord notification
 
 # tinkoff_image_url="https://acdn.tinkoff.ru/static/documents/0f0aa9f1-0b06-4fe5-960c-5ca04de7904a.png"
 # git_url="https://github.com/TFS-iOS/chat-app-eoshtanko"
