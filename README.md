@@ -1,6 +1,6 @@
 # CI
 
-╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ[![CI](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml/badge.svg)](https://github.com/TFS-iOS/chat-app-eoshtanko/actions/workflows/github.yml)
+╰( ͡° ͜ʖ ͡° )つ──☆*:・ﾟ[![CI](https://github.com/eoshtanko/ChatApp/actions/workflows/github.yml/badge.svg)](https://github.com/eoshtanko/ChatApp/actions/workflows/github.yml)
 
 <p float="left">
   <img src="https://github.com/eoshtanko/ChatApp/blob/4862adc0a17dbb05416661a150854b6daf14ab10/Illustrations/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202022-05-23%20%D0%B2%2011.06.14.png" width="405" />
