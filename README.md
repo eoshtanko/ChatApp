@@ -29,7 +29,6 @@
 
 <p float="left">
   <img src="https://github.com/eoshtanko/ChatApp/blob/4862adc0a17dbb05416661a150854b6daf14ab10/Illustrations/Simulator%20Screen%20Shot%20-%20iPhone%2011%20-%202022-05-21%20at%2013.31.56.png" width="270" />
-   <img src="https://github.com/eoshtanko/ChatApp2/blob/1c84b3b8aa17c72f6cecf487faff746f3279655e/Illustrations/Simulator%20Screen%20Shot%20-%20iPhone%2011%20-%202022-07-02%20at%2019.02.03.png" width="270" />
 </p>
 
 # Как сделано?
